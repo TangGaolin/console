@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Request;
 
+use App\Services\AuthService;
 class LoginController extends Controller
 {
     /*
@@ -17,23 +18,39 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+    protected $request;
 
-    use AuthenticatesUsers;
+    protected $authService;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AuthService $authService)
     {
-        $this->middleware('guest')->except('logout');
+        $this->authService = $authService;
     }
+
+    public function login(){
+
+        $param = [
+            'user' => Request::input('user'),
+            'password' => Request::input('password'),
+            'ip' => Request::getClientIp()
+        ];
+
+        $result =  $this->authService->login($param);
+
+        if ($result['statusCode'] == '0') {
+            Request::session()->put('admin', $result['data']);
+            unset($result['data']['emp_id']);
+        }
+
+        return $result;
+
+    }
+
+
 }
