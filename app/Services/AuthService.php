@@ -39,8 +39,8 @@ Class AuthService {
         unset($res['password']);
         $res['job_title'] = config('global.job_title.' . $res['job']) ?? "";
         return [
-            'statusCode' => $this->responseCode['STATUSCODE_PASSWDERROR'],
-            'msg'  => $this->responseCode['MSG_PASSWDERROR'],
+            'statusCode' => $this->responseCode['STATUSCODE_SUCCESS'],
+            'msg'  => $this->responseCode['MSG_OK'],
             'success' => true,
             'data' => $res
         ];

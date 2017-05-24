@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::post('/admin/login', 'Auth\LoginController@login');
+Route::post('/admin/logout', 'Auth\LoginController@logout');

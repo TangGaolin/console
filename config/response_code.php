@@ -15,6 +15,7 @@ return [
     'STATUSCODE_PASSWDERROR'               => 402,//用户名或密码错误
 
     'MSG_PASSWDERROR'                      => "用户名或密码错误",
+    'MSG_OK'                               => "OK"
 
 
 ];

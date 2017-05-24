@@ -47,10 +47,16 @@ class LoginController extends Controller
             Request::session()->put('admin', $result['data']);
             unset($result['data']['emp_id']);
         }
-
         return $result;
-
     }
+
+    public function logout()
+    {
+        Request::session()->flush();
+        return $this->success();
+    }
+
+
 
 
 }
