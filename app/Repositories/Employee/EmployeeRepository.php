@@ -1,4 +1,5 @@
-<?php namespace App\Repositories\Employee;
+<?php
+namespace App\Repositories\Employee;
 
 use App\Models\Employee;
 use DB;
