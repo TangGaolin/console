@@ -16,8 +16,19 @@ class ShopRepository implements ShopRepositoryInterface
 
     public function getStoreList()
     {
-        $result = $this->shopModel->get();
+        $result = $this->shopModel->select('shop_id', 'shop_name', 'shop_tel', 'city', 'address')->get();
         return $result->toArray();
     }
+
+    public function updateStoreInfo($param)
+    {
+        return $this->shopModel->where(['shop_id' => $param['shop_id']])->update($param);
+    }
+
+    public function addStore($param)
+    {
+        return $this->shopModel->insert($param);
+    }
+
 
 }

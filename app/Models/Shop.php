@@ -16,4 +16,13 @@ class Shop extends Model
      * @var array
      */
     protected $guarded = [];
+
+    protected $casts = [
+        'city'          => 'array'
+    ];
+
+    public function getCityAttribute($value)
+    {
+        return $value ? json_decode($value, true) : [];
+    }
 }

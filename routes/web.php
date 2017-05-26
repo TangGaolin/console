@@ -18,3 +18,5 @@ Route::get('/', function () {
 Route::post('/admin/login', 'Auth\LoginController@login');
 Route::post('/admin/logout', 'Auth\LoginController@logout');
 Route::post('/store/getStoreList', 'Store\StoreController@getStoreList');
+Route::post('/store/updateStoreInfo', 'Store\StoreController@updateStoreInfo');
+Route::post('/store/addStore', 'Store\StoreController@addStore');

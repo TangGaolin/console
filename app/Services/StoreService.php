@@ -12,17 +12,39 @@ use App\Repositories\Shop\ShopRepositoryInterface;
 Class StoreService {
 
     protected $responseCode;
+    protected $shopRepository;
 
-    public function __construct()
+    public function __construct(ShopRepositoryInterface $shopRepository)
     {
-        $this->responseCode          = config('response_code');
+        $this->responseCode         = config('response_code');
+        $this->shopRepository       = $shopRepository;
     }
 
     public function getStoreList()
     {
-        $shopRepository=  app(ShopRepositoryInterface::class);
-        $storeList = $shopRepository->getStoreList();
+        $storeList = $this->shopRepository->getStoreList();
         return $storeList;
+    }
+
+    public function updateStoreInfo($param)
+    {
+        if(isset($param['city'])){
+            $param['province'] = $param['city'][0];
+            $param['city'] = json_encode($param['city'],JSON_UNESCAPED_UNICODE);
+        }
+
+        $res = $this->shopRepository->updateStoreInfo($param);
+        return $res;
+    }
+
+    public function addStore($param)
+    {
+        if(isset($param['city'])){
+            $param['province'] = $param['city'][0];
+            $param['city'] = json_encode($param['city'],JSON_UNESCAPED_UNICODE);
+        }
+        $res = $this->shopRepository->addStore($param);
+        return $res;
     }
 
 
