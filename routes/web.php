@@ -20,3 +20,6 @@ Route::post('/admin/logout', 'Auth\LoginController@logout');
 Route::post('/store/getStoreList', 'Store\StoreController@getStoreList');
 Route::post('/store/updateStoreInfo', 'Store\StoreController@updateStoreInfo');
 Route::post('/store/addStore', 'Store\StoreController@addStore');
+
+
+Route::post('/employee/getEmployeeList', 'Employee\EmployeeController@getEmployeeList');
