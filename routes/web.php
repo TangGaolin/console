@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::any('/getConfig', 'ConfigController@getConfig');
 Route::post('/admin/login', 'Auth\LoginController@login');
 Route::post('/admin/logout', 'Auth\LoginController@logout');
 Route::post('/store/getStoreList', 'Store\StoreController@getStoreList');
@@ -23,3 +24,4 @@ Route::post('/store/addStore', 'Store\StoreController@addStore');
 
 
 Route::post('/employee/getEmployeeList', 'Employee\EmployeeController@getEmployeeList');
+Route::post('/employee/addEmployee', 'Employee\EmployeeController@addEmployee');

@@ -37,4 +37,9 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         ];
     }
 
+    public function addEmployee($employeeData)
+    {
+        return $this->employeeModel->insert($employeeData);
+    }
+
 }

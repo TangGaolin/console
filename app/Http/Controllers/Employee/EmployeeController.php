@@ -24,14 +24,14 @@ class EmployeeController extends Controller
     public function getEmployeeList()
     {
         $param = [
-            "emp_name_phone"  => Request::input('emp_name_phone', ""),
-            'cur_page'        => Request::input('cur_page', 1),
-            'limit'           => Request::input('limit', 15)
+            "emp_name_phone" => Request::input('emp_name_phone', ""),
+            'cur_page' => Request::input('cur_page', 1),
+            'limit' => Request::input('limit', 15)
         ];
         $rule = [
-            "emp_name_phone"  => "string",
-            "cur_page"        => "integer",
-            "limit"           => "integer"
+            "emp_name_phone" => "string",
+            "cur_page" => "integer",
+            "limit" => "integer"
         ];
         $this->validation($param, $rule);
 
@@ -39,5 +39,28 @@ class EmployeeController extends Controller
         return $this->success($data);
     }
 
+    public function addEmployee()
+    {
+        $param = [
+            "emp_name" => Request::input("emp_name"),
+            "phone_no" => Request::input("phone_no"),
+            "sex"      => Request::input("sex"),
+            "shop_id"  => Request::input("shop_id"),
+            "job"      => Request::input("job"),
+            "remark"   => Request::input("remark", "")
+        ];
+        $rule = [
+            "emp_name" => "required|string",
+            "phone_no" => "required|string",
+            "sex"      => "required|integer",
+            "shop_id"  => "required|integer",
+            "job"      => "required|string",
+            "remark"   => "string"
+        ];
+
+        $this->validation($param, $rule);
+        $this->employeeService->addEmployee($param);
+        return $this->success();
+    }
 
 }

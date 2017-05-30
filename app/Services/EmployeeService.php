@@ -8,6 +8,7 @@
 namespace App\Services;
 
 use App\Repositories\Employee\EmployeeRepositoryInterface;
+use App\Repositories\Shop\ShopRepositoryInterface;
 
 
 Class EmployeeService {
@@ -28,10 +29,25 @@ Class EmployeeService {
         } else {
             $param['emp_name'] = $param['emp_name_phone'];
         }
-
-        return $this->employeeRepository->getEmployeeList($param);
+        $storeRepository =  app(ShopRepositoryInterface::class);
+        $storeList = $storeRepository->getStoreList();
+        $newStoreData = [];
+        foreach ($storeList as $v){
+            $newStoreData[$v['shop_id']] = $v['shop_name'];
+        }
+        $data =  $this->employeeRepository->getEmployeeList($param);
+        foreach ($data['data'] as &$v) {
+            $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "总部";
+        }
+        return $data;
     }
 
+    public function addEmployee($param)
+    {
+        $employeeData = $param;
+        $data =  $this->employeeRepository->addEmployee($employeeData);
+        return $data;
+    }
 
 
 }
