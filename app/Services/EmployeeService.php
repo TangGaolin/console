@@ -45,7 +45,35 @@ Class EmployeeService {
     public function addEmployee($param)
     {
         $employeeData = $param;
+        $res = $this->employeeRepository->getEmployeeInfo(['phone_no' => $param['phone_no']]);
+        if($res){
+            return [
+                'statusCode' => config('response_code.STATUSCODE_USERERROR'),
+                'msg'        => "手机号码已经存在",
+                'success'    => false
+            ];
+        }
         $data =  $this->employeeRepository->addEmployee($employeeData);
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true
+        ];
+    }
+
+    public function updateEmployee($param)
+    {
+
+        $res = $this->employeeRepository->getEmployeeInfo(['phone_no' => $param['phone_no']]);
+        if($res && $res['emp_id'] != $param['emp_id']){
+            return [
+                'statusCode' => config('response_code.STATUSCODE_USERERROR'),
+                'msg'        => "手机号码已经存在",
+                'success'    => false
+            ];
+        }
+        $employeeData = $param;
+        $data =  $this->employeeRepository->updateEmployee($employeeData);
         return $data;
     }
 

@@ -25,3 +25,4 @@ Route::post('/store/addStore', 'Store\StoreController@addStore');
 
 Route::post('/employee/getEmployeeList', 'Employee\EmployeeController@getEmployeeList');
 Route::post('/employee/addEmployee', 'Employee\EmployeeController@addEmployee');
+Route::post('/employee/updateEmployee', 'Employee\EmployeeController@updateEmployee');

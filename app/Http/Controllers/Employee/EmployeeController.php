@@ -59,7 +59,33 @@ class EmployeeController extends Controller
         ];
 
         $this->validation($param, $rule);
-        $this->employeeService->addEmployee($param);
+        return $this->employeeService->addEmployee($param);
+
+    }
+
+    public function updateEmployee()
+    {
+        $param = [
+            "emp_id" => Request::input("emp_id"),
+            "emp_name" => Request::input("emp_name"),
+            "phone_no" => Request::input("phone_no"),
+            "sex"      => Request::input("sex"),
+            "shop_id"  => Request::input("shop_id"),
+            "job"      => Request::input("job"),
+            "remark"   => Request::input("remark", "")
+        ];
+        $rule = [
+            "emp_name" => "required|string",
+            "phone_no" => "required|string",
+            "sex"      => "required|integer",
+            "shop_id"  => "required|integer",
+            "job"      => "required|string",
+            "remark"   => "string"
+        ];
+
+        $this->validation($param,$rule);
+
+        $this->employeeService->updateEmployee($param);
         return $this->success();
     }
 

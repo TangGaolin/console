@@ -14,7 +14,10 @@ return [
     'STATUSCODE_NOTACCESS'                 => 401,//无权限
     'STATUSCODE_PASSWDERROR'               => 402,//用户名或密码错误
 
+    'STATUSCODE_USERERROR'                 => 501,//用户信息添加或者修改错误的
+
     'MSG_PASSWDERROR'                      => "用户名或密码错误",
+    'MSG_USERERROR_ADD'                    => "添加用户错误",
     'MSG_OK'                               => "OK"
 
 

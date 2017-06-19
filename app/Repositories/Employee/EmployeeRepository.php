@@ -24,6 +24,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     public function getEmployeeList($whereParam)
     {
         $select = $this->employeeModel->select('emp_id','emp_name','phone_no','sex','shop_id','job', "remark");
+        $select = $select->where("is_admin","=",0);
 
         !empty($param['phone_no']) && $select = $select->where("phone_no", "=", $whereParam["phone_no"]);
         !empty($param['emp_name']) && $select = $select->where("emp_name", "like", $whereParam["emp_name"].'%');
@@ -40,6 +41,11 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     public function addEmployee($employeeData)
     {
         return $this->employeeModel->insert($employeeData);
+    }
+
+    public function updateEmployee($employeeData)
+    {
+        return $this->employeeModel->where(['emp_id' => $employeeData['emp_id']])->update($employeeData);
     }
 
 }

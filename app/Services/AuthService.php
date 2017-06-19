@@ -28,7 +28,7 @@ Class AuthService {
         ]);
 
         //不存在，用户名和密码错误
-        if(!$res){
+        if(!$res || $res["is_admin"] != 1){
             return [
                 'statusCode' => $this->responseCode['STATUSCODE_PASSWDERROR'],
                 'msg'  => $this->responseCode['MSG_PASSWDERROR'],
