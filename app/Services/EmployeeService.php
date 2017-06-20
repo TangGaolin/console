@@ -9,6 +9,7 @@ namespace App\Services;
 
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Shop\ShopRepositoryInterface;
+use Excel;
 
 
 Class EmployeeService {
@@ -45,15 +46,15 @@ Class EmployeeService {
     public function addEmployee($param)
     {
         $employeeData = $param;
-        $res = $this->employeeRepository->getEmployeeInfo(['phone_no' => $param['phone_no']]);
-        if($res){
+
+        $res =  $this->employeeRepository->addEmployee($employeeData);
+        if(!$res){
             return [
                 'statusCode' => config('response_code.STATUSCODE_USERERROR'),
                 'msg'        => "手机号码已经存在",
                 'success'    => false
             ];
         }
-        $data =  $this->employeeRepository->addEmployee($employeeData);
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg'        => config('response_code.MSG_OK'),
@@ -64,17 +65,52 @@ Class EmployeeService {
     public function updateEmployee($param)
     {
 
-        $res = $this->employeeRepository->getEmployeeInfo(['phone_no' => $param['phone_no']]);
-        if($res && $res['emp_id'] != $param['emp_id']){
+        $employeeData = $param;
+        $res =  $this->employeeRepository->updateEmployee($employeeData);
+        if(!$res){
             return [
                 'statusCode' => config('response_code.STATUSCODE_USERERROR'),
                 'msg'        => "手机号码已经存在",
                 'success'    => false
             ];
         }
-        $employeeData = $param;
-        $data =  $this->employeeRepository->updateEmployee($employeeData);
-        return $data;
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true
+        ];
+    }
+
+    public function importEmployee($param)
+    {
+
+        $shopRepository = app(ShopRepositoryInterface::class);
+        $shopData = $shopRepository->getStoreList();
+        $converShopData = [];
+        foreach ($shopData as $v){
+            $converShopData[$v['shop_name']] = $v['shop_id'];
+        }
+        $data = Excel::load($param['file']->getPathName(), function ($reader) {
+            return $reader;
+        });
+        $employeeData = $data->getSheet(0)->toArray();
+        unset($employeeData[0]);
+
+        foreach ($employeeData as $v) {
+            if(!isset($converShopData[$v[0]])){
+                continue;
+            }
+            $tmpEmployeeData['shop_id']  = $converShopData[$v['0']];
+            $tmpEmployeeData['emp_name'] =  $v[1];
+            $tmpEmployeeData['job']      =  $v[2];
+            $tmpEmployeeData['phone_no'] =  $v[3];
+            $tmpEmployeeData['sex']      =  10;
+
+            $res = $this->employeeRepository->addEmployee($tmpEmployeeData);
+            if(!$res){
+                $this->employeeRepository->updateEmployee($tmpEmployeeData);
+            }
+        }
     }
 
 

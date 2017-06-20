@@ -40,11 +40,22 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function addEmployee($employeeData)
     {
+        $res = $this->getEmployeeInfo(['phone_no' => $employeeData['phone_no']]);
+        if($res) {
+            return false;
+        }
         return $this->employeeModel->insert($employeeData);
     }
 
     public function updateEmployee($employeeData)
     {
+        $res = $this->getEmployeeInfo(['phone_no' => $employeeData['phone_no']]);
+        if($res && (isset($employeeData['emp_id']) != $res["emp_id"])) {
+            return false;
+        }
+        if(!isset($employeeData['emp_id']) && isset($employeeData['phone_no'])){
+            return $this->employeeModel->where(['emp_phone' => $employeeData['emp_phone']])->update($employeeData);
+        }
         return $this->employeeModel->where(['emp_id' => $employeeData['emp_id']])->update($employeeData);
     }
 

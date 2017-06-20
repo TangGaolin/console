@@ -60,7 +60,6 @@ class EmployeeController extends Controller
 
         $this->validation($param, $rule);
         return $this->employeeService->addEmployee($param);
-
     }
 
     public function updateEmployee()
@@ -80,12 +79,25 @@ class EmployeeController extends Controller
             "sex"      => "required|integer",
             "shop_id"  => "required|integer",
             "job"      => "required|string",
-            "remark"   => "string"
         ];
 
         $this->validation($param,$rule);
 
-        $this->employeeService->updateEmployee($param);
+        return $this->employeeService->updateEmployee($param);
+    }
+
+
+    public function importEmployee()
+    {
+        $param = [
+            'file'      => Request::file('file'),
+        ];
+        $rule = [
+            'file'      =>  "required",
+        ];
+        $this->validation($param,$rule);
+        $this->employeeService->importEmployee($param);
+
         return $this->success();
     }
 
