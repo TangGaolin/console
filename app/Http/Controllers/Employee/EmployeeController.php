@@ -23,6 +23,7 @@ class EmployeeController extends Controller
 
     public function getEmployeeList()
     {
+
         $param = [
             "emp_name_phone" => Request::input('emp_name_phone', ""),
             'cur_page' => Request::input('cur_page', 1),
