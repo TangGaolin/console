@@ -12,15 +12,16 @@ use App\Repositories\Shop\ShopRepositoryInterface;
 use Excel;
 
 
-Class EmployeeService {
+Class EmployeeService
+{
 
     protected $responseCode;
     protected $employeeRepository;
 
     public function __construct(EmployeeRepositoryInterface $employeeRepository)
     {
-        $this->responseCode         = config('response_code');
-        $this->employeeRepository       = $employeeRepository;
+        $this->responseCode = config('response_code');
+        $this->employeeRepository = $employeeRepository;
     }
 
     public function getEmployeeList($param)
@@ -31,13 +32,13 @@ Class EmployeeService {
             $param['emp_name'] = $param['emp_name_phone'];
         }
 
-        $storeRepository =  app(ShopRepositoryInterface::class);
+        $storeRepository = app(ShopRepositoryInterface::class);
         $storeList = $storeRepository->getStoreList();
         $newStoreData = [];
-        foreach ($storeList as $v){
+        foreach ($storeList as $v) {
             $newStoreData[$v['shop_id']] = $v['shop_name'];
         }
-        $data =  $this->employeeRepository->getEmployeeList($param);
+        $data = $this->employeeRepository->getEmployeeList($param);
         foreach ($data['data'] as &$v) {
             $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "总部";
         }
@@ -48,18 +49,18 @@ Class EmployeeService {
     {
         $employeeData = $param;
 
-        $res =  $this->employeeRepository->addEmployee($employeeData);
-        if(!$res){
+        $res = $this->employeeRepository->addEmployee($employeeData);
+        if (!$res) {
             return [
                 'statusCode' => config('response_code.STATUSCODE_USERERROR'),
-                'msg'        => "手机号码已经存在",
-                'success'    => false
+                'msg' => "手机号码已经存在",
+                'success' => false
             ];
         }
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
-            'msg'        => config('response_code.MSG_OK'),
-            'success'    => true
+            'msg' => config('response_code.MSG_OK'),
+            'success' => true
         ];
     }
 
@@ -67,18 +68,32 @@ Class EmployeeService {
     {
 
         $employeeData = $param;
-        $res =  $this->employeeRepository->updateEmployee($employeeData);
-        if(!$res){
+        $res = $this->employeeRepository->updateEmployee($employeeData);
+        if (!$res) {
             return [
                 'statusCode' => config('response_code.STATUSCODE_USERERROR'),
-                'msg'        => "手机号码已经存在",
-                'success'    => false
+                'msg' => "手机号码已经存在",
+                'success' => false
             ];
         }
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
-            'msg'        => config('response_code.MSG_OK'),
-            'success'    => true
+            'msg' => config('response_code.MSG_OK'),
+            'success' => true
+        ];
+    }
+
+    public function removeEmployee($param)
+    {
+        $updateData = [
+            "emp_id" => $param['emp_id'],
+            "status" => -1
+        ];
+        $this->employeeRepository->removeEmployee($updateData);
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg' => config('response_code.MSG_OK'),
+            'success' => true
         ];
     }
 

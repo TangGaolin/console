@@ -27,3 +27,4 @@ Route::post('/employee/getEmployeeList', 'Employee\EmployeeController@getEmploye
 Route::post('/employee/addEmployee', 'Employee\EmployeeController@addEmployee');
 Route::post('/employee/updateEmployee', 'Employee\EmployeeController@updateEmployee');
 Route::post('/employee/importEmployee', 'Employee\EmployeeController@importEmployee');
+Route::post('/employee/removeEmployee', 'Employee\EmployeeController@removeEmployee');

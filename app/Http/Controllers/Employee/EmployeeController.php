@@ -74,6 +74,7 @@ class EmployeeController extends Controller
             "remark"   => Request::input("remark", "")
         ];
         $rule = [
+            "emp_id"   => "required|integer",
             "emp_name" => "required|string",
             "phone_no" => "required|string",
             "sex"      => "required|integer",
@@ -86,6 +87,20 @@ class EmployeeController extends Controller
         return $this->employeeService->updateEmployee($param);
     }
 
+
+    public function removeEmployee()
+    {
+        $param = [
+            "emp_id" => Request::input("emp_id")
+        ];
+        $rule = [
+            "emp_id" => "required|integer"
+        ];
+
+        $this->validation($param,$rule);
+
+        return $this->employeeService->removeEmployee($param);
+    }
 
     public function importEmployee()
     {

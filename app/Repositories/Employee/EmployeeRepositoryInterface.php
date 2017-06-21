@@ -7,4 +7,5 @@ interface EmployeeRepositoryInterface
     public function getEmployeeList($whereParam);
     public function addEmployee($employeeData);
     public function updateEmployee($employeeData);
+    public function removeEmployee($employeeData);
 }

@@ -25,6 +25,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     {
         $select = $this->employeeModel->select('emp_id','emp_name','phone_no','sex','shop_id','job', "remark");
         $select = $select->where("is_admin","=",0);
+        $select = $select->where("status","=",1);
 
         !empty($whereParam['phone_no']) && $select = $select->where("phone_no", "=", $whereParam["phone_no"]);
         !empty($whereParam['emp_name']) && $select = $select->where("emp_name", "like", $whereParam["emp_name"].'%');
@@ -57,6 +58,11 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         if(!isset($employeeData['emp_id']) && isset($employeeData['phone_no'])){
             return $this->employeeModel->where(['emp_phone' => $employeeData['emp_phone']])->update($employeeData);
         }
+        return $this->employeeModel->where(['emp_id' => $employeeData['emp_id']])->update($employeeData);
+    }
+
+    public function removeEmployee($employeeData)
+    {
         return $this->employeeModel->where(['emp_id' => $employeeData['emp_id']])->update($employeeData);
     }
 
