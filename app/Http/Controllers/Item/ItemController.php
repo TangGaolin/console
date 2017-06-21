@@ -57,5 +57,20 @@ class ItemController extends Controller
         return $this->success();
     }
 
+    public function getItemList()
+    {
+        $param = [
+            'cur_page'       => Request::input('cur_page', 1),
+            'limit'          => Request::input('limit', 15)
+        ];
+        $rule = [
+            "cur_page" => "integer",
+            "limit" => "integer"
+        ];
+        $this->validation($param, $rule);
+        $data = $this->itemService->getItemList($param);
+        return $this->success($data);
+    }
+
 
 }

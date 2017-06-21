@@ -33,3 +33,4 @@ Route::post('/employee/removeEmployee', 'Employee\EmployeeController@removeEmplo
 Route::post('/item/addItemType', 'Item\ItemController@addItemType');
 Route::post('/item/getItemType', 'Item\ItemController@getItemType');
 Route::post('/item/addItem', 'Item\ItemController@addItem');
+Route::post('/item/getItemList', 'Item\ItemController@getItemList');

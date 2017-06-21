@@ -40,4 +40,8 @@ Class ItemService
         return $this->itemRepository->addItem($itemData);
     }
 
+    public function getItemList($param)
+    {
+        return $this->itemRepository->getItemList($param);
+    }
 }

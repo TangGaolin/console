@@ -22,10 +22,18 @@ class ItemRepository implements ItemRepositoryInterface
         return $this->item->insert($itemData);
     }
 
-    public function getItemList()
+    public function getItemList($whereParam)
     {
-        $result =  $this->item->select('item_id','item_name','item_type','price','times','emp_free','status')->get();
-        return $result->toArray();
+        $select =  $this->item->select('item_id','item_name','item_type','price','times','emp_fee','status');
+
+
+        $countSelect = $select;
+        $count       = $countSelect->count();
+        $res         = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();
+        return [
+            'totalSize' => $count,
+            'data'      => $res,
+        ];
     }
 
     public function updateItem($itemData)
