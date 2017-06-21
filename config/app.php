@@ -180,6 +180,7 @@ return [
 
         App\Providers\EmployeeServiceProvider::class,
         App\Providers\ShopServiceProvider::class,
+        App\Providers\ItemServiceProvider::class
     ],
 
     /*

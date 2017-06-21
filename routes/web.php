@@ -28,3 +28,8 @@ Route::post('/employee/addEmployee', 'Employee\EmployeeController@addEmployee');
 Route::post('/employee/updateEmployee', 'Employee\EmployeeController@updateEmployee');
 Route::post('/employee/importEmployee', 'Employee\EmployeeController@importEmployee');
 Route::post('/employee/removeEmployee', 'Employee\EmployeeController@removeEmployee');
+
+
+Route::post('/item/addItemType', 'Item\ItemController@addItemType');
+Route::post('/item/getItemType', 'Item\ItemController@getItemType');
+Route::post('/item/addItem', 'Item\ItemController@addItem');

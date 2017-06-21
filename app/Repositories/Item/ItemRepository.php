@@ -2,15 +2,19 @@
 namespace App\Repositories\Item;
 
 use App\Models\Item;
+use App\Models\ItemType;
 use DB;
 
 class ItemRepository implements ItemRepositoryInterface
 {
 
     protected $item;
-    public function __construct(Item $item)
+    protected $itemType;
+
+    public function __construct(Item $item, ItemType $itemType)
     {
         $this->item = $item;
+        $this->itemType = $itemType;
     }
 
     public function addItem($itemData)
@@ -32,6 +36,23 @@ class ItemRepository implements ItemRepositoryInterface
     public function disableItem($itemData)
     {
         return $this->item->where(['item_id' => $itemData['item']])->update(['status' => -1]);
+    }
+
+    public function addItemType($itemTypeData)
+    {
+        return $this->itemType->insert($itemTypeData);
+    }
+
+    public function getItemTypeList()
+    {
+        $result = $this->itemType->select('item_type_id','item_type_name')->where('status','=', 1)
+            ->get();
+        return $result->toArray();
+    }
+
+    public function updateTypeName($itemTypeData)
+    {
+        return $this->itemType->where('item_type_id', $itemTypeData['item_type_id'])->update($itemTypeData);
     }
 
 
