@@ -15,12 +15,10 @@ use Excel;
 Class EmployeeService
 {
 
-    protected $responseCode;
     protected $employeeRepository;
 
     public function __construct(EmployeeRepositoryInterface $employeeRepository)
     {
-        $this->responseCode = config('response_code');
         $this->employeeRepository = $employeeRepository;
     }
 

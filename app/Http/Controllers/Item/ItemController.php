@@ -14,6 +14,9 @@ class ItemController extends Controller
         $this->itemService = $itemService;
     }
 
+    /*
+     * 添加项目类别
+     * */
     public function addItemType()
     {
         $param = [
@@ -28,13 +31,35 @@ class ItemController extends Controller
         return $this->success();
     }
 
+    /*
+     * 获取项目类别列表
+     * */
     public function getItemType()
     {
         $data = $this->itemService->getItemType();
         return $this->success($data);
     }
 
+    /*
+     * 修改项目类型
+     * */
+    public function modifyItemType()
+    {
+        $param = [
+            "item_type_id"   => Request::input('item_type_id'),
+            "item_type_name" => Request::input('item_type_name'),
+        ];
+        $rule = [
+            "item_type_id"   => "required|integer",
+            "item_type_name" => "required|string",
+        ];
+        $this->validation($param, $rule);
+        return $this->itemService->modifyItemType($param);
+    }
 
+    /*
+     * 新增项目
+     * */
     public function addItem()
     {
         $param = [
@@ -53,10 +78,12 @@ class ItemController extends Controller
         ];
         $this->validation($param, $rule);
 
-        $this->itemService->addItem($param);
-        return $this->success();
+        return $this->itemService->addItem($param);
     }
 
+    /*
+     * 获取项目列表
+     * */
     public function getItemList()
     {
         $param = [
@@ -74,6 +101,32 @@ class ItemController extends Controller
         $this->validation($param, $rule);
         $data = $this->itemService->getItemList($param);
         return $this->success($data);
+    }
+
+    /*
+     * 修改项目
+     * */
+    public function modifyItem()
+    {
+        $param = [
+            "item_id"   => Request::input('item_id'),
+            "item_name" => Request::input('item_name'),
+            "item_type" => Request::input('item_type'),
+            "price"     => Request::input('price'),
+            "times"     => Request::input('times'),
+            "emp_fee"   => Request::input('emp_fee'),
+        ];
+        $rule = [
+            "item_id"   => "required|integer",
+            "item_name" => "required|string",
+            "item_type" => "required|integer",
+            "price"     => "required|numeric",
+            "times"     => "required|integer",
+            "emp_fee"   => "required|numeric",
+        ];
+        $this->validation($param, $rule);
+        return $this->itemService->modifyItem($param);
+
     }
 
 

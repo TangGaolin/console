@@ -5,7 +5,7 @@ interface ItemRepositoryInterface
 {
     public function addItemType($itemTypeData);
     public function getItemTypeList();
-    public function updateTypeName($itemTypeData);
+    public function modifyItemType($itemTypeData);
 
 
     public function addItem($itemData);

@@ -19,8 +19,13 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function addItem($itemData)
     {
+        $res =  $res = $this->item->where(["item_name" => $itemData["item_name"]])->first();
+        if($res) {
+            return false;
+        }
         return $this->item->insert($itemData);
     }
+
 
     public function getItemList($whereParam)
     {
@@ -40,13 +45,20 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function updateItem($itemData)
     {
-        return $this->item->where(['item_id' => $itemData['item']])->update($itemData);
+        $res =  $res = $this->item->where(["item_name" => $itemData["item_name"]])->first();
+        if($res && ($itemData['item_id'] != $res["item_id"])) {
+            return false;
+        }
+        $this->item->where(['item_id' => $itemData['item_id']])->update($itemData);
+        return true;
     }
 
     public function disableItem($itemData)
     {
         return $this->item->where(['item_id' => $itemData['item']])->update(['status' => -1]);
     }
+
+    /*********** item type   *********/
 
     public function addItemType($itemTypeData)
     {
@@ -60,9 +72,15 @@ class ItemRepository implements ItemRepositoryInterface
         return $result->toArray();
     }
 
-    public function updateTypeName($itemTypeData)
+    public function modifyItemType($itemTypeData)
     {
-        return $this->itemType->where('item_type_id', $itemTypeData['item_type_id'])->update($itemTypeData);
+
+        $res =  $res = $this->itemType->where(["item_type_name" => $itemTypeData["item_type_name"]])->first();
+        if($res && ($itemTypeData['item_type_id'] != $res["item_type_id"])) {
+            return false;
+        }
+        $this->itemType->where(['item_type_id' => $itemTypeData['item_type_id']])->update($itemTypeData);
+        return true;
     }
 
 
