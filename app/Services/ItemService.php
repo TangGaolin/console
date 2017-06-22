@@ -42,6 +42,9 @@ Class ItemService
 
     public function getItemList($param)
     {
+        if(0 == $param['item_type']){
+            unset($param['item_type']);
+        }
         return $this->itemRepository->getItemList($param);
     }
 }

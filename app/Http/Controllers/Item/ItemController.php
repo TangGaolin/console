@@ -60,10 +60,14 @@ class ItemController extends Controller
     public function getItemList()
     {
         $param = [
+            'item_type'      => Request::input('item_type'),
+            'item_name'      => Request::input('item_name'),
             'cur_page'       => Request::input('cur_page', 1),
             'limit'          => Request::input('limit', 15)
         ];
         $rule = [
+            "item_type" => "integer",
+            "item_name" => "string",
             "cur_page" => "integer",
             "limit" => "integer"
         ];
