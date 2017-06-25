@@ -24,14 +24,21 @@ class EmployeeController extends Controller
     public function getEmployeeList()
     {
         $param = [
-            "emp_name_phone" => Request::input('emp_name_phone', ""),
-            'cur_page' => Request::input('cur_page', 1),
-            'limit' => Request::input('limit', 15)
+            "emp_name_phone" => Request::input('emp_name_phone'),
+            "is_server" => Request::input('is_server'),
+            "is_cashier"=> Request::input('is_cashier'),
+            "is_admin"  => Request::input('is_admin'),
+            'cur_page'  => Request::input('cur_page', 1),
+            'limit'     => Request::input('limit', 15)
         ];
+//        dd($param);
         $rule = [
-            "emp_name_phone" => "string",
-            "cur_page" => "integer",
-            "limit" => "integer"
+            "emp_name_phone" => "nullable|string",
+            "is_server"  => "nullable|integer",
+            "is_cashier" => "nullable|integer",
+            "is_admin"   => "nullable|integer",
+            "cur_page"   => "integer",
+            "limit"      => "integer"
         ];
         $this->validation($param, $rule);
 
