@@ -31,7 +31,7 @@ Route::post('/employee/removeEmployee', 'Employee\EmployeeController@removeEmplo
 
 Route::post('/employee/addCashier', 'Employee\CashierController@addCashier');
 Route::post('/employee/updateCashier', 'Employee\CashierController@updateCashier');
-Route::post('/employee/updateCashier', 'Employee\CashierController@updateCashier');
+Route::post('/employee/removeCashier', 'Employee\CashierController@removeCashier');
 
 
 Route::post('/item/addItemType', 'Item\ItemController@addItemType');

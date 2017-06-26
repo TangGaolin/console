@@ -34,7 +34,7 @@ class CashierController extends Controller
             "phone_no" => "required|string",
             "shop_id"  => "required|integer"
         ];
-
+        $param['is_cashier'] = 1;
         $this->validation($param, $rule);
         return $this->employeeService->addCashier($param);
     }
@@ -43,11 +43,13 @@ class CashierController extends Controller
     public function updateCashier()
     {
         $param = [
+            "emp_id" => Request::input("emp_id"),
             "emp_name" => Request::input("emp_name"),
             "phone_no" => Request::input("phone_no"),
             "shop_id"  => Request::input("shop_id"),
         ];
         $rule = [
+            "emp_id"   => "required|integer",
             "emp_name" => "required|string",
             "phone_no" => "required|string",
             "shop_id"  => "required|integer",
