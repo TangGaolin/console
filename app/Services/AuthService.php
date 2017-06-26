@@ -18,17 +18,18 @@ Class AuthService {
         $this->responseCode          = config('response_code');
     }
 
-
+    //后台管理员登录
     public function login($param)
     {
         $employee =  app(EmployeeRepositoryInterface::class);
         $res = $employee->getEmployeeInfo([
             'phone_no' => $param['user'],
             'password' => $param['password'],
+            'is_admin' => 1
         ]);
 
         //不存在，用户名和密码错误
-        if(!$res || $res["is_admin"] != 1){
+        if(!$res){
             return [
                 'statusCode' => $this->responseCode['STATUSCODE_PASSWDERROR'],
                 'msg'  => $this->responseCode['MSG_PASSWDERROR'],
@@ -45,5 +46,32 @@ Class AuthService {
         ];
     }
 
+    //前台收银员登录
+    public function cashierLogin($param)
+    {
+        $employee =  app(EmployeeRepositoryInterface::class);
+        $res = $employee->getEmployeeInfo([
+            'phone_no' => $param['user'],
+            'password' => $param['password'],
+            'is_cashier' => 1
+        ]);
+
+        //不存在，用户名和密码错误
+        if(!$res){
+            return [
+                'statusCode' => $this->responseCode['STATUSCODE_PASSWDERROR'],
+                'msg'  => $this->responseCode['MSG_PASSWDERROR'],
+                'success' => false
+            ];
+        }
+
+        unset($res['password']);
+        return [
+            'statusCode' => $this->responseCode['STATUSCODE_SUCCESS'],
+            'msg'  => $this->responseCode['MSG_OK'],
+            'success' => true,
+            'data' => $res
+        ];
+    }
 
 }
