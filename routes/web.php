@@ -29,6 +29,10 @@ Route::post('/employee/updateEmployee', 'Employee\EmployeeController@updateEmplo
 Route::post('/employee/importEmployee', 'Employee\EmployeeController@importEmployee');
 Route::post('/employee/removeEmployee', 'Employee\EmployeeController@removeEmployee');
 
+Route::post('/employee/addCashier', 'Employee\CashierController@addCashier');
+Route::post('/employee/updateCashier', 'Employee\CashierController@updateCashier');
+Route::post('/employee/updateCashier', 'Employee\CashierController@updateCashier');
+
 
 Route::post('/item/addItemType', 'Item\ItemController@addItemType');
 Route::post('/item/getItemType', 'Item\ItemController@getItemType');
@@ -41,4 +45,5 @@ Route::post('/item/modifyItemType', 'Item\ItemController@modifyItemType');
 Route::post('/goods/addGood', 'Goods\GoodsController@addGood');
 Route::post('/goods/getGoodsList', 'Goods\GoodsController@getGoodsList');
 Route::post('/goods/updateGood', 'Goods\GoodsController@updateGood');
+
 

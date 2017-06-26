@@ -11,16 +11,14 @@ class EmployeeController extends Controller
     protected $request;
     protected $employeeService;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct(EmployeeService $employeeService)
     {
         $this->employeeService = $employeeService;
     }
 
+    /*
+     * 按照条件获取员工列表
+     * */
     public function getEmployeeList()
     {
         $param = [
@@ -31,7 +29,6 @@ class EmployeeController extends Controller
             'cur_page'  => Request::input('cur_page', 1),
             'limit'     => Request::input('limit', 15)
         ];
-//        dd($param);
         $rule = [
             "emp_name_phone" => "nullable|string",
             "is_server"  => "nullable|integer",
@@ -46,6 +43,7 @@ class EmployeeController extends Controller
         return $this->success($data);
     }
 
+    //添加员工
     public function addEmployee()
     {
         $param = [
@@ -69,10 +67,11 @@ class EmployeeController extends Controller
         return $this->employeeService->addEmployee($param);
     }
 
+    //更新员工信息
     public function updateEmployee()
     {
         $param = [
-            "emp_id" => Request::input("emp_id"),
+            "emp_id"   => Request::input("emp_id"),
             "emp_name" => Request::input("emp_name"),
             "phone_no" => Request::input("phone_no"),
             "sex"      => Request::input("sex"),
@@ -94,7 +93,7 @@ class EmployeeController extends Controller
         return $this->employeeService->updateEmployee($param);
     }
 
-
+    //删除员工
     public function removeEmployee()
     {
         $param = [
@@ -106,9 +105,11 @@ class EmployeeController extends Controller
 
         $this->validation($param,$rule);
 
-        return $this->employeeService->removeEmployee($param);
+        $param['is_server'] = 0;
+        return $this->employeeService->updateEmployee($param);
     }
 
+    //导入员工
     public function importEmployee()
     {
         $param = [
