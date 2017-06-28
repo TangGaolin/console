@@ -8,7 +8,6 @@ use App\Services\StoreService;
 class StoreController extends Controller
 {
 
-    protected $request;
     protected $storeService;
 
     /**

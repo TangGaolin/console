@@ -9,7 +9,6 @@ use App\Services\AuthService;
 class LoginController extends Controller
 {
 
-    protected $request;
 
     protected $authService;
 

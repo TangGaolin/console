@@ -46,4 +46,5 @@ Route::post('/goods/addGood', 'Goods\GoodsController@addGood');
 Route::post('/goods/getGoodsList', 'Goods\GoodsController@getGoodsList');
 Route::post('/goods/updateGood', 'Goods\GoodsController@updateGood');
 
+Route::post('/users/addUser', 'Users\UsersController@addUser');
 

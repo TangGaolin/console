@@ -8,7 +8,6 @@ use App\Services\EmployeeService;
 class CashierController extends Controller
 {
 
-    protected $request;
     protected $employeeService;
 
     /**

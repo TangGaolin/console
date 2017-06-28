@@ -8,7 +8,6 @@ use App\Services\EmployeeService;
 class EmployeeController extends Controller
 {
 
-    protected $request;
     protected $employeeService;
 
     public function __construct(EmployeeService $employeeService)
