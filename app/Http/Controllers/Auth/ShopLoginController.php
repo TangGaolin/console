@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Request;
 
 use App\Services\AuthService;
-class LoginController extends Controller
+class ShopLoginController extends Controller
 {
 
     protected $authService;
@@ -20,18 +20,16 @@ class LoginController extends Controller
     public function login(){
 
         $param = [
-            'user'     => Request::input('user'),
+            'user' => Request::input('user'),
             'password' => Request::input('password'),
-            'ip'       => Request::getClientIp()
+            'ip' => Request::getClientIp()
         ];
-
         $rule = [
             'user'     => "required|string",
             'password' => "required|string",
         ];
         $this->validation($param, $rule);
-
-        $result =  $this->authService->login($param);
+        $result =  $this->authService->cashierLogin($param);
 
         if ($result['statusCode'] == '0') {
             Request::session()->put('admin', $result['data']);

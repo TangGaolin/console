@@ -8,6 +8,7 @@
 namespace App\Services;
 
 use App\Repositories\Employee\EmployeeRepositoryInterface;
+use App\Repositories\Shop\ShopRepositoryInterface;
 
 Class AuthService {
 
@@ -55,7 +56,9 @@ Class AuthService {
             'password' => $param['password'],
             'is_cashier' => 1
         ]);
-
+        $storeRepository = app(ShopRepositoryInterface::class);
+        $storeInfo = $storeRepository->getShopInfo($res['shop_id']);
+        $res['shop_name'] = $storeInfo['shop_name'];
         //不存在，用户名和密码错误
         if(!$res){
             return [

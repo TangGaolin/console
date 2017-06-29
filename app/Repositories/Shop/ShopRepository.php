@@ -32,5 +32,11 @@ class ShopRepository implements ShopRepositoryInterface
         return $this->shopModel->insert($param);
     }
 
+    public function getShopInfo($shop_id)
+    {
+        $result = $this->shopModel->where('shop_id', '=', $shop_id)->first();
+        return $result ? $result->toArray() : false;
+    }
+
 
 }
