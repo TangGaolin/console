@@ -21,7 +21,10 @@ Route::post('/shop/logout', 'Auth\ShopLoginController@logout'); //店务系统�
 Route::post('/shop/searchUserList', 'Users\UsersController@getUserList'); //查询用户
 Route::post('/shop/typeUserList', 'Users\UsersController@typeUserList');  //获取类型的用户
 Route::post('/shop/getUserDetail', 'Users\UsersController@getUserDetail');  //获取用户详情
+
+Route::post('/shop/getEmployeeList', 'Employee\EmployeeController@getEmployeeList');
 Route::post('/shop/addUser', 'Users\UsersController@addUser');  //创建用户
+
 Route::post('/shop/recharge', 'Users\UsersController@recharge');  //充值
 
 Route::post('/shop/getItemList', 'Item\ItemController@getItemList');  //获取服务数据

@@ -69,6 +69,29 @@ Class UsersService
         ];
     }
 
+    public function getUserDetail($param)
+    {
+        $userInfo = [];
+        if(isset($param['uid'])) {
+            $userInfo = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+        }
+        if(isset($param['phone_no']) && isset($param['shop_id'])) {
+            $userInfo = $this->usersRepository->getUserInfo([
+                'phone_no' => $param['phone_no'],
+                'shop_id'  => $param['shop_id'],
+            ]);
+        }
+        if(!empty($userInfo)){
+            //继续查询其他信息
+        }
+         return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true,
+            'data'       => $userInfo
+        ];
+    }
+
 
 
 

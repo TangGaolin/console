@@ -39,7 +39,6 @@ class UsersController extends Controller
         ];
 
         $this->validation($param, $rule);
-
         return $this->usersService->getUserList($param);
     }
 
@@ -92,7 +91,22 @@ class UsersController extends Controller
             "birthday"   => "nullable|date",
             "remark"     => "string",
         ];
+    }
+    public function getUserDetail()
+    {
+        $param = [
+            "uid"       => Request::input("uid"),
+            "phone_no"  => Request::input("phone_no"),
+            "shop_id"   => Request::input("shop_id")
+        ];
+        $rule = [
+            "uid"        => "nullable|integer",
+            "phone_no"   => "nullable|numeric",
+            "shop_id"    => "nullable|integer",
+        ];
 
+        $this->validation($param, $rule);
+        return $this->usersService->getUserDetail($param);
     }
 
 }
