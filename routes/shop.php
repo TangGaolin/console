@@ -25,7 +25,7 @@ Route::post('/shop/getUserDetail', 'Users\UsersController@getUserDetail');  //�
 Route::post('/shop/getEmployeeList', 'Employee\EmployeeController@getEmployeeList');
 Route::post('/shop/addUser', 'Users\UsersController@addUser');  //创建用户
 
-Route::post('/shop/recharge', 'Users\UsersController@recharge');  //充值
+Route::post('/shop/recharge', 'Users\UsersAccountController@recharge');  //充值
 
 Route::post('/shop/getItemList', 'Item\ItemController@getItemList');  //获取服务数据
 Route::post('/shop/buyItem', 'Users\UsersController@buyItem');  //购买服务
