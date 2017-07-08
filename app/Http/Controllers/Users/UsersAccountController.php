@@ -34,7 +34,6 @@ class UsersAccountController extends Controller
             "pay_emps"      => Request::input("pay_emps", []),
             "add_time"      => Request::input("add_time"),
         ];
-
         $rule = [
             "uid"            => "required|integer",
             "charge_money"   => "required|numeric",
@@ -47,16 +46,26 @@ class UsersAccountController extends Controller
 
         $this->validation($param, $rule);
 
-        $this->usersAccountService->recharge($param);
+        return $this->usersAccountService->recharge($param);
+    }
 
-        dd($param);
+    public function getOrderList()
+    {
+        $param = [
+            "uid"           => Request::input("uid"),
+            "shop_id"       => Request::input("shop_id"),
+            "cur_page"      => Request::input("cur_page",1),
+            "limit"         => Request::input("limit",10)
+        ];
+        $rule = [
+            "uid"           => "nullable|integer",
+            "cur_page"      => "required|integer",
+            "limit"         => "required|integer",
+        ];
 
-        return $this->success();
+        $this->validation($param, $rule);
 
-
-
-
-
+        return $this->usersAccountService->getOrderList($param);
     }
 
 

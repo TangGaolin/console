@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'PRC',
 
     /*
     |--------------------------------------------------------------------------
@@ -182,7 +182,8 @@ return [
         App\Providers\ShopServiceProvider::class,
         App\Providers\ItemServiceProvider::class,
         App\Providers\GoodsServiceProvider::class,
-        App\Providers\UsersServiceProvider::class
+        App\Providers\UsersServiceProvider::class,
+        App\Providers\UsersAccountServiceProvider::class
     ],
 
     /*

@@ -22,6 +22,10 @@ Route::post('/shop/searchUserList', 'Users\UsersController@getUserList'); //查�
 Route::post('/shop/typeUserList', 'Users\UsersController@typeUserList');  //获取类型的用户
 Route::post('/shop/getUserDetail', 'Users\UsersController@getUserDetail');  //获取用户详情
 
+Route::post('/shop/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
+
+
+
 Route::post('/shop/getEmployeeList', 'Employee\EmployeeController@getEmployeeList');
 Route::post('/shop/addUser', 'Users\UsersController@addUser');  //创建用户
 

@@ -7,7 +7,9 @@
  */
 namespace App\Services;
 
+use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Shop\ShopRepositoryInterface;
+use App\Repositories\Users\UsersAccountRepositoryInterface;
 use App\Repositories\Users\UsersRepositoryInterface;
 use Excel;
 
@@ -81,10 +83,14 @@ Class UsersService
                 'shop_id'  => $param['shop_id'],
             ]);
         }
-        if(!empty($userInfo)){
-            //继续查询其他信息
+        if(!empty($userInfo)) {
+            //获取员工信息
+            $empRepository = app(EmployeeRepositoryInterface::class);
+            $emp_info = $empRepository->getEmployeeInfo(['emp_id' => $userInfo['emp_id']]);
+            $userInfo['emp_name'] = $emp_info['emp_name'];
         }
-         return [
+
+        return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg'        => config('response_code.MSG_OK'),
             'success'    => true,
