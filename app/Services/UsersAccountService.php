@@ -25,8 +25,10 @@ Class UsersAccountService
 
     public function recharge($param)
     {
-        $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
         $orderId = date('YmdHis', time()) . mt_rand(100,999);
+
+        $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
+        $debt = $param['charge_money'] - $payMoney;
         //计算消费表数据
         $orderData = [
             "order_id"      => $orderId,
@@ -36,7 +38,8 @@ Class UsersAccountService
             "pay_card"     => $param['pay_card'],
             "pay_mobile"   => $param['pay_mobile'],
             "pay_money"    => $payMoney,
-            "debt"         => $param['charge_money'] - $payMoney,
+            "debt"         => $debt,
+            "status"       => $debt > 0 ? 1 : 0,
             "emp_info"     => json_encode($param['pay_emps'], JSON_UNESCAPED_UNICODE),
             "add_time"     => $param['add_time'],
         ];

@@ -59,6 +59,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             $whereParam['limit'] = 10;
         }
 
+        $select = $select->orderBy('add_time', 'desc');
         $res         = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();
 
         return [
