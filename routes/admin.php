@@ -11,8 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+Route::any('/', function () {
+    return redirect('/index.html', '301');
 });
 
 Route::any('/getConfig', 'ConfigController@getConfig');

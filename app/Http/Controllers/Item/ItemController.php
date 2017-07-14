@@ -87,7 +87,7 @@ class ItemController extends Controller
     public function getItemList()
     {
         $param = [
-            'item_type'      => Request::input('item_type'),
+            'item_type'      => Request::input('item_type',0),
             'item_name'      => Request::input('item_name'),
             'cur_page'       => Request::input('cur_page', 1),
             'limit'          => Request::input('limit', 15)
@@ -95,8 +95,8 @@ class ItemController extends Controller
         $rule = [
             "item_type" => "integer",
             "item_name" => "string",
-            "cur_page" => "integer",
-            "limit" => "integer"
+            "cur_page"  => "integer",
+            "limit"     => "integer"
         ];
         $this->validation($param, $rule);
         $data = $this->itemService->getItemList($param);
