@@ -31,7 +31,7 @@ Route::post('/shop/getEmployeeList', 'Employee\EmployeeController@getEmployeeLis
 
 Route::post('/shop/getItemList', 'Item\ItemController@getItemList');  //获取服务数据
 
-Route::post('/shop/buyItem', 'Users\UsersController@buyItem');  //购买服务
+Route::post('/shop/buyItems', 'Users\UsersAccountController@buyItems');  //购买服务
 
 Route::post('/shop/getGoodList', 'Goods\GoodsController@getGoodsList');  //获取产品列表
 Route::post('/shop/buyItem', 'Users\UsersController@buyItem');  //购买产品

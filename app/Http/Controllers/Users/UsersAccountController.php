@@ -49,6 +49,38 @@ class UsersAccountController extends Controller
         return $this->usersAccountService->recharge($param);
     }
 
+    public function buyItems()
+    {
+        $param = [
+            "uid"           => Request::input("uid"),   //用户UID
+            "selected_items"=> Request::input("selectedItems"), //购买项目明细
+            "items_money"   => Request::input("itemsMoney"), //项目总金额
+            "pay_balance"   => Request::input("pay_balance", 0), //卡扣余额
+            "pay_cash"      => Request::input("pay_cash", 0), //支付现金
+            "pay_card"      => Request::input("pay_card", 0), //银行卡
+            "pay_mobile"    => Request::input("pay_mobile", 0), //移动支付
+            "pay_emps"      => Request::input("pay_emps", []), //员工金额分配
+            "add_time"      => Request::input("add_time"), //添加时间
+        ];
+
+        $rule = [
+            "uid"            => "required|integer",
+            "selected_items" => "required|array",
+            "items_money"    => "numeric",
+            "pay_balance"    => "numeric",
+            "pay_card"       => "numeric",
+            "pay_cash"       => "numeric",
+            "pay_mobile"     => "numeric",
+            "pay_emps"       => "required|array",
+            "add_time"       => "required|string",
+        ];
+
+        $this->validation($param, $rule);
+
+        return $this->usersAccountService->buyItems($param);
+
+    }
+
     public function getOrderList()
     {
         $param = [
