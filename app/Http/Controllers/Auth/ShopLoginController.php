@@ -20,9 +20,9 @@ class ShopLoginController extends Controller
     public function login(){
 
         $param = [
-            'user' => Request::input('user'),
+            'user'     => Request::input('user'),
             'password' => Request::input('password'),
-            'ip' => Request::getClientIp()
+            'ip'       => Request::getClientIp()
         ];
         $rule = [
             'user'     => "required|string",
@@ -32,7 +32,7 @@ class ShopLoginController extends Controller
         $result =  $this->authService->cashierLogin($param);
 
         if ($result['statusCode'] == '0') {
-            Request::session()->put('admin', $result['data']);
+            Request::session()->put('cashier', $result['data']);
             unset($result['data']['emp_id']);
         }
         return $result;

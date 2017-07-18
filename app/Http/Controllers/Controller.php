@@ -30,9 +30,16 @@ class Controller extends BaseController
         }
     }
 
-    protected function getAid(){
+    protected function getAid()
+    {
         $admin = Request::session()->get('admin');
         return $admin['emp_id'];
+    }
+
+    protected function getCashierId()
+    {
+        $cashier = Request::session()->get('cashier');
+        return $cashier['emp_id'];
     }
 
     protected function success($data = null)

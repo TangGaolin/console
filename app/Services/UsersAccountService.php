@@ -42,6 +42,7 @@ Class UsersAccountService
             "status"       => $debt > 0 ? 1 : 0,
             "emp_info"     => json_encode($param['pay_emps'], JSON_UNESCAPED_UNICODE),
             "add_time"     => $param['add_time'],
+            "cashier_id"   => $param['cashier_id'],
         ];
         //计算员工业绩分成表
         $empOrderData = [];
@@ -93,6 +94,7 @@ Class UsersAccountService
             "status"       => $debt > 0 ? 1 : 0,
             "emp_info"     => json_encode($param['pay_emps'], JSON_UNESCAPED_UNICODE),
             "add_time"     => $param['add_time'],
+            "cashier_id"   => $param['cashier_id']
         ];
 
         //计算会员项目表数据

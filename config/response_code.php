@@ -18,9 +18,12 @@ return [
 
     'STATUSCODE_ITEMERROR'                 => 601,//项目信息添加或者修改错误的
 
+    'MSG_NOT_LOGIN'                        => "登录信息失效，请重新登录",
     'MSG_PASSWDERROR'                      => "用户名或密码错误",
     'MSG_USERERROR_ADD'                    => "添加用户错误",
-    'MSG_OK'                               => "OK"
+    'MSG_OK'                               => "OK",
+
+
 
 
 ];

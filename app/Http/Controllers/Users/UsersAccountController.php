@@ -45,7 +45,7 @@ class UsersAccountController extends Controller
         ];
 
         $this->validation($param, $rule);
-
+        $param['casher_id'] = $this->getCashierId();
         return $this->usersAccountService->recharge($param);
     }
 
@@ -76,6 +76,8 @@ class UsersAccountController extends Controller
         ];
 
         $this->validation($param, $rule);
+
+        $param['casher_id'] = $this->getCashierId();
 
         return $this->usersAccountService->buyItems($param);
 
