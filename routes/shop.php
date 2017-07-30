@@ -33,7 +33,7 @@ Route::group(['middleware' => ['loginState']], function () {
     Route::post('/shop/getEmployeeList', 'Employee\EmployeeController@getEmployeeList'); // 获取员工信息数据
 
 
-    Route::post('/shop/getItemList', 'Item\ItemController@getItemList');  //获取服务数据
+    Route::post('/shop/getItemList', 'Users\UsersAccountController@getItemList');  //获取服务数据
 
     Route::post('/shop/buyItems', 'Users\UsersAccountController@buyItems');  //购买服务
 

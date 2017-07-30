@@ -45,7 +45,7 @@ class UsersAccountController extends Controller
         ];
 
         $this->validation($param, $rule);
-        $param['casher_id'] = $this->getCashierId();
+        $param['cashier_id'] = $this->getCashierId();
         return $this->usersAccountService->recharge($param);
     }
 
@@ -76,11 +76,8 @@ class UsersAccountController extends Controller
         ];
 
         $this->validation($param, $rule);
-
-        $param['casher_id'] = $this->getCashierId();
-
+        $param['cashier_id'] = $this->getCashierId();
         return $this->usersAccountService->buyItems($param);
-
     }
 
     public function getOrderList()
@@ -100,6 +97,26 @@ class UsersAccountController extends Controller
         $this->validation($param, $rule);
 
         return $this->usersAccountService->getOrderList($param);
+    }
+
+    public function getItemList()
+    {
+
+        $param = [
+            "uid"           => Request::input("uid"),
+            "shop_id"       => Request::input("shop_id"),
+            "cur_page"      => Request::input("cur_page",1),
+            "limit"         => Request::input("limit",10)
+        ];
+        $rule = [
+            "uid"           => "nullable|integer",
+            "cur_page"      => "required|integer",
+            "limit"         => "required|integer",
+        ];
+
+        $this->validation($param, $rule);
+
+        return $this->usersAccountService->getItemList($param);
     }
 
 

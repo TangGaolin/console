@@ -63,7 +63,6 @@ Class UsersAccountService
         ]);
         //记录操作Log
 
-
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg'        => config('response_code.MSG_OK'),
@@ -154,6 +153,19 @@ Class UsersAccountService
             'success'    => true,
             'data'       => $orderList
         ];
+    }
+
+    public function getItemList($param)
+    {
+        $orderList = $this->usersAccountRepository->getItemList($param);
+
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true,
+            'data'       => $orderList
+        ];
+
     }
 
 

@@ -38,7 +38,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             $this->empOrderModel->insert($param['emp_order_data']);
             //更新会员金额
             $updateData = [
-                'balance'     => DB::raw('balance+' . $param['order_data']['charge_money']),
+                'balance'     => DB::raw('balance+' . $param['order_data']['worth_money']),
                 'debt' => DB::raw('debt+' . $param['order_data']['debt']),
             ];
             return $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
@@ -99,6 +99,33 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
         };
         return DB::transaction($query);
+    }
+
+
+
+    public function getItemList($whereParam)
+    {
+        $select = $this->userItemsModel;
+        !empty($whereParam['uid']) && $select = $select->where("uid", "=", $whereParam["uid"]);
+
+        $countSelect = $select;
+        $count       = $countSelect->count();
+
+        if(!isset($whereParam['cur_page'])) {
+            $whereParam['cur_page'] = 1;
+        }
+
+        if(!isset($whereParam['limit'])) {
+            $whereParam['limit'] = 10;
+        }
+
+        $select = $select->orderBy('add_time', 'desc');
+        $res         = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();
+
+        return [
+            'totalSize' => $count,
+            'data'      => $res,
+        ];
     }
 
     public function buyGoods()

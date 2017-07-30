@@ -34,7 +34,7 @@ class GoodsRepository implements GoodsRepositoryInterface
 
     public function updateGood($goodData)
     {
-        return $this->goods->where('good_id','=',$goodData['good_id'])->update($goodData);
+        return $this->goods->where('good_id', '=', $goodData['good_id'])->update($goodData);
     }
 
 
