@@ -32,10 +32,12 @@ Route::group(['middleware' => ['loginState']], function () {
 
     Route::post('/shop/getEmployeeList', 'Employee\EmployeeController@getEmployeeList'); // 获取员工信息数据
 
-
-    Route::post('/shop/getItemList', 'Users\UsersAccountController@getItemList');  //获取服务数据
+    Route::post('/shop/getItemList', 'Item\ItemController@getItemList');  //获取当前服务项目
+    Route::post('/shop/getUserItemList', 'Users\UsersAccountController@getItemList');  //获取用户的服务数据
 
     Route::post('/shop/buyItems', 'Users\UsersAccountController@buyItems');  //购买服务
+
+    Route::post('/shop/useItems', 'Users\UsersAccountController@useItems');  //耗卡
 
     Route::post('/shop/getGoodList', 'Goods\GoodsController@getGoodsList');  //获取产品列表
     Route::post('/shop/buyItem', 'Users\UsersController@buyItem');  //购买产品

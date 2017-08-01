@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Users;
 
+use App\Models\UseOrder;
 use App\Models\Users;
 use App\Models\Order;
 use App\Models\EmpOrder;
@@ -14,18 +15,21 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     protected $orderModel;
     protected $empOrderModel;
     protected $userItemsModel;
+    protected $useOrderModel;
 
     public function __construct(
         Users $users,
         Order $order,
         EmpOrder $empOrder,
-        UserItems $userItems
+        UserItems $userItems,
+        UseOrder $useOrder
     )
     {
         $this->usersModel      = $users;
         $this->orderModel      = $order;
         $this->empOrderModel   = $empOrder;
         $this->userItemsModel  = $userItems;
+        $this->useOrderModel   = $useOrder;
     }
 
     //用户充值事物处理
@@ -120,13 +124,43 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         }
 
         $select = $select->orderBy('add_time', 'desc');
-        $res         = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();
+        $res    = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();
 
         return [
             'totalSize' => $count,
             'data'      => $res,
         ];
     }
+
+
+    public function getUserItemInfo($whereParam)
+    {
+        $res = $this->userItemsModel->where($whereParam)->first();
+        return $res ? $res->toArray() : false;
+    }
+
+    public function useItems($param)
+    {
+        $query = function () use ($param) {
+            //插入员工明细表
+            $this->empOrderModel->insert($param['empOrderDatas']);
+
+            //账户卡进行更新
+            foreach ($param['updateUserItemDatas'] as $userItemData) {
+                $updateData['id'] = $userItemData['id'];
+                $updateData['used_times'] = DB::raw('used_times+' . $userItemData['use_time']); // 更新次数
+
+                // 更新金额
+                $updateData['now_money'] = DB::raw('now_money-' . $userItemData['use_time'] * $userItemData['sold_price']);
+                $updateData['status'] = $userItemData['status'];
+                $this->userItemsModel->where('id', '=', $updateData['id'])->update($updateData);
+            }
+            //插入消耗表
+            return $this->useOrderModel->insert($param['useOrderData']);
+        };
+        return DB::transaction($query);
+    }
+
 
     public function buyGoods()
     {

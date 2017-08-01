@@ -33,6 +33,7 @@ Class UsersAccountService
             "order_id"      => $orderId,
             "order_type"    => 0, //充值订单类型为 0
             "uid"          => $param['uid'],
+            "shop_id"          => $param['shop_id'],
             "worth_money"  => $param['charge_money'],
             "pay_cash"     => $param['pay_cash'],
             "pay_card"     => $param['pay_card'],
@@ -80,8 +81,9 @@ Class UsersAccountService
         //计算消费表数据
         $orderData = [
             "order_id"     => $orderId,
-            "order_type"    => 1, //购买服务类型为 1
+            "order_type"   => 1, //购买服务类型为 1
             "uid"          => $param['uid'],
+            "shop_id"      => $param['shop_id'],
             "worth_money"  => $param['items_money'],
             "order_info"   => json_encode($param['selected_items'], JSON_UNESCAPED_UNICODE),
             "pay_balance"  => $param['pay_balance'],
@@ -164,6 +166,84 @@ Class UsersAccountService
             'msg'        => config('response_code.MSG_OK'),
             'success'    => true,
             'data'       => $orderList
+        ];
+
+    }
+
+    public  function useItems($param)
+    {
+
+        // 计算 useOrderData
+        $useOrderId                   = date('YmdHis', time()) . mt_rand(1000, 9999);
+        $useOrderData['use_order_id'] = $useOrderId;
+        $useOrderData['uid']          = $param['uid'];
+        $useOrderData['use_type']     = 0;  //0 为耗卡类型
+        $useOrderData['shop_id']      = $param['shop_id'];
+        $useOrderData['cashier_id']   = $param['cashier_id'];
+        $useOrderData['items_info']   = json_encode($param['select_items'], JSON_UNESCAPED_UNICODE);
+        $useOrderData['add_time']     = $param['add_time'];
+
+        // 获取用户信息
+        $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+        $order_desc = "耗卡" . '-' . $user_info['user_name'];
+        $use_money = 0;
+        $emps = [];
+
+        // 计算员工消耗信息表
+        $empOrderDatas = [];
+
+        // 计算 user——items update 数据
+        $updateUserItemDatas = [];
+
+        foreach ($param['select_items'] as $select_item) {
+            $use_money += $select_item['sold_price'] * $select_item['use_time']; //总消耗金额
+
+            //耗卡次数验证
+            $item = $this->usersAccountRepository->getUserItemInfo(['id' => $select_item['id']]);
+            if($select_item['use_time'] + $item['used_times'] > $item['times']){
+                return [
+                    'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+                    'msg'        => $item["item_name"] . "次数不正确，请验证",
+                    'success'    => false
+                ];
+            }
+            $updateUserItemData['status'] = 0;
+            if($select_item['use_time'] + $item['used_times'] == $item['times']) {
+                $updateUserItemData['status'] = 1;
+            }
+
+            $updateUserItemData['id']       = $select_item['id'];
+            $updateUserItemData['use_time'] = $select_item['use_time'];
+            $updateUserItemData['sold_price'] = $item['sold_price']; //用查出来的数据
+            $updateUserItemDatas[]          = $updateUserItemData;
+
+
+            foreach ($select_item['emps'] as $emp) {
+                $empOrderData['emp_id']     = $emp['emp_id'];
+                $empOrderData['order_desc'] = $order_desc;
+                $empOrderData['fee']        = $emp['fee'];
+                $empOrderData['xiaohao']    = $emp['xiaohao'];
+                $empOrderData['order_id']   = $useOrderId;
+                $empOrderData['from_type']  = 1;  //来源于消耗表
+                $emps[] = $emp['emp_name'];
+                $empOrderDatas[] = $empOrderData;
+            }
+        }
+
+        $useOrderData['use_money'] = $use_money;
+        $useOrderData['emps'] = implode(',', $emps);
+
+
+        $res = $this->usersAccountRepository->useItems([
+                'useOrderData'  => $useOrderData,
+                'empOrderDatas' => $empOrderDatas,
+                'updateUserItemDatas' => $updateUserItemDatas,
+        ]);
+
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true
         ];
 
     }

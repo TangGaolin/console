@@ -27,6 +27,7 @@ class UsersAccountController extends Controller
     {
         $param = [
             "uid"           => Request::input("uid"),
+            "shop_id"       => Request::input("shop_id"),
             "charge_money"  => Request::input("charge_money"),
             "pay_cash"      => Request::input("pay_cash",0),
             "pay_card"      => Request::input("pay_card",0),
@@ -36,6 +37,7 @@ class UsersAccountController extends Controller
         ];
         $rule = [
             "uid"            => "required|integer",
+            "shop_id"        => "required|integer",
             "charge_money"   => "required|numeric",
             "pay_cash"       => "numeric",
             "pay_card"       => "numeric",
@@ -53,6 +55,7 @@ class UsersAccountController extends Controller
     {
         $param = [
             "uid"           => Request::input("uid"),   //用户UID
+            "shop_id"       => Request::input('shop_id'),
             "selected_items"=> Request::input("selectedItems"), //购买项目明细
             "items_money"   => Request::input("itemsMoney"), //项目总金额
             "pay_balance"   => Request::input("pay_balance", 0), //卡扣余额
@@ -65,6 +68,7 @@ class UsersAccountController extends Controller
 
         $rule = [
             "uid"            => "required|integer",
+            "shop_id"        => "required|integer",
             "selected_items" => "required|array",
             "items_money"    => "numeric",
             "pay_balance"    => "numeric",
@@ -117,6 +121,28 @@ class UsersAccountController extends Controller
         $this->validation($param, $rule);
 
         return $this->usersAccountService->getItemList($param);
+    }
+
+    public function useItems()
+    {
+        $param = [
+            "uid"          => Request::input('uid'),
+            "shop_id"      => Request::input('shop_id'),
+            "select_items" => Request::input('select_items'),
+            "add_time"     => Request::input('add_time')
+        ];
+        $rule = [
+            "uid"          => "required|integer",
+            "shop_id"      => "required|integer",
+            "select_items" => "required|array",
+            "add_time"     => "required|string"
+        ];
+
+        $this->validation($param, $rule);
+        $param['cashier_id'] = $this->getCashierId();
+
+        return $this->usersAccountService->useItems($param);
+
     }
 
 
