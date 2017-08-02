@@ -42,6 +42,13 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         ];
     }
 
+    public function getEmpDataByIds($emp_ids)
+    {
+        $select = $this->employeeModel->select('emp_id','emp_name','phone_no','sex','shop_id','job', "remark");
+        $res = $select->whereIn('emp_id',$emp_ids)->get();
+        return $res->toArray();
+    }
+
     public function addEmployee($employeeData)
     {
         $res = $this->getEmployeeInfo(['phone_no' => $employeeData['phone_no']]);

@@ -7,6 +7,7 @@
  */
 namespace App\Services;
 
+use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Shop\ShopRepositoryInterface;
 use App\Repositories\Users\UsersAccountRepositoryInterface;
 use App\Repositories\Users\UsersRepositoryInterface;
@@ -167,7 +168,6 @@ Class UsersAccountService
             'success'    => true,
             'data'       => $orderList
         ];
-
     }
 
     public  function useItems($param)
@@ -245,7 +245,35 @@ Class UsersAccountService
             'msg'        => config('response_code.MSG_OK'),
             'success'    => true
         ];
+    }
 
+    public function getUseOrderList($param)
+    {
+        $orderList = $this->usersAccountRepository->getUseOrderList($param);
+
+        $convert_cashiers = [];
+        if($orderList['data']){
+            $cashier_ids = array_column($orderList['data'],"cashier_id");
+            $empRepository = app(EmployeeRepositoryInterface::class);
+            $cashier_ids = array_unique($cashier_ids);
+            $cashiers = $empRepository->getEmpDataByIds($cashier_ids);
+            foreach ($cashiers as $cashier){
+                $convert_cashiers[$cashier['emp_id']] = $cashier;
+            }
+        }
+
+        //获取员工信息
+        foreach ($orderList['data'] as &$order) {
+            $order['cashier_name'] = $convert_cashiers[$order['cashier_id']]['emp_name'];
+        }
+
+
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true,
+            'data'       => $orderList
+        ];
     }
 
 

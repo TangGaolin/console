@@ -161,6 +161,31 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         return DB::transaction($query);
     }
 
+    public function getUseOrderList($param)
+    {
+        $select = $this->useOrderModel;
+        !empty($whereParam['uid']) && $select = $select->where("uid", "=", $whereParam["uid"]);
+
+        $countSelect = $select;
+        $count       = $countSelect->count();
+
+        if(!isset($whereParam['cur_page'])) {
+            $whereParam['cur_page'] = 1;
+        }
+
+        if(!isset($whereParam['limit'])) {
+            $whereParam['limit'] = 10;
+        }
+
+        $select = $select->orderBy('add_time', 'desc');
+        $res    = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();
+
+        return [
+            'totalSize' => $count,
+            'data'      => $res->toArray(),
+        ];
+    }
+
 
     public function buyGoods()
     {

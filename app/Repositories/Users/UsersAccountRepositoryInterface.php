@@ -9,6 +9,7 @@ interface UsersAccountRepositoryInterface
     public function getItemList($whereParam);
     public function getUserItemInfo($whereParam);
     public function useItems($param);
+    public function getUseOrderList($param);
 
     public function buyGoods();
     public function repayment();
