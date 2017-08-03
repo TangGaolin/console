@@ -23,4 +23,10 @@ class Order extends Model
     {
         return json_decode($value, true) ?: $value;
     }
+
+
+    public function getOrderInfoAttribute($value)
+    {
+        return json_decode($value, true) ?: $value;
+    }
 }

@@ -71,7 +71,7 @@ class UsersAccountController extends Controller
             "shop_id"        => "required|integer",
             "selected_items" => "required|array",
             "items_money"    => "numeric",
-            "pay_balance"    => "numeric",
+            "pay_balance"    => "numerthis.viewDataic",
             "pay_card"       => "numeric",
             "pay_cash"       => "numeric",
             "pay_mobile"     => "numeric",
@@ -152,8 +152,8 @@ class UsersAccountController extends Controller
             "uid"           => Request::input("uid"),
             "shop_id"       => Request::input("shop_id"),
             "select_date"   => Request::input("select_date"),
-            "cur_page"      => Request::input("cur_page",1),
-            "limit"         => Request::input("limit",10)
+            "cur_page"      => Request::input("cur_page", 1),
+            "limit"         => Request::input("limit", 10)
         ];
         $rule = [
             "uid"           => "nullable|integer",
