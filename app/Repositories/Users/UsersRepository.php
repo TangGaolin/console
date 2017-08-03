@@ -43,6 +43,12 @@ class UsersRepository implements UsersRepositoryInterface
         return $result ? $result->toArray() : false;
     }
 
+    public function getUserInfoByIds($u_ids)
+    {
+        $result = $this->usersModel->whereIn('uid',$u_ids)->get();
+        return $result ? $result->toArray() : false;
+    }
+
     public function updateUser($uid, $userData)
     {
         return $this->usersModel->where('uid','=', $uid)->update($userData);

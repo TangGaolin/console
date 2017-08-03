@@ -55,6 +55,8 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
         $select = $this->orderModel;
         !empty($whereParam['uid']) && $select = $select->where("uid", "=", $whereParam["uid"]);
+        isset($whereParam['start_time']) && $select = $select->where("add_time", ">=", $whereParam["start_time"]);
+        isset($whereParam['end_time']) && $select = $select->where("add_time", "<", $whereParam["end_time"]);
 
         $countSelect = $select;
         $count       = $countSelect->count();
@@ -72,7 +74,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
         return [
             'totalSize' => $count,
-            'data'      => $res,
+            'data'      => $res->toArray(),
         ];
     }
 

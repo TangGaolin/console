@@ -89,11 +89,14 @@ class UsersAccountController extends Controller
         $param = [
             "uid"           => Request::input("uid"),
             "shop_id"       => Request::input("shop_id"),
+            "select_date"   => Request::input("select_date"),
             "cur_page"      => Request::input("cur_page",1),
             "limit"         => Request::input("limit",10)
         ];
         $rule = [
             "uid"           => "nullable|integer",
+            "shop_id"       => "nullable|integer",
+            "select_date"   => "nullable|date",
             "cur_page"      => "required|integer",
             "limit"         => "required|integer",
         ];
@@ -148,12 +151,14 @@ class UsersAccountController extends Controller
         $param = [
             "uid"           => Request::input("uid"),
             "shop_id"       => Request::input("shop_id"),
+            "select_date"   => Request::input("select_date"),
             "cur_page"      => Request::input("cur_page",1),
             "limit"         => Request::input("limit",10)
         ];
         $rule = [
             "uid"           => "nullable|integer",
             "cur_page"      => "required|integer",
+            "select_date"   => "nullable|date",
             "limit"         => "required|integer",
         ];
 
