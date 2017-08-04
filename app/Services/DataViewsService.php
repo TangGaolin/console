@@ -30,7 +30,7 @@ Class DataViewsService
             if($day <= $param['day']){
                 $data['day'] = $day;
                 $data['yeji'] = $this->getYejiData($param['year'], $param['mouth'], $day, $param['shop_id']);
-                $data['xiaohao'] = $this->getYejiData($param['year'], $param['mouth'], $day, $param['shop_id']);
+                $data['xiaohao'] = $this->getXiaohaoData($param['year'], $param['mouth'], $day, $param['shop_id']);
                 $shopDatas[] = $data;
             }else{
                 $data['day'] = $day;
@@ -52,15 +52,28 @@ Class DataViewsService
     {
         $redis = PRedis::connection();
         $redis_key = "shop_yeji:"  . $year . ':' . $mouth . ':' . $shop_id;
-        $yeji  = $redis->hget($redis_key, $day);
-        if(!$yeji){
-            $yeji = $this->countData($year, $mouth, $day, $shop_id);
-            $redis->hset($redis_key, $day, $yeji);
+        $data  = $redis->hget($redis_key, $day);
+        if(!$data){
+            $data = $this->countYejiData($year, $mouth, $day, $shop_id);
+            $redis->hset($redis_key, $day, $data);
         }
-        return $yeji;
+        return $data;
     }
 
-    protected function countData($year, $mouth, $day, $shop_id)
+    protected function getXiaohaoData($year, $mouth, $day, $shop_id)
+    {
+        $redis = PRedis::connection();
+        $redis_key = "shop_xiaohao:"  . $year . ':' . $mouth . ':' . $shop_id;
+        $data  = $redis->hget($redis_key, $day);
+        if(!$data){
+            $data = $this->countXiaohaoData($year, $mouth, $day, $shop_id);
+            $redis->hset($redis_key, $day, $data);
+        }
+        return $data;
+    }
+
+
+    protected function countYejiData($year, $mouth, $day, $shop_id)
     {
         $usersAccountRepository = app(UsersAccountRepositoryInterface::class);
 
@@ -70,12 +83,31 @@ Class DataViewsService
         $whereParam['limit'] = 1000;
 
         $orders = $usersAccountRepository->getOrderList($whereParam);
-        $yeji = 0;
+        $data = 0;
         foreach ($orders['data'] as $order) {
-            $yeji += $order['pay_money'];
+            $data += $order['pay_money'];
         }
-        return $yeji;
+        return $data;
     }
+
+    protected function countXiaohaoData($year, $mouth, $day, $shop_id)
+    {
+        $usersAccountRepository = app(UsersAccountRepositoryInterface::class);
+
+        $whereParam['start_time'] = $year . "-" . $mouth . '-' .$day;
+        $whereParam['end_time'] = $whereParam['start_time'] . ' 23:59:59';
+        $whereParam['shop_id'] = $shop_id;
+        $whereParam['limit'] = 1000;
+
+        $orders = $usersAccountRepository->getUseOrderList($whereParam);
+        $data = 0;
+        foreach ($orders['data'] as $order) {
+            $data += $order['use_money'];
+        }
+        return $data;
+    }
+
+
 
 
 

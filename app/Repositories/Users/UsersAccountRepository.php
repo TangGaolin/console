@@ -171,6 +171,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
         isset($whereParam['start_time']) && $select = $select->where("add_time", ">=", $whereParam["start_time"]);
         isset($whereParam['end_time']) && $select = $select->where("add_time", "<", $whereParam["end_time"]);
+        isset($whereParam['shop_id']) && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
 
         $countSelect = $select;
         $count       = $countSelect->count();
