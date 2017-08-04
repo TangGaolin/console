@@ -71,7 +71,7 @@ class UsersAccountController extends Controller
             "shop_id"        => "required|integer",
             "selected_items" => "required|array",
             "items_money"    => "numeric",
-            "pay_balance"    => "numerthis.viewDataic",
+            "pay_balance"    => "numeric",
             "pay_card"       => "numeric",
             "pay_cash"       => "numeric",
             "pay_mobile"     => "numeric",
@@ -91,7 +91,8 @@ class UsersAccountController extends Controller
             "shop_id"       => Request::input("shop_id"),
             "select_date"   => Request::input("select_date"),
             "cur_page"      => Request::input("cur_page",1),
-            "limit"         => Request::input("limit",10)
+            "limit"         => Request::input("limit",10),
+            "status"        => Request::input("status"),
         ];
         $rule = [
             "uid"           => "nullable|integer",
@@ -99,6 +100,8 @@ class UsersAccountController extends Controller
             "select_date"   => "nullable|date",
             "cur_page"      => "required|integer",
             "limit"         => "required|integer",
+            "status"        => "nullable|integer",
+
         ];
 
         $this->validation($param, $rule);
@@ -165,6 +168,36 @@ class UsersAccountController extends Controller
         $this->validation($param, $rule);
 
         return $this->usersAccountService->getUseOrderList($param);
+    }
+
+    public function repay()
+    {
+        $param = [
+            "uid"           => Request::input("uid"),
+            "shop_id"       => Request::input("shop_id"),
+            "order_id"      => Request::input("order_id"),
+            "repay_money"   => Request::input("repay_money"),
+            "pay_cash"      => Request::input("pay_cash"),
+            "pay_card"      => Request::input("pay_card"),
+            "pay_mobile"    => Request::input("pay_mobile"),
+            "pay_emps"      => Request::input("pay_emps"),
+            "add_time"      => Request::input("add_time"),
+        ];
+        $rule = [
+            "uid"           => "required|integer",
+            "shop_id"       => "required|integer",
+            "order_id"      => "required|integer",
+            "repay_money"   => "required|numeric",
+            "pay_cash"      => "required|numeric",
+            "pay_card"      => "required|numeric",
+            "pay_mobile"    => "required|numeric",
+            "pay_emps"      => "required|Array",
+            "add_time"      => "required|string",
+        ];
+
+        $this->validation($param, $rule);
+        $param['cashier_id'] = $this->getCashierId();
+        return $this->usersAccountService->repay($param);
     }
 
 

@@ -31,10 +31,10 @@ Class UsersAccountService
         $debt = $param['charge_money'] - $payMoney;
         //计算消费表数据
         $orderData = [
-            "order_id"      => $orderId,
-            "order_type"    => 0, //充值订单类型为 0
+            "order_id"     => $orderId,
+            "order_type"   => 0, //充值订单类型为 0
             "uid"          => $param['uid'],
-            "shop_id"          => $param['shop_id'],
+            "shop_id"      => $param['shop_id'],
             "worth_money"  => $param['charge_money'],
             "pay_cash"     => $param['pay_cash'],
             "pay_card"     => $param['pay_card'],
@@ -327,6 +327,65 @@ Class UsersAccountService
             'success'    => true,
             'data'       => $orderList
         ];
+    }
+
+    public function repay($param)
+    {
+        //组合订单数据
+        $orderId = date('YmdHis', time()) . mt_rand(100,999);
+        $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
+
+        $order_info = $this->usersAccountRepository->getOrderInfo(['order_id' => $param['order_id']]);
+
+        $orderData = [
+            "order_id"     => $orderId,
+            "repay_order_id" => $param['order_id'],
+            "order_type"   => 3, //还款订单类型为 3
+            "uid"          => $param['uid'],
+            "shop_id"      => $param['shop_id'],
+            "worth_money"  => 0,  //还款价值金额为 0
+            "pay_cash"     => $param['pay_cash'],
+            "pay_card"     => $param['pay_card'],
+            "pay_mobile"   => $param['pay_mobile'],
+            "pay_money"    => $payMoney,
+            "emp_info"     => json_encode($param['pay_emps'], JSON_UNESCAPED_UNICODE),
+            "add_time"     => $param['add_time'],
+            "cashier_id"   => $param['cashier_id'],
+        ];
+        //计算员工业绩分成表
+        $empOrderData = [];
+        $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+        $order_desc = "还款" . '-' .$user_info['user_name'];
+        foreach ($param['pay_emps'] as $v){
+            $item['emp_id']     = $v['emp_id'];
+            $item['order_desc'] = $order_desc;
+            $item['yeji']       = $v['money'];
+            $item['order_id']   = $orderId;
+            $item['from_type']  = 0; //来自业绩表
+            $item['add_time']   = $param['add_time'];
+            $empOrderData[]     = $item;
+        }
+        //更新账户欠款数据
+        $updateData = [
+            'uid'  => $param['uid'],
+            'debt' => $payMoney,
+            'order_id' => $param['order_id'],
+            'status'   => $payMoney < $order_info['debt'] ? 1 : 10
+        ];
+
+        $res = $this->usersAccountRepository->repayment([
+            'order_data' => $orderData,
+            'emp_order_data' => $empOrderData,
+            'update_data' => $updateData,
+        ]);
+
+        //更新数据
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true
+        ];
+
     }
 
 

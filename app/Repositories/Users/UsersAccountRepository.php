@@ -32,6 +32,8 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         $this->useOrderModel   = $useOrder;
     }
 
+
+
     //用户充值事物处理
     public function recharge($param)
     {
@@ -52,12 +54,12 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
     public function getOrderList($whereParam)
     {
-
         $select = $this->orderModel;
-        !empty($whereParam['uid']) && $select = $select->where("uid", "=", $whereParam["uid"]);
-        isset($whereParam['start_time']) && $select = $select->where("add_time", ">=", $whereParam["start_time"]);
-        isset($whereParam['end_time']) && $select = $select->where("add_time", "<", $whereParam["end_time"]);
-        isset($whereParam['shop_id']) && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
+        $this->checkValue($whereParam,'uid') && $select = $select->where("uid", "=", $whereParam["uid"]);
+        $this->checkValue($whereParam,'start_time') &&$select = $select->where("add_time", ">=", $whereParam["start_time"]);
+        $this->checkValue($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
+        $this->checkValue($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
+        $this->checkValue($whereParam,'status') && $whereParam['status'] && $select = $select->where("status", "=", $whereParam["status"]);  //获取不同状态的订单
 
         $countSelect = $select;
         $count       = $countSelect->count();
@@ -78,6 +80,19 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             'data'      => $res->toArray(),
         ];
     }
+
+    protected function checkValue($array, $key)
+    {
+        return isset($array[$key]) && $array[$key];
+    }
+
+
+    public function getOrderInfo($whereParam)
+    {
+        $res = $this->orderModel->where($whereParam)->first();
+        return $res ? $res->toArray() : [];
+    }
+
 
     public function buyItems($param)
     {
@@ -139,7 +154,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     public function getUserItemInfo($whereParam)
     {
         $res = $this->userItemsModel->where($whereParam)->first();
-        return $res ? $res->toArray() : false;
+        return $res ? $res->toArray() : [];
     }
 
     public function useItems($param)
@@ -194,14 +209,33 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     }
 
 
+
+
     public function buyGoods()
     {
         // TODO: Implement buyGoods() method.
     }
 
-    public function repayment()
+    public function repayment($param)
     {
-        // TODO: Implement repayment() method.
+        $query = function () use ($param) {
+            //插入订单表
+            $this->orderModel->insert($param['order_data']);
+            //插入员工明细表
+            $this->empOrderModel->insert($param['emp_order_data']);
+            //更新会员欠款金额
+            $updateAccountData = [
+                'debt' => DB::raw('debt-' . $param['update_data']['debt'])
+            ];
+            $this->usersModel->where('uid','=',$param['update_data']['uid'])->update($updateAccountData);
+
+            $updateOldOrderData = [
+                'debt'   => DB::raw('debt-' . $param['update_data']['debt']),
+                'status' => $param['update_data']['status']
+            ];
+            return $this->orderModel->where('order_id','=',$param['update_data']['order_id'])->update($updateOldOrderData);
+        };
+        return DB::transaction($query);
     }
 
 

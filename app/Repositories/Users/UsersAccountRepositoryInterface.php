@@ -4,6 +4,7 @@ namespace App\Repositories\Users;
 interface UsersAccountRepositoryInterface
 {
     public function getOrderList($param);
+    public function getOrderInfo($param);
     public function recharge($param);
     public function buyItems($param);
     public function getItemList($whereParam);
@@ -12,7 +13,7 @@ interface UsersAccountRepositoryInterface
     public function getUseOrderList($param);
 
     public function buyGoods();
-    public function repayment();
+    public function repayment($param);
 
 
 
