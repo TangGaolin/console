@@ -15,13 +15,11 @@ class UsersAccountController extends Controller
      *
      * @return void
      */
-
     protected $usersAccountService;
     public function __construct(UsersAccountService $usersAccountService)
     {
         $this->usersAccountService = $usersAccountService;
     }
-
 
     public function recharge()
     {
@@ -90,9 +88,9 @@ class UsersAccountController extends Controller
             "uid"           => Request::input("uid"),
             "shop_id"       => Request::input("shop_id"),
             "select_date"   => Request::input("select_date"),
-            "cur_page"      => Request::input("cur_page",1),
-            "limit"         => Request::input("limit",10),
-            "status"        => Request::input("status"),
+            "cur_page"      => Request::input("cur_page", 1),
+            "limit"         => Request::input("limit", 10),
+            "status"        => Request::input("status")
         ];
         $rule = [
             "uid"           => "nullable|integer",
@@ -100,8 +98,7 @@ class UsersAccountController extends Controller
             "select_date"   => "nullable|date",
             "cur_page"      => "required|integer",
             "limit"         => "required|integer",
-            "status"        => "nullable|integer",
-
+            "status"        => "nullable|integer"
         ];
 
         $this->validation($param, $rule);

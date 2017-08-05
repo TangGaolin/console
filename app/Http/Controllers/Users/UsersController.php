@@ -23,6 +23,7 @@ class UsersController extends Controller
         $this->usersService = $usersService;
     }
 
+    //获取用户列表 or 查询用户
     public function getUserList()
     {
         $param = [
@@ -42,7 +43,7 @@ class UsersController extends Controller
         return $this->usersService->getUserList($param);
     }
 
-
+    //添加用户
     public function addUser()
     {
         $param = [
@@ -70,6 +71,7 @@ class UsersController extends Controller
         return $this->usersService->addUser($param);
     }
 
+    // 更新用户信息
     public function updateUser()
     {
         $param = [
@@ -92,6 +94,8 @@ class UsersController extends Controller
             "remark"     => "string",
         ];
     }
+
+    // 获取用户详情
     public function getUserDetail()
     {
         $param = [
@@ -107,6 +111,26 @@ class UsersController extends Controller
 
         $this->validation($param, $rule);
         return $this->usersService->getUserDetail($param);
+    }
+
+    //shop side  user
+    public function getShopSideUsers()
+    {
+        $param = [
+            'shop_id' => Request::input('shop_id'),
+        ];
+
+        $rule = [
+            'shop_id' => 'nullable|integer'
+        ];
+
+        $this->validation($param, $rule);
+        return $this->usersService->getShopSideUsers($param);
+
+
+
+
+
     }
 
 }

@@ -98,6 +98,47 @@ Class UsersService
         ];
     }
 
+    public function getShopSideUsers($param)
+    {
+
+        // 获取预约顾客
+        $data['res_user'] = [];
+
+        // 获取生日提醒
+        $data['birth_user'] = [];
+
+
+
+        // 获取今日顾客
+        $usersAccountRepository = app(UsersAccountRepositoryInterface::class);
+        $whereParam['shop_id'] = $param['shop_id'];
+        $whereParam['start_time'] = date('Y-m-d');
+        $whereParam['end_time']   = $whereParam['start_time']  . " 23:59:59";
+        $whereParam['limit']   = 1000;
+        $useOrderData = $usersAccountRepository->getUseOrderList($whereParam);
+        $orderData = $usersAccountRepository->getOrderList($whereParam);
+        $u_ids1 = array_column($useOrderData['data'],'uid');
+        $u_ids2 = array_column($orderData['data'],'uid');
+        $u_ids = array_merge($u_ids1, $u_ids2);
+        $useRepository = app(UsersRepositoryInterface::class);
+        $users = $useRepository->getUserInfoByIds($u_ids);
+        $data['today_user'] = [];
+        foreach ($users as $user){
+            $convert_users['uid'] = $user['uid'];
+            $convert_users['user_name'] = $user['user_name'];
+            $convert_users['phone_no'] = $user['phone_no'];
+            $data['today_user'][] = $convert_users;
+        }
+
+
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true,
+            'data'       => $data
+        ];
+    }
+
 
 
 

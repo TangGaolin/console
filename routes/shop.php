@@ -44,9 +44,11 @@ Route::group(['middleware' => ['loginState']], function () {
     Route::post('/shop/repay', 'Users\UsersAccountController@repay');  //用户还款
 
 
+    Route::post('/shop/getShopSideUsers', 'Users\UsersController@getShopSideUsers');  //用户还款
+
+
 //    Route::post('/shop/getGoodList', 'Goods\GoodsController@getGoodsList');  //获取产品列表
 //    Route::post('/shop/buyItem', 'Users\UsersController@buyItem');  //购买产品
-//    Route::post('/shop/orderList', 'Users\UsersController@orderList');  //单据流水
 //    Route::post('/shop/orderRepeal', 'Users\UsersController@orderRepeal');  //用户还款
 
 
