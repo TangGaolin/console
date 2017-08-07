@@ -49,6 +49,37 @@ class UsersAccountController extends Controller
         return $this->usersAccountService->recharge($param);
     }
 
+
+    public function chargeGoods()
+    {
+        $param = [
+            "uid"           => Request::input("uid"),
+            "shop_id"       => Request::input("shop_id"),
+            "good_money"    => Request::input("good_money"),  //产品价值
+            "charge_money"  => Request::input("charge_money"), //充值金额
+            "pay_cash"      => Request::input("pay_cash",0),
+            "pay_card"      => Request::input("pay_card",0),
+            "pay_mobile"    => Request::input("pay_mobile",0),
+            "pay_emps"      => Request::input("pay_emps", []),
+            "add_time"      => Request::input("add_time"),
+        ];
+        $rule = [
+            "uid"            => "required|integer",
+            "shop_id"        => "required|integer",
+            "good_money"     => "required|numeric",
+            "charge_money"   => "required|numeric",
+            "pay_cash"       => "numeric",
+            "pay_card"       => "numeric",
+            "pay_mobile"     => "numeric",
+            "pay_emps"       => "required|array",
+            "add_time"       => "required|string",
+        ];
+
+        $this->validation($param, $rule);
+        $param['cashier_id'] = $this->getCashierId();
+        return $this->usersAccountService->chargeGoods($param);
+    }
+
     public function buyItems()
     {
         $param = [

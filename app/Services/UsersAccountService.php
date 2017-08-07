@@ -26,7 +26,7 @@ Class UsersAccountService
 
     public function recharge($param)
     {
-        $orderId = date('YmdHis', time()) . mt_rand(100,999);
+        $orderId = date('YmdHis', time()) . mt_rand(100, 999);
         $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
         $debt = $param['charge_money'] - $payMoney;
         //计算消费表数据
@@ -63,7 +63,6 @@ Class UsersAccountService
             'order_data' => $orderData,
             'emp_order_data' => $empOrderData,
         ]);
-        //记录操作Log
 
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
@@ -72,10 +71,56 @@ Class UsersAccountService
         ];
     }
 
+    public function chargeGoods($param)
+    {
+        $orderId = date('YmdHis', time()) . mt_rand(100,999);
+        $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
+        $debt = $param['charge_money'] - $payMoney; //计算欠款
+        //计算消费表数据
+        $orderData = [
+            "order_id"     => $orderId,
+            "order_type"   => 4, //产品卡充值订单类型为 4
+            "uid"          => $param['uid'],
+            "shop_id"      => $param['shop_id'],
+            "order_info"   => $param['good_money'],  //产品价值
+            "worth_money"  => $param['charge_money'],
+            "pay_cash"     => $param['pay_cash'],
+            "pay_card"     => $param['pay_card'],
+            "pay_mobile"   => $param['pay_mobile'],
+            "pay_money"    => $payMoney,
+            "debt"         => $debt,
+            "status"       => $debt > 0 ? 1 : 0,
+            "emp_info"     => json_encode($param['pay_emps'], JSON_UNESCAPED_UNICODE),
+            "add_time"     => $param['add_time'],
+            "cashier_id"   => $param['cashier_id'],
+        ];
+        //计算员工业绩分成表
+        $empOrderData = [];
+        $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+        $order_desc = "产品卡充值" . '-' .$user_info['user_name'];
+        foreach ($param['pay_emps'] as $v){
+            $item['emp_id']     = $v['emp_id'];
+            $item['order_desc'] = $order_desc;
+            $item['yeji']       = $v['money'];
+            $item['order_id']   = $orderId;
+            $item['from_type']  = 0; //来自业绩表
+            $item['add_time']   = $param['add_time'];
+            $empOrderData[]     = $item;
+        }
+        $res = $this->usersAccountRepository->chargeGood([
+            'order_data' => $orderData,
+            'emp_order_data' => $empOrderData,
+        ]);
+
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true
+        ];
+    }
 
     public function buyItems($param)
     {
-
         $orderId = date('YmdHis', time()) . mt_rand(100,999);
         $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
         $debt = $param['items_money'] - $payMoney - $param['pay_balance'];

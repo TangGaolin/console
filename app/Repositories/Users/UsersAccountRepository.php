@@ -52,6 +52,24 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         return DB::transaction($query);
     }
 
+    // recharge good
+    public function chargeGood($param)
+    {
+        $query = function () use ($param) {
+            //插入订单表
+            $this->orderModel->insert($param['order_data']);
+            //插入员工明细表
+            $this->empOrderModel->insert($param['emp_order_data']);
+            //更新会员金额
+            $updateData = [
+                'good_money'     => DB::raw('good_money+' . $param['order_data']['order_info']),
+                'debt' => DB::raw('debt+' . $param['order_data']['debt']),
+            ];
+            return $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
+        };
+        return DB::transaction($query);
+    }
+
     public function getOrderList($whereParam)
     {
         $select = $this->orderModel;

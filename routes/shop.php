@@ -45,6 +45,7 @@ Route::group(['middleware' => ['loginState']], function () {
 
 
     Route::post('/shop/getShopSideUsers', 'Users\UsersController@getShopSideUsers');  //用户还款
+    Route::post('/shop/chargeGoods', 'Users\UsersAccountController@chargeGoods');  //用户还款
 
 
 //    Route::post('/shop/getGoodList', 'Goods\GoodsController@getGoodsList');  //获取产品列表
