@@ -126,11 +126,6 @@ class UsersController extends Controller
 
         $this->validation($param, $rule);
         return $this->usersService->getShopSideUsers($param);
-
-
-
-
-
     }
 
 }

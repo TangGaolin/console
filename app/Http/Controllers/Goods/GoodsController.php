@@ -59,25 +59,26 @@ class GoodsController extends Controller
     public function updateGood()
     {
         $param = [
-            "good_id" => Request::input('good_id'),
-            "good_name" => Request::input('good_name'),
-            "brand" => Request::input('brand'),
-            "speci" => Request::input('speci'),
-            "unit" => Request::input('unit'),
-            "cost" => Request::input('cost'),
-            "price" => Request::input('price'),
-            //"good_details" => Request::input('good_details'),
-            "descri" => Request::input('descri')
+            "good_id"       => Request::input('good_id'),
+            "good_name"     => Request::input('good_name'),
+            "brand"         => Request::input('brand'),
+            "speci"         => Request::input('speci'),
+            "unit"          => Request::input('unit'),
+            "cost"          => Request::input('cost'),
+            "price"         => Request::input('price'),
+            "good_details"  => Request::input('good_details'),
+            "descri"        => Request::input('descri')
         ];
         $rule = [
-            "good_id" => "required|integer",
-            "good_name" => "required|string",
-            "brand" => "required|string",
-            "speci" => "string",
-            "unit" => "string",
-            "cost" => "numeric",
-            "price" => "numeric",
-            "descri" => "string"
+            "good_id"       => "required|integer",
+            "good_name"     => "required|string",
+            "brand"         => "required|string",
+            "speci"         => "string",
+            "unit"          => "string",
+            "cost"          => "numeric",
+            "price"         => "numeric",
+            "good_details"  => "string",
+            "descri"        => "string"
         ];
         $this->validation($param, $rule);
         return $this->goodService->updateGood($param);
