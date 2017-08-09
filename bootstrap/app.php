@@ -51,5 +51,5 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
-
+require  app_path() ."/utils/comm.php";
 return $app;

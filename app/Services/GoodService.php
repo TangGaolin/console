@@ -23,7 +23,11 @@ class GoodService {
     {
         $goodData = $param;
         $res = $this->goodRepository->addGood($goodData);
-        return $this->success();
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true
+        ];
     }
 
     public function getGoodsList($param)
@@ -35,16 +39,19 @@ class GoodService {
     {
         $goodData = $param;
         $res = $this->goodRepository->updateGood($goodData);
-        return $this->success();
+        return success();
     }
 
-    public function success()
+    //增加商品品牌
+    public function addGoodBrand($param)
     {
-        return [
-            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
-            'msg'        => config('response_code.MSG_OK'),
-            'success'    => true
-        ];
+        //检查是否对有重复名称
+        $res = $this->goodRepository->getBrandList(['good_brand_name' => $param['good_brand_name']]);
+        if($res) {
+            return fail(602, "该品牌已经存在！");
+        }
+        $res = $this->goodRepository->addBrand($param);
+        return success();
     }
 
 
