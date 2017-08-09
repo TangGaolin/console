@@ -50,7 +50,7 @@ class GoodService {
         if($res) {
             return fail(602, "该品牌已经存在！");
         }
-        $res = $this->goodRepository->addBrand($param);
+        $this->goodRepository->addBrand($param);
         return success();
     }
 
@@ -58,6 +58,12 @@ class GoodService {
     {
         $res = $this->goodRepository->getBrandList($param);
         return success($res);
+    }
+
+    public function updateBrand($param)
+    {
+        $this->goodRepository->updateBrand($param);
+        return success();
     }
 
 

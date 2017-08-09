@@ -49,32 +49,19 @@ class GoodBrandController extends Controller
         return $data;
     }
 
-    public function updateGood()
+    public function updateBrand()
     {
         $param = [
-            "good_id"       => Request::input('good_id'),
-            "good_name"     => Request::input('good_name'),
-            "brand"         => Request::input('brand'),
-            "speci"         => Request::input('speci'),
-            "unit"          => Request::input('unit'),
-            "cost"          => Request::input('cost'),
-            "price"         => Request::input('price'),
-            "good_details"  => Request::input('good_details'),
-            "descri"        => Request::input('descri')
+            "good_brand_id"       => Request::input('good_brand_id'),
+            "good_brand_name"     => Request::input('good_brand_name')
         ];
         $rule = [
-            "good_id"       => "required|integer",
-            "good_name"     => "required|string",
-            "brand"         => "required|string",
-            "speci"         => "string",
-            "unit"          => "string",
-            "cost"          => "numeric",
-            "price"         => "numeric",
-            "good_details"  => "string",
-            "descri"        => "string"
+            "good_brand_id"       => "required|integer",
+            "good_brand_name"     => "required|string"
         ];
         $this->validation($param, $rule);
-        return $this->goodService->updateGood($param);
+        $param['admin_id'] = $this->getAid();
+        return $this->goodService->updateBrand($param);
     }
 
 }
