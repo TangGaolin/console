@@ -49,7 +49,7 @@ class GoodsRepository implements GoodsRepositoryInterface
     {
         checkParam($whereParam, 'status') && $this->brandModel = $this->brandModel->where('status',$whereParam['status']);
         checkParam($whereParam, 'good_brand_name') && $this->brandModel = $this->brandModel->where('good_brand_name',$whereParam['good_brand_name']);
-        $res = $this->brandModel->get();
+        $res = $this->brandModel->select('good_brand_id','good_brand_name','status','admin_id')->get();
         return $res->toArray();
     }
 

@@ -34,19 +34,19 @@ class GoodBrandController extends Controller
         return $this->goodService->addGoodBrand($param);
     }
 
-    public function getGoodsList()
+    public function getBrandList()
     {
         $param = [
-            'cur_page'       => Request::input('cur_page', 1),
-            'limit'          => Request::input('limit', 15)
+            'good_brand_name' => Request::input('good_brand_name'),
+            'status'          => Request::input('status')
         ];
         $rule = [
-            "cur_page" => "integer",
-            "limit"    => "integer"
+            "good_brand_name" => "nullable|integer",
+            "status"    => "nullable|integer"
         ];
         $this->validation($param, $rule);
-        $data = $this->goodService->getGoodsList($param);
-        return $this->success($data);
+        $data = $this->goodService->getBrandList($param);
+        return $data;
     }
 
     public function updateGood()

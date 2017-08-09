@@ -54,6 +54,12 @@ class GoodService {
         return success();
     }
 
+    public function getBrandList($param)
+    {
+        $res = $this->goodRepository->getBrandList($param);
+        return success($res);
+    }
+
 
 
 }
