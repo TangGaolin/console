@@ -20,7 +20,9 @@ class GoodsRepository implements GoodsRepositoryInterface
     public function getGoodsList($whereParam)
     {
         $select = $this->goods->select();
-        !empty($whereParam['good_name']) && $select = $select->where("good_name", "like", $whereParam["good_name"].'%');
+        checkParam($whereParam,'good_name') && $select = $select->where("good_name", "like", $whereParam["good_name"].'%');
+        checkParam($whereParam,'pinyin') && $select = $select->where("pinyin", "like", $whereParam["pinyin"].'%');
+        checkParam($whereParam,'brand') && $select = $select->where("brand", $whereParam["brand"]);
         $countSelect = $select;
         $count       = $countSelect->count();
         $res         = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();

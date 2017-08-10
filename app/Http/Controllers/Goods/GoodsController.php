@@ -46,12 +46,16 @@ class GoodsController extends Controller
     public function getGoodsList()
     {
         $param = [
+            'brand'         => Request::input('good_brand_id',0),
+            'good_name'      => Request::input('good_name'),
             'cur_page'       => Request::input('cur_page', 1),
             'limit'          => Request::input('limit', 15)
         ];
         $rule = [
-            "cur_page" => "integer",
-            "limit"    => "integer"
+            "good_name"     => "nullable|string",
+            "brand" => "integer",
+            "cur_page"      => "integer",
+            "limit"         => "integer"
         ];
         $this->validation($param, $rule);
         $data = $this->goodService->getGoodsList($param);

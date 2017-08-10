@@ -33,7 +33,15 @@ class GoodService {
 
     public function getGoodsList($param)
     {
-        return $this->goodRepository->getGoodsList($param);
+        $whereParam = $param;
+        if(checkParam($whereParam,'good_name')) {
+            if (!preg_match("/[\x7f-\xff]/", $whereParam['good_name'])) {  //判断字符串中是否有中文
+                $whereParam['pinyin'] = $whereParam['good_name'];
+                unset($whereParam['good_name']);
+            }
+        }
+
+        return $this->goodRepository->getGoodsList($whereParam);
     }
 
     public function updateGood($param)
