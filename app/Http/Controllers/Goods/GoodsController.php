@@ -19,16 +19,18 @@ class GoodsController extends Controller
     {
         $param = [
             "good_name" => Request::input('good_name'),
-            "brand" => Request::input('brand'),
-            "speci" => Request::input('speci'),
-            "unit" => Request::input('unit'),
-            "cost" => Request::input('cost'),
-            "price" => Request::input('price'),
+            "pinyin"    => Request::input('pinyin'),
+            "brand"     => Request::input('brand'),
+            "speci"     => Request::input('speci'),
+            "unit"      => Request::input('unit'),
+            "cost"      => Request::input('cost'),
+            "price"     => Request::input('price'),
             //"good_details" => Request::input('good_details'),
             "descri" => Request::input('descri')
         ];
         $rule = [
             "good_name" => "required|string",
+            "pinyin" => "nullable|string",
             "brand" => "required|string",
             "speci" => "string",
             "unit" => "string",
@@ -37,7 +39,7 @@ class GoodsController extends Controller
             "descri" => "string"
         ];
         $this->validation($param, $rule);
-
+        $param['admin_id'] = $this->getAid();
         return $this->goodService->addGood($param);
     }
 

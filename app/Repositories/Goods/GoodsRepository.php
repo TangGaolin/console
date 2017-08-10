@@ -30,6 +30,15 @@ class GoodsRepository implements GoodsRepositoryInterface
         ];
     }
 
+    public function getGoodInfo($whereParam)
+    {
+        $select = $this->goods->select();
+        checkParam($whereParam,'good_id') && $select = $select->where("good_id", $whereParam['good_id']);
+        checkParam($whereParam,'good_name') && $select = $select->where("good_name", $whereParam['good_name']);
+        $res = $select->first();
+        return $res ? $res->toArray() : [];
+    }
+
     public function addGood($goodData)
     {
         return $this->goods->insert($goodData);

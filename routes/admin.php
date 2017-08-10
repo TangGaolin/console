@@ -49,7 +49,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/goods/getBrandList', 'Goods\GoodBrandController@getBrandList'); //获取品牌列表
     Route::post('/goods/updateBrand', 'Goods\GoodBrandController@updateBrand');   //更新品牌
 
-    Route::post('/goods/addGood', 'Goods\GoodsController@addGood');
+    Route::post('/goods/addGood', 'Goods\GoodsController@addGood');  // 添加产品
     Route::post('/goods/getGoodsList', 'Goods\GoodsController@getGoodsList');
     Route::post('/goods/updateGood', 'Goods\GoodsController@updateGood');
 

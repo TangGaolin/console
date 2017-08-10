@@ -22,18 +22,21 @@ class GoodService {
     public function addGood($param)
     {
         $goodData = $param;
-        $res = $this->goodRepository->addGood($goodData);
-        return [
-            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
-            'msg'        => config('response_code.MSG_OK'),
-            'success'    => true
-        ];
+        //检查产品名称是否相同
+        $res = $this->goodRepository->getGoodInfo(['good_name' => $param['good_name']]);
+        if($res) {
+            return fail(601, '该项目名称已经存在');
+        }
+        $this->goodRepository->addGood($goodData);
+        return success();
     }
 
     public function getGoodsList($param)
     {
         return $this->goodRepository->getGoodsList($param);
     }
+
+
 
     public function updateGood($param)
     {
