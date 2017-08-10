@@ -36,12 +36,10 @@ class GoodService {
         return $this->goodRepository->getGoodsList($param);
     }
 
-
-
     public function updateGood($param)
     {
         $goodData = $param;
-        $res = $this->goodRepository->updateGood($goodData);
+        $this->goodRepository->updateGood($goodData);
         return success();
     }
 

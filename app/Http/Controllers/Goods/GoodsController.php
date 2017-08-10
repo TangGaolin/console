@@ -31,7 +31,7 @@ class GoodsController extends Controller
         $rule = [
             "good_name" => "required|string",
             "pinyin" => "nullable|string",
-            "brand" => "required|string",
+            "brand" => "required|integer",
             "speci" => "string",
             "unit" => "string",
             "cost" => "numeric",
@@ -63,6 +63,7 @@ class GoodsController extends Controller
         $param = [
             "good_id"       => Request::input('good_id'),
             "good_name"     => Request::input('good_name'),
+            "pinyin"        => Request::input('pinyin'),
             "brand"         => Request::input('brand'),
             "speci"         => Request::input('speci'),
             "unit"          => Request::input('unit'),
@@ -74,13 +75,14 @@ class GoodsController extends Controller
         $rule = [
             "good_id"       => "required|integer",
             "good_name"     => "required|string",
-            "brand"         => "required|string",
+            "pinyin"        => "required|string",
+            "brand"         => "required|integer",
             "speci"         => "string",
             "unit"          => "string",
             "cost"          => "numeric",
             "price"         => "numeric",
-            "good_details"  => "string",
-            "descri"        => "string"
+            "good_details"  => "nullable|string",
+            "descri"        => "nullable|string"
         ];
         $this->validation($param, $rule);
         return $this->goodService->updateGood($param);
