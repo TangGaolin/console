@@ -211,7 +211,7 @@ Class UsersAccountService
             foreach ($cashiers as $cashier){
                 $convert_cashiers[$cashier['emp_id']] = $cashier;
             }
-            //若参数中没有uid条件参数，则就回去用户信息
+            //若参数中没有uid条件参数，则就取用户信息
             if(!$param['uid']){
                 $u_ids = array_column($orderList['data'],"uid");
                 $u_ids = array_unique($u_ids);

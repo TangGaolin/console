@@ -46,7 +46,7 @@ class GoodsController extends Controller
     public function getGoodsList()
     {
         $param = [
-            'brand'         => Request::input('good_brand_id',0),
+            'brand'          => Request::input('good_brand_id',0),
             'good_name'      => Request::input('good_name'),
             'cur_page'       => Request::input('cur_page', 1),
             'limit'          => Request::input('limit', 15)

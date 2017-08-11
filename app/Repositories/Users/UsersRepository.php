@@ -21,7 +21,7 @@ class UsersRepository implements UsersRepositoryInterface
 
     public function getUserList($whereParam)
     {
-        $select = $this->usersModel->select("uid", "user_name", "phone_no", "user_degree", "emp_id", "shop_id", "remark");
+        $select = $this->usersModel->select("uid", "user_name", "phone_no", "user_degree", "emp_id", "shop_id", "remark", "add_time");
 
         !empty($whereParam['shop_id']) && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
         !empty($whereParam['phone_no']) && $select = $select->where("phone_no", "=", $whereParam["phone_no"]);
@@ -33,7 +33,7 @@ class UsersRepository implements UsersRepositoryInterface
 
         return [
             'totalSize' => $count,
-            'data'      => $res,
+            'data'      => $res->toArray(),
         ];
     }
 

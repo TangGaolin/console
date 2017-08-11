@@ -32,6 +32,7 @@ Class UsersService
             $param['user_name'] = $param['user_name_phone'];
         }
 
+        //获取门店信息
         $storeRepository = app(ShopRepositoryInterface::class);
         $storeList       = $storeRepository->getStoreList();
         $newStoreData = [];
@@ -40,9 +41,22 @@ Class UsersService
         }
         $data = $this->usersRepository->getUserList($param);
 
+        //获取美疗师信息
+        $emp_ids = array_column($data['data'],"emp_id");
+        $empRepository = app(EmployeeRepositoryInterface::class);
+        $emp_ids = array_unique($emp_ids);
+        $emps = $empRepository->getEmpDataByIds($emp_ids);
+        foreach ($emps as $emp){
+            $convert_emps[$emp['emp_id']] = $emp['emp_name'];
+        }
+
         foreach ($data['data'] as &$v) {
             $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "无指定门店";
+            $v["emp_name"] = $convert_emps[$v["emp_id"]] ?? "无";
         }
+
+
+
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg' => config('response_code.MSG_OK'),
