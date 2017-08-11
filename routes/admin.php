@@ -54,5 +54,10 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/goods/updateGood', 'Goods\GoodsController@updateGood');
 
     Route::post('/users/getUserList', 'Users\UsersController@getUserList');  //获取会员列表
+    Route::post('/users/updateUser', 'Users\UsersController@updateUser');  //更新会员信息
 
+    Route::post('/users/getUserDetail', 'Users\UsersController@getUserDetail');  //获取用户详情
+    Route::post('/users/getUserItemList', 'Users\UsersAccountController@getItemList');  //获取用户的服务数据
+    Route::post('/users/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
+    Route::post('/users/getUseOrderList', 'Users\UsersAccountController@getUseOrderList');  //获取用户购买记录
 });

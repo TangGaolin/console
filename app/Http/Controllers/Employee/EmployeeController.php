@@ -22,6 +22,7 @@ class EmployeeController extends Controller
     {
         $param = [
             "emp_name_phone" => Request::input('emp_name_phone'),
+            "shop_id"   => Request::input('shop_id'),
             "is_server" => Request::input('is_server'),
             "is_cashier"=> Request::input('is_cashier'),
             "is_admin"  => Request::input('is_admin'),
@@ -30,6 +31,7 @@ class EmployeeController extends Controller
         ];
         $rule = [
             "emp_name_phone" => "nullable|string",
+            "shop_id"    => "nullable|integer",
             "is_server"  => "nullable|integer",
             "is_cashier" => "nullable|integer",
             "is_admin"   => "nullable|integer",

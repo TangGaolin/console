@@ -54,9 +54,6 @@ Class UsersService
             $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "无指定门店";
             $v["emp_name"] = $convert_emps[$v["emp_id"]] ?? "无";
         }
-
-
-
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg' => config('response_code.MSG_OK'),
@@ -83,6 +80,19 @@ Class UsersService
             'msg' => config('response_code.MSG_OK'),
             'success' => true
         ];
+    }
+
+    public function updateUser($param)
+    {
+        $userData = [];
+        $uid = $param['uid'];
+        foreach ($param as $key => $value){
+            if(!is_null($value)){
+                $userData[$key] = $value;
+            }
+        }
+        $this->usersRepository->updateUser($uid, $userData);
+        return success();
     }
 
     public function getUserDetail($param)
@@ -114,13 +124,11 @@ Class UsersService
 
     public function getShopSideUsers($param)
     {
-
         // 获取预约顾客
         $data['res_user'] = [];
 
         // 获取生日提醒
         $data['birth_user'] = [];
-
 
 
         // 获取今日顾客

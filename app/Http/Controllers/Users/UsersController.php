@@ -77,22 +77,24 @@ class UsersController extends Controller
         $param = [
             "uid"       => Request::input("uid"),
             "phone_no"  => Request::input("phone_no"),
-            "user_name" => Request::input("user_name",""),
+            "user_name" => Request::input("user_name"),
             "shop_id"   => Request::input("shop_id"),
             "emp_id"    => Request::input("emp_id"),
             "birthday"  => Request::input("birthday"),
-            "remark"    => Request::input("remark",""),
+            "remark"    => Request::input("remark"),
 
         ];
         $rule = [
             "uid"        => "required|integer",
-            "phone_no"   => "required|numeric",
+            "phone_no"   => "nullable|numeric",
             "user_name"  => "nullable|string",
-            "shop_id"    => "integer",
-            "emp_id"     => "integer",
+            "shop_id"    => "nullable|integer",
+            "emp_id"     => "nullable|integer",
             "birthday"   => "nullable|date",
-            "remark"     => "string",
+            "remark"     => "nullable|string",
         ];
+        $this->validation($param, $rule);
+        return $this->usersService->updateUser($param);
     }
 
     // 获取用户详情
