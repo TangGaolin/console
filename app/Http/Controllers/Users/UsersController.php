@@ -71,6 +71,20 @@ class UsersController extends Controller
         return $this->usersService->addUser($param);
     }
 
+    public function importUser() {
+        $param = [
+            'file'      => Request::file('file'),
+            'shop_id'   => Request::input('shop_id'),
+        ];
+        $rule = [
+            'file'      =>  "required",
+            'shop_id'   =>  "required|integer",
+        ];
+        $this->validation($param,$rule);
+
+        return $this->usersService->importUser($param);
+    }
+
     // 更新用户信息
     public function updateUser()
     {

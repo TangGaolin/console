@@ -82,6 +82,37 @@ Class UsersService
         ];
     }
 
+    public function importUser($param)
+    {
+        $data = Excel::load($param['file']->getPathName(), function ($reader) {
+            return $reader;
+        });
+        $userData = $data->getSheet(0)->toArray();
+        unset($userData[0]);
+        $saveUserData = [];
+        $error_flag = false;
+        $insertData = [];
+        foreach ($userData as $v) {
+            $insertData['shop_id'] = $param['shop_id'];
+            $insertData['user_name'] = trim($v[0]);
+            $insertData['phone_no'] = trim($v[1]);
+
+            if(!isPhoneNo($insertData['phone_no'])) {
+                $error_flag = true;
+                break;
+            }
+            $saveUserData[] = $insertData;
+        }
+
+        if($error_flag) {
+            return fail(601,'表格数据错误:' . $insertData['user_name'] . ':' . $insertData['phone_no']);
+        }
+
+        dd($saveUserData);
+        $this->usersRepository->addUser($saveUserData);
+        return success();
+    }
+
     public function updateUser($param)
     {
         $userData = [];
@@ -130,7 +161,6 @@ Class UsersService
         // 获取生日提醒
         $data['birth_user'] = [];
 
-
         // 获取今日顾客
         $usersAccountRepository = app(UsersAccountRepositoryInterface::class);
         $whereParam['shop_id'] = $param['shop_id'];
@@ -146,12 +176,11 @@ Class UsersService
         $users = $useRepository->getUserInfoByIds($u_ids);
         $data['today_user'] = [];
         foreach ($users as $user){
-            $convert_users['uid'] = $user['uid'];
-            $convert_users['user_name'] = $user['user_name'];
+            $convert_users['uid']      = $user['uid'];
+            $convert_users['user_name']= $user['user_name'];
             $convert_users['phone_no'] = $user['phone_no'];
-            $data['today_user'][] = $convert_users;
+            $data['today_user'][]      = $convert_users;
         }
-
 
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
