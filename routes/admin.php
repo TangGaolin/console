@@ -50,8 +50,8 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/goods/updateBrand', 'Goods\GoodBrandController@updateBrand');   //更新品牌
 
     Route::post('/goods/addGood', 'Goods\GoodsController@addGood');  // 添加产品
-    Route::post('/goods/getGoodsList', 'Goods\GoodsController@getGoodsList');
-    Route::post('/goods/updateGood', 'Goods\GoodsController@updateGood');
+    Route::post('/goods/getGoodsList', 'Goods\GoodsController@getGoodsList');  //获取产品列表
+    Route::post('/goods/updateGood', 'Goods\GoodsController@updateGood');  // 更新产品信息
 
     Route::post('/users/getUserList', 'Users\UsersController@getUserList');  //获取会员列表
     Route::post('/users/updateUser', 'Users\UsersController@updateUser');  //更新会员信息
