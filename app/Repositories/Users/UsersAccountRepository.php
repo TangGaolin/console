@@ -229,9 +229,33 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
 
 
-    public function buyGoods()
+    public function buyGoods($param)
     {
-        // TODO: Implement buyGoods() method.
+        $query = function () use ($param) {
+            //插入订单表
+            $this->orderModel->insert($param['order_data']);
+            //判断是否使用余额
+            $updateData = [];
+            if($param['order_data']['pay_balance'] > 0){
+                $updateData['balance'] = DB::raw('balance-' . $param['order_data']['pay_balance']);
+            }
+
+            if($param['order_data']['use_good_money'] > 0){
+                $updateData['good_money'] = DB::raw('good_money-' . $param['order_data']['use_good_money']);
+            }
+            //判断是否有欠款
+            if($param['order_data']['debt'] > 0){
+                $updateData['debt'] = DB::raw('debt+' . $param['order_data']['debt']);
+            }
+            //更新会员金额
+            if(!empty($updateData)){
+                $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
+            }
+            //插入员工明细表
+            return $this->empOrderModel->insert($param['emp_order_data']);
+
+        };
+        return DB::transaction($query);
     }
 
     public function repayment($param)

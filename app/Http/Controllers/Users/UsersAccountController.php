@@ -226,6 +226,41 @@ class UsersAccountController extends Controller
         return $this->usersAccountService->repay($param);
     }
 
+    public function buyGoods()
+    {
+        $param = [
+            "uid"           => Request::input("uid"),   //用户UID
+            "shop_id"       => Request::input('shop_id'),
+            "selected_goods"=> Request::input("selectedGoods"), //购买项目明细
+            "goods_money"   => Request::input("goodsMoney"),  //产品总金额
+            "pay_balance"   => Request::input("pay_balance", 0), //卡扣余额
+            "use_good_money"=> Request::input("use_good_money", 0), //卡扣余额
+            "pay_cash"      => Request::input("pay_cash", 0), //支付现金
+            "pay_card"      => Request::input("pay_card", 0), //银行卡
+            "pay_mobile"    => Request::input("pay_mobile", 0), //移动支付
+            "pay_emps"      => Request::input("pay_emps", []), //员工金额分配
+            "add_time"      => Request::input("add_time"), //添加时间
+        ];
+
+        $rule = [
+            "uid"            => "required|integer",
+            "shop_id"        => "required|integer",
+            "selected_goods" => "required|array",
+            "goods_money"    => "numeric",
+            "pay_balance"    => "numeric",
+            "use_good_money" => "numeric",
+            "pay_card"       => "numeric",
+            "pay_cash"       => "numeric",
+            "pay_mobile"     => "numeric",
+            "pay_emps"       => "required|array",
+            "add_time"       => "required|string",
+        ];
+        $this->validation($param, $rule);
+        $param['cashier_id'] = $this->getCashierId();
+
+        return $this->usersAccountService->buyGoods($param);
+    }
+
 
 
 }

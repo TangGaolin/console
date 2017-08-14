@@ -433,6 +433,54 @@ Class UsersAccountService
 
     }
 
+    public function buyGoods($param)
+    {
+
+        $orderId = date('YmdHis', time()) . mt_rand(100,999);
+        $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
+        $debt = $param['goods_money'] - $payMoney - $param['pay_balance'] - $param['use_good_money'];
+        //计算消费表数据
+        $orderData = [
+            "order_id"     => $orderId,
+            "order_type"   => 2, //购买产品类型为 2
+            "uid"          => $param['uid'],
+            "shop_id"      => $param['shop_id'],
+            "worth_money"  => $param['goods_money'],
+            "order_info"   => json_encode($param['selected_goods'], JSON_UNESCAPED_UNICODE),
+            "pay_balance"  => $param['pay_balance'],
+            "use_good_money"  => $param['use_good_money'],
+            "pay_cash"     => $param['pay_cash'],
+            "pay_card"     => $param['pay_card'],
+            "pay_mobile"   => $param['pay_mobile'],
+            "pay_money"    => $payMoney,
+            "debt"         => $debt,
+            "status"       => $debt > 0 ? 1 : 0,
+            "emp_info"     => json_encode($param['pay_emps'], JSON_UNESCAPED_UNICODE),
+            "add_time"     => $param['add_time'],
+            "cashier_id"   => $param['cashier_id']
+        ];
+
+        //计算员工业绩分成表
+        $empOrderData = [];
+        $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+        $order_desc = "购买产品" . '-' .$user_info['user_name'];
+        foreach ($param['pay_emps'] as $v){
+            $item['emp_id']     = $v['emp_id'];
+            $item['order_desc'] = $order_desc;
+            $item['yeji']       = $v['money'];
+            $item['order_id']   = $orderId;
+            $item['from_type']  = 0; //来自业绩表
+            $item['add_time']   = $param['add_time'];
+            $empOrderData[]     = $item;
+        }
+        $res = $this->usersAccountRepository->buyGoods([
+            'order_data'     => $orderData,
+            'emp_order_data' => $empOrderData,
+        ]);
+
+        return success();
+    }
+
 
 
 

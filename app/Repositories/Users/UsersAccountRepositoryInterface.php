@@ -13,7 +13,7 @@ interface UsersAccountRepositoryInterface
     public function useItems($param);
     public function getUseOrderList($param);
 
-    public function buyGoods();
+    public function buyGoods($param);
     public function repayment($param);
 
 
