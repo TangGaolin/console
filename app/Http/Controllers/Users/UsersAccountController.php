@@ -186,6 +186,7 @@ class UsersAccountController extends Controller
         ];
         $rule = [
             "uid"           => "nullable|integer",
+            "shop_id"       => "nullable|integer",
             "cur_page"      => "required|integer",
             "select_date"   => "nullable|date",
             "limit"         => "required|integer",

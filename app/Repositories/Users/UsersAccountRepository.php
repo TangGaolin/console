@@ -202,9 +202,9 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         $select = $this->useOrderModel;
         !empty($whereParam['uid']) && $select = $select->where("uid", "=", $whereParam["uid"]);
 
-        isset($whereParam['start_time']) && $select = $select->where("add_time", ">=", $whereParam["start_time"]);
-        isset($whereParam['end_time']) && $select = $select->where("add_time", "<", $whereParam["end_time"]);
-        isset($whereParam['shop_id']) && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
+        checkParam($whereParam,'start_time') && $select = $select->where("add_time", ">=", $whereParam["start_time"]);
+        checkParam($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
+        checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
 
         $countSelect = $select;
         $count       = $countSelect->count();
@@ -225,9 +225,6 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             'data'      => $res->toArray(),
         ];
     }
-
-
-
 
     public function buyGoods($param)
     {

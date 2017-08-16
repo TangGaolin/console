@@ -64,4 +64,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
 
     Route::post('/users/importUser', 'Users\UsersController@importUser');  //导入用户
 
+    Route::post('/order/getUseOrderList', 'Users\UsersAccountController@getUseOrderList');  //获取消耗记录
+    Route::post('/order/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
+
 });
