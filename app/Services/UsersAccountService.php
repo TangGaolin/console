@@ -8,7 +8,6 @@
 namespace App\Services;
 
 use App\Repositories\Employee\EmployeeRepositoryInterface;
-use App\Repositories\Shop\ShopRepositoryInterface;
 use App\Repositories\Users\UsersAccountRepositoryInterface;
 use App\Repositories\Users\UsersRepositoryInterface;
 
@@ -477,6 +476,37 @@ Class UsersAccountService
             'order_data'     => $orderData,
             'emp_order_data' => $empOrderData,
         ]);
+
+        return success();
+    }
+
+
+
+    public function changeItems($param)
+    {
+        $orderId = date('YmdHis', time()) . mt_rand(100,999);
+
+        // 若没有新项目则为退款，若有新项目为换购
+        $orderType = $param['select_new_items'] ? 6 : 5;
+
+        //计算插入订单数据
+        $orderData = [
+            "order_id" => $orderId,
+            "order_type" => $orderType,
+            "uid"   => $param['uid'],
+        ];
+
+
+
+        //更新老项目数据
+
+
+        //更新新项目数据
+
+        //
+
+
+
 
         return success();
     }

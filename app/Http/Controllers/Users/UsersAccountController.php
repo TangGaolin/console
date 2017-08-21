@@ -25,7 +25,7 @@ class UsersAccountController extends Controller
             "uid"           => Request::input("uid"),
             "shop_id"       => Request::input("shop_id"),
             "charge_money"  => Request::input("charge_money"),
-            "pay_cash"      => Request::input("pay_cash",0),
+            "pay_cash"      => Request::input("pay_cash", 0),
             "pay_card"      => Request::input("pay_card",0),
             "pay_mobile"    => Request::input("pay_mobile",0),
             "pay_emps"      => Request::input("pay_emps", []),
@@ -260,6 +260,55 @@ class UsersAccountController extends Controller
         $param['cashier_id'] = $this->getCashierId();
 
         return $this->usersAccountService->buyGoods($param);
+    }
+
+    //退换项目功能
+    public function changeItems()
+    {
+        $param = [
+            "uid"           => Request::input("uid"),   //用户UID
+            "shop_id"       => Request::input('shop_id'), // 门店id
+
+            "select_items"  => Request::input("select_items"), //选择要退的项目
+            "item_money"    => Request::input("itemsMoney"),  //项目金额
+            "select_new_items" => Request::input("selectedNewItems"), //选择新项目
+            "new_item_money"=> Request::input("newItemMoney", 0), //新项目金额
+
+            "change_fee"    => Request::input("change_fee", 0), //本单手续费
+            "use_balance"   => Request::input("use_balance", 0),//使用会员卡金额
+            "pay_cash"      => Request::input("pay_cash", 0),   //支付现金
+            "pay_card"      => Request::input("pay_card", 0),   //银行卡
+            "pay_mobile"    => Request::input("pay_mobile", 0), //移动支付
+
+            "pay_emps"      => Request::input("pay_emps", []), //员工金额分配
+            "add_time"      => Request::input("add_time"), //添加时间
+        ];
+
+        $rule = [
+            "uid"            => "required|integer",
+            "shop_id"        => "required|integer",
+
+            "select_items"  => "required|array",
+            "item_money"    => "numeric",
+            "select_new_items" => "array",
+            "new_item_money" => "numeric",
+
+            "change_fee"    => "numeric",
+            "use_balance"    => "numeric",
+            "pay_card"       => "numeric",
+            "pay_cash"       => "numeric",
+            "pay_mobile"     => "numeric",
+
+            "pay_emps"       => "required|array",
+            "add_time"       => "required|string",
+        ];
+        $this->validation($param, $rule);
+        $param['cashier_id'] = $this->getCashierId();
+
+
+        dd($param);
+
+        return $this->usersAccountService->changeItems($param);
     }
 
 
