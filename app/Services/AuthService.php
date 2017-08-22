@@ -56,9 +56,6 @@ Class AuthService {
             'password' => $param['password'],
             'is_cashier' => 1
         ]);
-        $storeRepository = app(ShopRepositoryInterface::class);
-        $storeInfo = $storeRepository->getShopInfo($res['shop_id']);
-        $res['shop_name'] = $storeInfo['shop_name'];
         //不存在，用户名和密码错误
         if(!$res){
             return [
@@ -67,6 +64,10 @@ Class AuthService {
                 'success' => false
             ];
         }
+
+        $storeRepository = app(ShopRepositoryInterface::class);
+        $storeInfo = $storeRepository->getShopInfo($res['shop_id']);
+        $res['shop_name'] = $storeInfo['shop_name'];
 
         unset($res['password']);
         return [
