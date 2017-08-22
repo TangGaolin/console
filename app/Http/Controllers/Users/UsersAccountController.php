@@ -305,9 +305,6 @@ class UsersAccountController extends Controller
         $this->validation($param, $rule);
         $param['cashier_id'] = $this->getCashierId();
 
-
-        dd($param);
-
         return $this->usersAccountService->changeItems($param);
     }
 

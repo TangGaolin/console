@@ -15,6 +15,7 @@ interface UsersAccountRepositoryInterface
 
     public function buyGoods($param);
     public function repayment($param);
+    public function changeItems($param);
 
 
 

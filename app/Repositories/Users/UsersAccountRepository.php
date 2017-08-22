@@ -187,7 +187,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
                 $updateData['used_times'] = DB::raw('used_times+' . $userItemData['use_time']); // 更新次数
 
                 // 更新金额
-                $updateData['now_money'] = DB::raw('now_money-' . $userItemData['use_time'] * $userItemData['sold_price']);
+                $updateData['now_money'] = DB::raw('now_money-' . $userItemData['use_money']);
                 $updateData['status'] = $userItemData['status'];
                 $this->userItemsModel->where('id', '=', $updateData['id'])->update($updateData);
             }
@@ -273,6 +273,51 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
                 'status' => $param['update_data']['status']
             ];
             return $this->orderModel->where('order_id','=',$param['update_data']['order_id'])->update($updateOldOrderData);
+        };
+        return DB::transaction($query);
+    }
+
+    public function changeItems($param)
+    {
+        $query = function () use ($param) {
+
+            // 判断是否使用余额
+            $updateData = [];
+            if($param['order_data']['pay_balance'] > 0){
+                $updateData['balance'] = DB::raw('balance-' . $param['order_data']['pay_balance']);
+            }
+
+            // 判断是否有欠款
+            if($param['order_data']['debt'] > 0){
+                $updateData['debt'] = DB::raw('debt+' . $param['order_data']['debt']);
+            }
+            // 更新会员金额
+            if(!empty($updateData)){
+                $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
+            }
+
+            // 账户卡进行更新
+            foreach ($param['update_item_data'] as $userItemData) {
+                $updateData['id'] = $userItemData['id'];
+                $updateData['used_times'] = DB::raw('used_times+' . $userItemData['use_time']); //更新次数
+
+                // 更新金额
+                $updateData['now_money'] = DB::raw('now_money-' . $userItemData['use_money']);
+                $updateData['status'] = $userItemData['status'];
+                $this->userItemsModel->where('id', '=', $updateData['id'])->update($updateData);
+            }
+
+            // 新增项目卡
+            if(!empty($param['new_item_data'])) {
+                $this->userItemsModel->insert($param['new_item_data']);
+            }
+
+            // 插入员工明细表
+            $this->empOrderModel->insert($param['emp_order_data']);
+
+            // 插入订单表
+            return $this->orderModel->insert($param['order_data']);
+
         };
         return DB::transaction($query);
     }

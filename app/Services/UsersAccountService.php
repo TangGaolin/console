@@ -293,7 +293,7 @@ Class UsersAccountService
 
             $updateUserItemData['id']       = $select_item['id'];
             $updateUserItemData['use_time'] = $select_item['use_time'];
-            $updateUserItemData['sold_price'] = $item['sold_price']; //用查出来的数据
+            $updateUserItemData['use_money'] = $item['sold_price'] * $select_item['use_time']; //用查出来的数据
             $updateUserItemDatas[]          = $updateUserItemData;
 
 
@@ -488,26 +488,97 @@ Class UsersAccountService
 
         // 若没有新项目则为退款，若有新项目为换购
         $orderType = $param['select_new_items'] ? 6 : 5;
+        //业绩数据
+        $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
+        //本单价值: -退项目金额 + 新项目金额 + 手续费 - 会员卡卡扣
+        $lastMoney = -$param['item_money'] + $param['new_item_money'] + $param['change_fee'] - $param['use_balance'];
+        //计算欠款
+        $debt = $lastMoney - $payMoney;
+        //构造订单详情
+        $orderInfo = [
+            "select_items" => $param['select_items'],
+            "select_new_items" => $param['new_item_money'],
+            "change_fee" => $param['change_fee'],  //本单手续费
+        ];
 
         //计算插入订单数据
         $orderData = [
-            "order_id" => $orderId,
-            "order_type" => $orderType,
-            "uid"   => $param['uid'],
+            "order_id"  => $orderId,
+            "order_type"=> $orderType,
+            "uid"       => $param['uid'],
+            "shop_id"   => $param['shop_id'],
+            "worth_money" => $lastMoney,
+            "order_info"  => json_encode($orderInfo, JSON_UNESCAPED_UNICODE),
+            "pay_balance" => $param['use_balance'],
+            "pay_cash"     => $param['pay_cash'],
+            "pay_card"     => $param['pay_card'],
+            "pay_mobile"   => $param['pay_mobile'],
+            "pay_money"    => $payMoney,
+            "debt"         => $debt,
+            "status"       =>  $debt > 0 ? 1 : 0,
+            "emp_info"     => json_encode($param['pay_emps'], JSON_UNESCAPED_UNICODE),
+            "add_time"     => $param['add_time'],
+            "cashier_id"   => $param['cashier_id']
         ];
+        
+        //计算员工业绩分成表
+        $empOrderData = [];
+        $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+        $order_desc = "退换" . '-' .$user_info['user_name'];
+        foreach ($param['pay_emps'] as $v){
+            $item['emp_id']     = $v['emp_id'];
+            $item['order_desc'] = $order_desc;
+            $item['yeji']       = $v['money'];
+            $item['order_id']   = $orderId;
+            $item['from_type']  = 0; //来自业绩表
+            $item['add_time']   = $param['add_time'];
+            $empOrderData[]     = $item;
+        }
 
+        //计算更新老项目
+        $updateUserItemDatas = [];
+        foreach ($param['select_items'] as $select_item) {
+            $item = $this->usersAccountRepository->getUserItemInfo(['id' => $select_item['id']]);
+            if($select_item['change_times'] + $item['used_times'] > $item['times']){
+                return [
+                    'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+                    'msg'        => $item["item_name"] . "次数不正确，请验证",
+                    'success'    => false
+                ];
+            }
+            $updateUserItemData['status'] = 0;
+            if($select_item['change_times'] + $item['used_times'] == $item['times']) {
+                $updateUserItemData['status'] = 1;
+            }
 
-
-        //更新老项目数据
-
-
-        //更新新项目数据
-
-        //
-
-
-
-
+            $updateUserItemData['id']       = $select_item['id'];
+            $updateUserItemData['use_time'] = $select_item['change_times'];
+            $updateUserItemData['use_money'] = $item['sold_price'] * $select_item['change_times']; //用查出来的数据
+            $updateUserItemDatas[]          = $updateUserItemData;
+        }
+        //计算新项目数据
+        $newUserItems = [];
+        foreach ($param['select_new_items'] as $value) {
+            $u_item['order_id']  = $orderId;
+            $u_item['uid']       = $param['uid'];
+            $u_item['item_id']   = $value['item_id'];
+            $u_item['item_name'] = $value['item_name'];
+            $u_item['price']     = $value['price'];
+            $u_item['sold_price']= round($value['sold_money'] / $value['times'], 2);
+            $u_item['discount']  = $value['discount'];
+            $u_item['sold_money']= $value['sold_money'];
+            $u_item['now_money'] = $value['sold_money'];
+            $u_item['emp_fee']   = $value['emp_fee'];
+            $u_item['times']     = $value['times'];
+            $u_item['add_time']  = $param['add_time'];
+            $newUserItems[] = $u_item;
+        }
+        $this->usersAccountRepository->changeItems([
+            'order_data' => $orderData,
+            'emp_order_data' => $empOrderData,
+            'update_item_data' => $updateUserItemDatas,
+            'new_item_data' => $newUserItems,
+        ]);
         return success();
     }
 
