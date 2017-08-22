@@ -123,7 +123,8 @@ Class UsersAccountService
         $orderId = date('YmdHis', time()) . mt_rand(100,999);
         $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
         $debt = $param['items_money'] - $payMoney - $param['pay_balance'];
-        //计算消费表数据
+
+        //1 计算消费表数据
         $orderData = [
             "order_id"     => $orderId,
             "order_type"   => 1, //购买服务类型为 1
@@ -143,44 +144,84 @@ Class UsersAccountService
             "cashier_id"   => $param['cashier_id']
         ];
 
-        //计算会员项目表数据
-        $userItems = [];
-        foreach ($param['selected_items'] as $value) {
-            $u_item['order_id']  = $orderId;
-            $u_item['uid']       = $param['uid'];
-            $u_item['item_id']   = $value['item_id'];
-            $u_item['item_name'] = $value['item_name'];
-            $u_item['price']     = $value['price'];
-            $u_item['sold_price']= round($value['sold_money'] / $value['times'], 2);
-            $u_item['discount']  = $value['discount'];
-            $u_item['sold_money']= $value['sold_money'];
-            $u_item['now_money'] = $value['sold_money'];
-            $u_item['emp_fee']   = $value['emp_fee'];
-            $u_item['times']     = $value['times'];
-            $u_item['add_time']  = $param['add_time'];
-            $userItems[] = $u_item;
-        }
-
-        //计算员工业绩分成表
+        //2 计算员工业绩分成表
         $empOrderData = [];
-        $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
-        $order_desc = "购买服务" . '-' .$user_info['user_name'];
+        if(0 == $param['uid']) {
+            $user_name = "散客";
+        }else{
+            $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+            $user_name = $user_info['user_name'];
+        }
+        $order_desc = "购买服务" . '-' . $user_name;
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
             $item['order_desc'] = $order_desc;
             $item['yeji']       = $v['money'];
+            $item['xiaohao']    = 0;
+            $item['fee']        = 0;
             $item['order_id']   = $orderId;
             $item['from_type']  = 0; //来自业绩表
             $item['add_time']   = $param['add_time'];
             $empOrderData[]     = $item;
         }
+
+        $userItems = []; //会员项目订单的数据
+
+        $useOrderData = []; //消耗订单数据
+        if(0 != $param['uid']) {
+            //3 计算会员项目表数据
+            foreach ($param['selected_items'] as $value) {
+                $u_item['order_id']  = $orderId;
+                $u_item['uid']       = $param['uid'];
+                $u_item['item_id']   = $value['item_id'];
+                $u_item['item_name'] = $value['item_name'];
+                $u_item['price']     = $value['price'];
+                $u_item['sold_price']= round($value['sold_money'] / $value['times'], 2);
+                $u_item['discount']  = $value['discount'];
+                $u_item['sold_money']= $value['sold_money'];
+                $u_item['now_money'] = $value['sold_money'];
+                $u_item['emp_fee']   = $value['emp_fee'];
+                $u_item['times']     = $value['times'];
+                $u_item['add_time']  = $param['add_time'];
+                $userItems[] = $u_item;
+            }
+        }else{
+            //4 耗卡订单数据
+            $useOrderData['use_money'] = $param['items_money'];
+            $useOrderData['use_order_id'] = $orderId;
+            $useOrderData['uid']          = $param['uid'];
+            $useOrderData['use_type']     = 0;  //0 为耗卡类型
+            $useOrderData['shop_id']      = $param['shop_id'];
+            $useOrderData['cashier_id']   = $param['cashier_id'];
+
+            $itemsInfo = [
+                'use_items' => $param['selected_items'], //购买的业绩项目
+                'server_emps' => $param['server_emps']   //员工消耗数据
+            ];
+
+            $useOrderData['items_info']   = json_encode($itemsInfo, JSON_UNESCAPED_UNICODE);
+            $useOrderData['add_time']     = $param['add_time'];
+
+            //5 继续添加员工耗卡数据
+            $order_desc = "耗卡" . '-' . $user_name;
+            foreach ($param['server_emps'] as $v){
+                $item['emp_id']     = $v['emp_id'];
+                $item['order_desc'] = $order_desc;
+                $item['xiaohao']    = $v["xiaohao"];
+                $item['fee']        = $v["fee"];
+                $item['order_id']   = $orderId;
+                $item['from_type']  = 1;  //来自消耗表
+                $item['add_time']   = $param['add_time'];
+                $empOrderData[]     = $item;
+            }
+        }
+
         $res = $this->usersAccountRepository->buyItems([
             'order_data'     => $orderData,
             'emp_order_data' => $empOrderData,
-            'user_items'     => $userItems
+            'user_items'     => $userItems,
+            'user_order_data'=> $useOrderData
         ]);
-        //记录操作Log
-
 
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
@@ -226,7 +267,7 @@ Class UsersAccountService
         foreach ($orderList['data'] as &$order) {
             $order['cashier_name'] = $convert_cashiers[$order['cashier_id']]['emp_name'];
             if($convert_users){
-                $order['user_name'] = $convert_users[$order['uid']]['user_name'];
+                $order['user_name'] = $convert_users[$order['uid']]['user_name'] ?? "散客";
             }
         }
         return [
@@ -266,7 +307,6 @@ Class UsersAccountService
         $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
         $order_desc = "耗卡" . '-' . $user_info['user_name'];
         $use_money = 0;
-        $emps = [];
 
         // 计算员工消耗信息表
         $empOrderDatas = [];
@@ -300,18 +340,16 @@ Class UsersAccountService
             foreach ($select_item['emps'] as $emp) {
                 $empOrderData['emp_id']     = $emp['emp_id'];
                 $empOrderData['order_desc'] = $order_desc;
+                $empOrderData['yeji']       = 0;
                 $empOrderData['fee']        = $emp['fee'];
                 $empOrderData['xiaohao']    = $emp['xiaohao'];
                 $empOrderData['order_id']   = $useOrderId;
                 $empOrderData['from_type']  = 1;  //来源于消耗表
-                $emps[] = $emp['emp_name'];
                 $empOrderDatas[] = $empOrderData;
             }
         }
 
         $useOrderData['use_money'] = $use_money;
-        $useOrderData['emps'] = implode(',', $emps);
-
 
         $res = $this->usersAccountRepository->useItems([
                 'useOrderData'  => $useOrderData,
@@ -361,7 +399,7 @@ Class UsersAccountService
         foreach ($orderList['data'] as &$order) {
             $order['cashier_name'] = $convert_cashiers[$order['cashier_id']]['emp_name'];
             if($convert_users){
-                $order['user_name'] = $convert_users[$order['uid']]['user_name'];
+                $order['user_name'] = $convert_users[$order['uid']]['user_name'] ?? "散客";
             }
         }
 
@@ -461,8 +499,14 @@ Class UsersAccountService
 
         //计算员工业绩分成表
         $empOrderData = [];
-        $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
-        $order_desc = "购买产品" . '-' .$user_info['user_name'];
+
+        if(0 == $param['uid']) {
+            $user_name = "散客";
+        }else{
+            $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
+            $user_name = $user_info['user_name'];
+        }
+        $order_desc = "购买产品" . '-' .$user_name;
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
             $item['order_desc'] = $order_desc;

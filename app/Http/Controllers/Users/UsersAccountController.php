@@ -91,7 +91,9 @@ class UsersAccountController extends Controller
             "pay_mobile"    => Request::input("pay_mobile", 0), //移动支付
             "pay_emps"      => Request::input("pay_emps", []), //员工金额分配
             "add_time"      => Request::input("add_time"), //添加时间
+            "server_emps"      => Request::input("server_emps"), //散客传该参数
         ];
+
 
         $rule = [
             "uid"            => "required|integer",
@@ -104,6 +106,7 @@ class UsersAccountController extends Controller
             "pay_mobile"     => "numeric",
             "pay_emps"       => "required|array",
             "add_time"       => "required|string",
+            "server_emps"    => "nullable|Array",
         ];
 
         $this->validation($param, $rule);

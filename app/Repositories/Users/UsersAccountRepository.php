@@ -115,11 +115,6 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     public function buyItems($param)
     {
         $query = function () use ($param) {
-            //插入订单表
-            $this->orderModel->insert($param['order_data']);
-
-            //插入员工明细表
-            $this->empOrderModel->insert($param['emp_order_data']);
 
             //判断是否使用余额
             $updateData = [];
@@ -135,7 +130,17 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
                 $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
             }
             //插入会员项目表
-            return $this->userItemsModel->insert($param['user_items']);
+            !empty($param['user_items']) && $this->userItemsModel->insert($param['user_items']);
+
+            //散客 插入消耗表
+            !empty($param['user_order_data']) && $this->useOrderModel->insert($param['user_order_data']);
+
+
+            //插入员工明细表
+            $this->empOrderModel->insert($param['emp_order_data']);
+
+            //插入订单表
+            return $this->orderModel->insert($param['order_data']);
 
         };
         return DB::transaction($query);
