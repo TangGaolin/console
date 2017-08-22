@@ -497,7 +497,7 @@ Class UsersAccountService
         //构造订单详情
         $orderInfo = [
             "select_items" => $param['select_items'],
-            "select_new_items" => $param['new_item_money'],
+            "select_new_items" => $param['select_new_items'],
             "change_fee" => $param['change_fee'],  //本单手续费
         ];
 
@@ -520,7 +520,7 @@ Class UsersAccountService
             "add_time"     => $param['add_time'],
             "cashier_id"   => $param['cashier_id']
         ];
-        
+
         //计算员工业绩分成表
         $empOrderData = [];
         $user_info = $this->usersRepository->getUserInfo(['uid' => $param['uid']]);
