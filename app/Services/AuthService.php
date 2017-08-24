@@ -26,7 +26,8 @@ Class AuthService {
         $res = $employee->getEmployeeInfo([
             'phone_no' => $param['user'],
             'password' => $param['password'],
-            'is_admin' => 1
+            'is_admin' => 1,
+            'status'    => 1,
         ]);
 
         //不存在，用户名和密码错误
@@ -54,7 +55,8 @@ Class AuthService {
         $res = $employee->getEmployeeInfo([
             'phone_no' => $param['user'],
             'password' => $param['password'],
-            'is_cashier' => 1
+            'is_cashier' => 1,
+            'status' => 1,
         ]);
         //不存在，用户名和密码错误
         if(!$res){
