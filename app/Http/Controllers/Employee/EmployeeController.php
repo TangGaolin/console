@@ -50,7 +50,7 @@ class EmployeeController extends Controller
         $param = [
             "emp_name" => Request::input("emp_name"),
             "phone_no" => Request::input("phone_no"),
-            "sex"      => Request::input("sex"),
+            "is_server_all"      => Request::input("is_server_all"),
             "shop_id"  => Request::input("shop_id"),
             "job"      => Request::input("job"),
             "remark"   => Request::input("remark", "")
@@ -58,7 +58,7 @@ class EmployeeController extends Controller
         $rule = [
             "emp_name" => "required|string",
             "phone_no" => "required|string",
-            "sex"      => "required|integer",
+            "is_server_all" => "required|integer",
             "shop_id"  => "required|integer",
             "job"      => "required|string",
             "remark"   => "string"
@@ -75,7 +75,7 @@ class EmployeeController extends Controller
             "emp_id"   => Request::input("emp_id"),
             "emp_name" => Request::input("emp_name"),
             "phone_no" => Request::input("phone_no"),
-            "sex"      => Request::input("sex"),
+            "is_server_all"=> Request::input("is_server_all"),
             "shop_id"  => Request::input("shop_id"),
             "job"      => Request::input("job"),
             "remark"   => Request::input("remark", "")
@@ -84,7 +84,7 @@ class EmployeeController extends Controller
             "emp_id"   => "required|integer",
             "emp_name" => "required|string",
             "phone_no" => "required|string",
-            "sex"      => "required|integer",
+            "is_server_all" => "required|integer",
             "shop_id"  => "required|integer",
             "job"      => "required|string",
         ];
@@ -115,9 +115,11 @@ class EmployeeController extends Controller
     {
         $param = [
             'file'      => Request::file('file'),
+            'shop_id'   => Request::input('shop_id')
         ];
         $rule = [
-            'file'      =>  "required",
+            'file'      => "required",
+            'shop_id'   => "required|integer",
         ];
         $this->validation($param,$rule);
         $this->employeeService->importEmployee($param);

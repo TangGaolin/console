@@ -66,8 +66,20 @@ Class AuthService {
         }
 
         $storeRepository = app(ShopRepositoryInterface::class);
-        $storeInfo = $storeRepository->getShopInfo($res['shop_id']);
-        $res['shop_name'] = $storeInfo['shop_name'];
+        $res['shop_name'] = "";
+        if(0 == $res['shop_id']) {
+            $storeList = $storeRepository->getStoreList();
+            foreach ($storeList as $shop){
+                $store['shop_id'] = $shop['shop_id'];
+                $store['shop_name'] = $shop['shop_name'];
+                $res['shop_list'][] = $store;
+            }
+        }else{
+            $storeInfo = $storeRepository->getShopInfo($res['shop_id']);
+            $res['shop_name'] = $storeInfo['shop_name'];
+        }
+
+
 
         unset($res['password']);
         return [

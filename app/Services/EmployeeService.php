@@ -115,13 +115,6 @@ Class EmployeeService
 
     public function importEmployee($param)
     {
-
-        $shopRepository = app(ShopRepositoryInterface::class);
-        $shopData = $shopRepository->getStoreList();
-        $converShopData = [];
-        foreach ($shopData as $v){
-            $converShopData[$v['shop_name']] = $v['shop_id'];
-        }
         $data = Excel::load($param['file']->getPathName(), function ($reader) {
             return $reader;
         });
@@ -132,15 +125,13 @@ Class EmployeeService
             if(!isset($converShopData[$v[0]])){
                 continue;
             }
-            $tmpEmployeeData['shop_id']  = $converShopData[$v['0']];
+            $tmpEmployeeData['shop_id']  = $param['id'];
             $tmpEmployeeData['emp_name'] =  $v[1];
             $tmpEmployeeData['job']      =  $v[2];
             $tmpEmployeeData['phone_no'] =  $v[3];
-            $tmpEmployeeData['sex']      =  10;
 
             $res = $this->employeeRepository->addEmployee($tmpEmployeeData);
             if($res){
-                $tmpEmployeeData['sex'] = $res['sex'];
                 $this->employeeRepository->updateEmployee($res['emp_id'], $tmpEmployeeData);
             }
         }

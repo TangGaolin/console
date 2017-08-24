@@ -17,7 +17,7 @@ class ShopRepository implements ShopRepositoryInterface
     public function getStoreList()
     {
         $result = $this->shopModel->select('shop_id', 'shop_name', 'shop_tel', 'city', 'address')
-            ->where('shop_type', '=', 1)
+            ->where('status', '=', 1)
             ->get();
         return $result->toArray();
     }

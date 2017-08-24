@@ -23,7 +23,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function getEmployeeList($whereParam)
     {
-        $select = $this->employeeModel->select('emp_id','emp_name','phone_no','sex','shop_id','job', "remark");
+        $select = $this->employeeModel->select('emp_id','emp_name','phone_no', 'is_server_all','shop_id','job', "remark");
         $select = $select->where("status","=",1);
 
         checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);

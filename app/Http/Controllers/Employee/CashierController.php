@@ -33,7 +33,7 @@ class CashierController extends Controller
             "phone_no" => "required|string",
             "shop_id"  => "required|integer"
         ];
-        $param['is_cashier'] = 1;
+        $param['is_cashier'] = 1; //为收银前台账户
         $this->validation($param, $rule);
         return $this->employeeService->addCashier($param);
     }
