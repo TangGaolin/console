@@ -3,37 +3,76 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
+use Request;
 
+use App\Services\AuthService;
 class ResetPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
 
-    use ResetsPasswords;
-
-    /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
+    protected $authService;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AuthService $authService)
     {
-        $this->middleware('guest');
+        $this->authService = $authService;
     }
+
+
+    public function resetCashierPassword(){
+        $param = [
+            'current_password'  => Request::input('current_password'),
+            'new_password'      => Request::input('new_password'),
+            'check_new_password'=> Request::input('check_new_password'),
+            'ip'                => Request::getClientIp()
+        ];
+        $rule = [
+            'current_password'     => "required|string",
+            'new_password'         => "required|string",
+            'check_new_password'   => "required|string",
+        ];
+        $this->validation($param, $rule);
+        $param['emp_id'] = $this->getCashierId();
+        $result =  $this->authService->resetPassword($param);
+        return $result;
+    }
+
+    public function resetAdminPassword() {
+        $param = [
+            'current_password'  => Request::input('current_password'),
+            'new_password'      => Request::input('new_password'),
+            'check_new_password'=> Request::input('check_new_password'),
+            'ip'                => Request::getClientIp()
+        ];
+        $rule = [
+            'current_password'     => "required|string",
+            'new_password'         => "required|string",
+            'check_new_password'   => "required|string",
+        ];
+        $this->validation($param, $rule);
+        $param['emp_id'] = $this->getAid();
+        $result =  $this->authService->resetPassword($param);
+        return $result;
+    }
+
+    public function resetEmpPassword() {
+        $param = [
+            'current_password'  => Request::input('current_password'),
+            'new_password'      => Request::input('new_password'),
+            'check_new_password'=> Request::input('check_new_password'),
+            'ip'                => Request::getClientIp()
+        ];
+        $rule = [
+            'current_password'     => "required|string",
+            'new_password'         => "required|string",
+            'check_new_password'   => "required|string",
+        ];
+        $this->validation($param, $rule);
+        $param['emp_id'] = $this->getCashierId();
+        $result =  $this->authService->resetPassword($param);
+        return $result;
+    }
+
 }

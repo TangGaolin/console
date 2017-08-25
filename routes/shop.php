@@ -48,6 +48,8 @@ Route::group(['middleware' => ['loginState']], function () {
 
     Route::post('/shop/changeItems', 'Users\UsersAccountController@changeItems');  //退换操作接口
 
+    Route::post('/shop/resetPassword', 'Auth\ResetPasswordController@resetCashierPassword');  //修改密码接口
+
 
 
 
