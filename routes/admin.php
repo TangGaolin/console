@@ -67,4 +67,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/order/getUseOrderList', 'Users\UsersAccountController@getUseOrderList');  //获取消耗记录
     Route::post('/order/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
 
+    Route::post('/admin/resetPassword', 'Auth\ResetPasswordController@resetAdminPassword');  //修改密码接口
+
+
 });
