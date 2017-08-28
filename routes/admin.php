@@ -37,6 +37,8 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/employee/updateCashier', 'Employee\CashierController@updateCashier');  //更新收银员信息
     Route::post('/employee/removeCashier', 'Employee\CashierController@removeCashier');  //删除收银员
 
+    Route::post('/employee/getEmployeeInfo', 'Employee\EmployeeController@getEmployeeInfo');  //获取员工信息
+
     Route::post('/item/addItemType', 'Item\ItemController@addItemType');  //增加疗程类别
     Route::post('/item/getItemType', 'Item\ItemController@getItemType');  //获取疗程项目类别
     Route::post('/item/modifyItemType', 'Item\ItemController@modifyItemType'); //修改项目类别

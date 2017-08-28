@@ -127,4 +127,18 @@ class EmployeeController extends Controller
         return $this->success();
     }
 
+    public function getEmployeeInfo()
+    {
+        $param = [
+            "emp_id" => Request::input("emp_id")
+        ];
+        $rule = [
+            "emp_id" => "required|integer"
+        ];
+
+        $this->validation($param, $rule);
+
+        return $this->employeeService->getEmployeeInfo($param);
+    }
+
 }

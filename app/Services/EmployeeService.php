@@ -137,5 +137,23 @@ Class EmployeeService
         }
     }
 
+    public function getEmployeeInfo($param)
+    {
+        $whereParam = ['emp_id' => $param['emp_id']];
+        $empInfo = $this->employeeRepository->getEmployeeInfo($whereParam);
+        if(!$empInfo) {
+            return fail(501, "员工信息不存在!");
+        }
+        if(0 == $empInfo['shop_id']) {
+            $empInfo['shop_name'] = "总部";
+        }else {
+            $storeRepository = app(ShopRepositoryInterface::class);
+            $storeInfo = $storeRepository->getShopInfo($empInfo['shop_id']);
+            $empInfo['shop_name'] = $storeInfo['shop_name'];
+        }
+        unset($empInfo['password']);
+        return success($empInfo);
+    }
+
 
 }
