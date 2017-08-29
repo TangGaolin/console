@@ -23,7 +23,6 @@ Class UsersService
         $this->usersRepository = $usersRepository;
     }
 
-
     public function getUserList($param)
     {
         if (is_numeric($param['user_name_phone'])) {
@@ -54,12 +53,7 @@ Class UsersService
             $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "无指定门店";
             $v["emp_name"] = $convert_emps[$v["emp_id"]] ?? "无";
         }
-        return [
-            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
-            'msg' => config('response_code.MSG_OK'),
-            'success' => true,
-            'data' => $data
-        ];
+        return success($data);
     }
 
 

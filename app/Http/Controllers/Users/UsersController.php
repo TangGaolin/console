@@ -29,12 +29,14 @@ class UsersController extends Controller
         $param = [
             "user_name_phone"  => Request::input("user_name_phone"),
             "shop_id"          => Request::input("shop_id"),
+            "emp_id"           => Request::input("emp_id"),
             "cur_page"         => Request::input("cur_page", 1),
             "limit"            => Request::input("limit", 15),
         ];
         $rule = [
             "user_name_phone"   => "nullable|string",
             "shop_id"           => "nullable|integer",
+            "emp_id"           => "nullable|integer",
             "cur_page"          => "integer",
             "limit"             => "integer",
         ];

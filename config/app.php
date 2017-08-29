@@ -183,7 +183,8 @@ return [
         App\Providers\ItemServiceProvider::class,
         App\Providers\GoodsServiceProvider::class,
         App\Providers\UsersServiceProvider::class,
-        App\Providers\UsersAccountServiceProvider::class
+        App\Providers\UsersAccountServiceProvider::class,
+        App\Providers\EmpOrderServiceProvider::class
     ],
 
     /*

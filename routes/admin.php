@@ -72,4 +72,12 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/admin/resetPassword', 'Auth\ResetPasswordController@resetAdminPassword');  //修改密码接口
 
 
+    Route::post('/employee/getEmpDataView', 'DataViews\EmpDataController@getEmpDataView');  //获取用户数据接口
+    Route::post('/employee/getEmpOrderList', 'Employee\EmployeeOrderController@getEmpOrderList');  //获取用户数据接口
+
+
+
+
+
+
 });

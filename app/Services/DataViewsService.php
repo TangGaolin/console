@@ -13,9 +13,8 @@ use PRedis;
 Class DataViewsService
 {
     protected $usersAccountRepository;
-    public function __construct(UsersAccountRepositoryInterface $usersAccountRepository)
+    public function __construct()
     {
-        $this->usersAccountRepository = $usersAccountRepository;
     }
 
 
