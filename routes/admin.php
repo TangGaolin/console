@@ -27,7 +27,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/store/updateStoreInfo', 'Store\StoreController@updateStoreInfo'); //更新门店信息
     Route::post('/store/addStore', 'Store\StoreController@addStore');  //增加门店
 
-    Route::post('/employee/getEmployeeList', 'Employee\EmployeeController@getEmployeeList'); // 获取门店列表
+    Route::post('/employee/getEmployeeList', 'Employee\EmployeeController@getEmployeeList'); //获取员工列表
     Route::post('/employee/addEmployee', 'Employee\EmployeeController@addEmployee');  //新增员工
     Route::post('/employee/updateEmployee', 'Employee\EmployeeController@updateEmployee'); //更新员工信息
     Route::post('/employee/importEmployee', 'Employee\EmployeeController@importEmployee');  //导入员工信息

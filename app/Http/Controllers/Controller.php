@@ -42,6 +42,12 @@ class Controller extends BaseController
         return $cashier['emp_id'];
     }
 
+    protected function getEmpId()
+    {
+        $emp = Request::session()->get('emp');
+        return $emp['emp_id'];
+    }
+
     protected function success($data = null)
     {
         $returnData = [

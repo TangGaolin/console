@@ -70,7 +70,7 @@ class ResetPasswordController extends Controller
             'check_new_password'   => "required|string",
         ];
         $this->validation($param, $rule);
-        $param['emp_id'] = $this->getCashierId();
+        $param['emp_id'] = $this->getEmpId();
         $result =  $this->authService->resetPassword($param);
         return $result;
     }

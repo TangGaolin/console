@@ -52,17 +52,24 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         //console api
-        if('console' == env('APP_NAME')) {
+        if('console' == env('APP_NAME') || "local" == env('APP_ENV')) {
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/admin.php'));
         }
 
         //cashier sys api
-        if('shop' == env('APP_NAME')) {
+        if('shop' == env('APP_NAME') || "local" == env('APP_ENV')) {
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/shop.php'));
+        }
+
+        //cashier sys api
+        if('emp' == env('APP_NAME') || "local" == env('APP_ENV')) {
+            Route::middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/employee.php'));
         }
     }
 

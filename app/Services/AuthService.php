@@ -81,7 +81,34 @@ Class AuthService {
             $res['shop_name'] = $storeInfo['shop_name'];
         }
 
+        unset($res['password']);
+        return [
+            'statusCode' => $this->responseCode['STATUSCODE_SUCCESS'],
+            'msg'  => $this->responseCode['MSG_OK'],
+            'success' => true,
+            'data' => $res
+        ];
+    }
 
+    //后台管理员登录
+    public function empLogin($param)
+    {
+        $employee =  app(EmployeeRepositoryInterface::class);
+        $res = $employee->getEmployeeInfo([
+            'phone_no' => $param['user'],
+            'password' => $param['password'],
+            'is_server' => 1,
+            'status'    => 1,
+        ]);
+
+        //不存在，用户名和密码错误
+        if(!$res){
+            return [
+                'statusCode' => $this->responseCode['STATUSCODE_PASSWDERROR'],
+                'msg'  => $this->responseCode['MSG_PASSWDERROR'],
+                'success' => false
+            ];
+        }
 
         unset($res['password']);
         return [
@@ -92,27 +119,5 @@ Class AuthService {
         ];
     }
 
-    public function resetPassword($param) {
-
-        if($param['new_password'] !== $param['check_new_password']) {
-            return fail(106, "两次密码输入不正确!");
-        }
-
-        $employee =  app(EmployeeRepositoryInterface::class);
-        $res = $employee->getEmployeeInfo([
-            'emp_id' => $param['emp_id'],
-            'password' => $param['current_password']
-        ]);
-        //不存在，用户名和密码错误
-        if(!$res){
-            return fail(106, "旧密码不正确!");
-        }
-        //若存在，修改密码
-        $resetData = [
-            'password' => $param['check_new_password']
-        ];
-        $employee->updateEmployee($param['emp_id'], $resetData);
-        return success();
-    }
 
 }
