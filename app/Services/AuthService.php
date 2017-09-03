@@ -110,6 +110,10 @@ Class AuthService {
             ];
         }
 
+        $storeRepository = app(ShopRepositoryInterface::class);
+        $storeInfo = $storeRepository->getShopInfo($res['shop_id']);
+        $res['shop_name'] = $storeInfo['shop_name'];
+
         unset($res['password']);
         return [
             'statusCode' => $this->responseCode['STATUSCODE_SUCCESS'],

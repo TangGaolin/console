@@ -35,7 +35,6 @@ class LoginController extends Controller
 
         if ($result['statusCode'] == '0') {
             Request::session()->put('admin', $result['data']);
-            unset($result['data']['emp_id']);
         }
         return $result;
     }

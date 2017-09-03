@@ -33,7 +33,6 @@ class ShopLoginController extends Controller
 
         if ($result['statusCode'] == '0') {
             Request::session()->put('cashier', $result['data']);
-            unset($result['data']['emp_id']);
         }
         return $result;
     }
