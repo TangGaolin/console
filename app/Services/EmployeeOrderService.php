@@ -8,6 +8,7 @@
 namespace App\Services;
 
 use App\Repositories\Employee\EmpOrderRepositoryInterface;
+use App\Repositories\Users\UsersAccountRepositoryInterface;
 
 
 Class EmployeeOrderService
@@ -27,6 +28,30 @@ Class EmployeeOrderService
         $data = $this->employeeRepository->getEmpOrderList($whereParam);
         return success($data);
     }
+
+    public function getOrderInfo($param)
+    {
+        $orderRepository = app(UsersAccountRepositoryInterface::class);
+
+        $order_info = [];
+        if(0 == $param['from_type']) {
+            $whereParam = [
+                'order_id' => $param['order_id']
+            ];
+            $order_info = $orderRepository->getOrderInfo($whereParam);
+        }
+
+        if(1 == $param['from_type']) {
+            $whereParam = [
+                'use_order_id' => $param['order_id']
+            ];
+            $order_info = $orderRepository->getUseOrderInfo($whereParam);
+        }
+
+        return success($order_info);
+    }
+
+
 
 
 }

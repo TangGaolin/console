@@ -17,6 +17,8 @@ interface UsersAccountRepositoryInterface
     public function repayment($param);
     public function changeItems($param);
 
+    public function getUseOrderInfo($whereParam);
+
 
 
 

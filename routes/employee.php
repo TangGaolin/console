@@ -25,6 +25,12 @@ Route::post('/emp/getEmpOrderList', 'Employee\EmployeeOrderController@getEmpOrde
 Route::post('/emp/getEmpDataView', 'DataViews\EmpDataController@getEmpDataView'); //获取员工数据接口
 
 Route::post('/emp/resetPassword', 'Auth\ResetPasswordController@resetEmpPassword');  //员工修改密码接口
+
+Route::post('/emp/resetPassword', 'Auth\ResetPasswordController@resetEmpPassword');  //员工修改密码接口
+
+Route::post('/emp/getOrderInfo', 'Employee\EmployeeOrderController@getOrderInfo');   //获取单据详情
+
+
 //Route::post('/emp/orderTime', 'Auth\LoginController@login'); //会员预约接口
 //Route::post('/emp/serverLog', 'Auth\LoginController@login'); //服务记录
 

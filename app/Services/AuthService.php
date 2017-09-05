@@ -129,9 +129,9 @@ Class AuthService {
           }
          $employee =  app(EmployeeRepositoryInterface::class);
          $res = $employee->getEmployeeInfo([
-                  'emp_id' => $param['emp_id'],
-                  'password' => $param['current_password']
-                  ]);
+              'emp_id'  => $param['emp_id'],
+              'password'=> $param['current_password']
+         ]);
          //不存在，用户名和密码错误
          if(!$res){
              return fail(106, "旧密码不正确!");

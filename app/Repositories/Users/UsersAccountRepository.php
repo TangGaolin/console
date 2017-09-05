@@ -327,5 +327,11 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         return DB::transaction($query);
     }
 
+    public function getUseOrderInfo($whereParam)
+    {
+        $res = $this->useOrderModel->where($whereParam)->first();
+        return $res ? $res->toArray() : [];
+    }
+
 
 }
