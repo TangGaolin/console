@@ -311,6 +311,4 @@ class UsersAccountController extends Controller
         return $this->usersAccountService->changeItems($param);
     }
 
-
-
 }

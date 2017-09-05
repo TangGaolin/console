@@ -21,12 +21,17 @@ class Order extends Model
 
     public function getEmpInfoAttribute($value)
     {
-        return json_decode($value, true) ?: $value;
+        return json_decode($value, true) ?: [];
     }
 
 
     public function getOrderInfoAttribute($value)
     {
-        return json_decode($value, true) ?: $value;
+        return json_decode($value, true) ?: [];
+    }
+
+    public function getRemarkAttribute($value)
+    {
+        return json_decode($value, true) ?: [];
     }
 }

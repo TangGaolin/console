@@ -21,6 +21,11 @@ class UseOrder extends Model
 
     public function getItemsInfoAttribute($value)
     {
-        return json_decode($value, true) ?: $value;
+        return json_decode($value, true) ?: [];
+    }
+
+    public function getRemarkAttribute($value)
+    {
+        return json_decode($value, true) ?: [];
     }
 }

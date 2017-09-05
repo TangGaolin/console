@@ -32,7 +32,7 @@ Route::post('/emp/getOrderInfo', 'Employee\EmployeeOrderController@getOrderInfo'
 
 
 //Route::post('/emp/orderTime', 'Auth\LoginController@login'); //会员预约接口
-//Route::post('/emp/serverLog', 'Auth\LoginController@login'); //服务记录
+Route::post('/emp/serverLog', 'Employee\EmployeeOrderController@serverLog'); //服务记录
 
 
 

@@ -19,6 +19,11 @@ interface UsersAccountRepositoryInterface
 
     public function getUseOrderInfo($whereParam);
 
+    public function updateOrderRemark($whereParam, $updateData);
+    public function updateUseOrderRemark($whereParam, $updateData);
+
+
+
 
 
 

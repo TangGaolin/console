@@ -51,6 +51,52 @@ Class EmployeeOrderService
         return success($order_info);
     }
 
+    public function updateOrderRemark($param)
+    {
+        $orderRepository = app(UsersAccountRepositoryInterface::class);
+
+        $order_info = [];
+        if(0 == $param['from_type']) {
+            $whereParam = [
+                'order_id' => $param['order_id']
+            ];
+            $order_info = $orderRepository->getOrderInfo($whereParam);
+        }
+
+        if(1 == $param['from_type']) {
+            $whereParam = [
+                'use_order_id' => $param['order_id']
+            ];
+            $order_info = $orderRepository->getUseOrderInfo($whereParam);
+        }
+
+        $order_info['remark'][] = [
+            'remark' => $param['remark'],
+            'emp_id' => $param['emp_id'],
+            'emp_name' => $param['emp_name'],
+            'add_time' => date('Y-m-d H:i:s')
+        ];
+
+        $updateData = [
+            'remark' => json_encode($order_info['remark']),
+        ];
+        if(0 == $param['from_type']) {
+            $whereParam = [
+                'order_id' => $param['order_id'],
+            ];
+            $orderRepository->updateOrderRemark($whereParam, $updateData);
+        }
+
+        if(1 == $param['from_type']) {
+            $whereParam = [
+                'use_order_id' => $param['order_id'],
+            ];
+            $orderRepository->updateUseOrderRemark($whereParam, $updateData);
+        }
+
+        return success();
+    }
+
 
 
 

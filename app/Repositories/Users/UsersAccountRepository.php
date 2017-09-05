@@ -333,5 +333,15 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         return $res ? $res->toArray() : [];
     }
 
+    public function updateOrderRemark($whereParam, $updateData)
+    {
+        return $this->orderModel->where($whereParam)->update($updateData);
+    }
+
+    public function updateUseOrderRemark($whereParam, $updateData)
+    {
+        return $this->useOrderModel->where($whereParam)->update($updateData);
+    }
+
 
 }

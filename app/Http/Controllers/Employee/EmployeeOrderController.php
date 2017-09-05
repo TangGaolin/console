@@ -51,4 +51,27 @@ class EmployeeOrderController extends Controller
         $data = $this->employeeOrderService->getOrderInfo($param);
         return $data;
     }
+
+    public function serverLog() {
+
+        $param = [
+            "order_id"    => Request::input('order_id'),
+            'from_type'   => Request::input('from_type'),
+            'remark'      => Request::input('remark')
+        ];
+        $rule = [
+            "order_id"  => "required",
+            "from_type" => "required",
+            "remark"    => "required",
+        ];
+        $this->validation($param, $rule);
+
+
+        $emp_data = Request::session()->get('emp');
+        $param['emp_id'] = $emp_data['emp_id'];
+        $param['emp_name'] = $emp_data['emp_name'];
+
+        $data = $this->employeeOrderService->updateOrderRemark($param);
+        return $data;
+    }
 }
