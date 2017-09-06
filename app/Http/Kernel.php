@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
 
         'loginState' => [\App\Http\Middleware\LoginState::class],
         'AdminloginState' => [\App\Http\Middleware\AdminLoginState::class],
+        'EmploginState' => [\App\Http\Middleware\EmpLoginState::class],
 
         'api' => [
             'throttle:60,1',
