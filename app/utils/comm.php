@@ -20,7 +20,8 @@ function success($data = null)
         'msg'        => config('response_code.MSG_OK'),
         'success'    => true
     ];
-    $data && $returnData['data'] = $data;
+
+    !is_null($data) && $returnData['data'] = $data;
     return response()->json($returnData);
 }
 

@@ -7,7 +7,9 @@
  */
 namespace App\Services;
 
+use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Employee\EmpOrderRepositoryInterface;
+use App\Repositories\UserOrderTime\UserOrderTimeRepositoryInterface;
 use App\Repositories\Users\UsersAccountRepositoryInterface;
 
 
@@ -47,6 +49,11 @@ Class EmployeeOrderService
             ];
             $order_info = $orderRepository->getUseOrderInfo($whereParam);
         }
+        $empRepository = app(EmployeeRepositoryInterface::class);
+
+        $empInfo = $empRepository->getEmployeeInfo(['emp_id' => $order_info['cashier_id']]);
+        $order_info['cashier_name'] = $empInfo['emp_name'];
+
 
         return success($order_info);
     }
@@ -95,6 +102,20 @@ Class EmployeeOrderService
         }
 
         return success();
+    }
+
+    public function orderTime($param)
+    {
+        $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
+        $orderTimeRepository->addOrderTime($param);
+        return success();
+    }
+
+    public function getOrderTime($whereParam)
+    {
+        $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
+        $res = $orderTimeRepository->getOrderTime($whereParam);
+        return success($res);
     }
 
 

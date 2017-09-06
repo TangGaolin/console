@@ -266,6 +266,7 @@ Class UsersAccountService
         //获取员工信息
         foreach ($orderList['data'] as &$order) {
             $order['cashier_name'] = $convert_cashiers[$order['cashier_id']]['emp_name'];
+            $order['order_type_name'] = config('global.order_types')[$order['order_type']] ?? "其他";
             if($convert_users){
                 $order['user_name'] = $convert_users[$order['uid']]['user_name'] ?? "散客";
             }

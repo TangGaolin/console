@@ -31,8 +31,19 @@ Route::post('/emp/resetPassword', 'Auth\ResetPasswordController@resetEmpPassword
 Route::post('/emp/getOrderInfo', 'Employee\EmployeeOrderController@getOrderInfo');   //获取单据详情
 
 
-//Route::post('/emp/orderTime', 'Auth\LoginController@login'); //会员预约接口
+Route::post('/emp/orderTime', 'Employee\EmployeeOrderController@orderTime'); //会员预约接口
+Route::post('/emp/getOrderTime', 'Employee\EmployeeOrderController@getOrderTime'); //获取会员预约数据
 Route::post('/emp/serverLog', 'Employee\EmployeeOrderController@serverLog'); //服务记录
+
+
+Route::post('/emp/getUserDetail', 'Users\UsersController@getUserDetail');  //获取用户详情
+Route::post('/emp/getUserItemList', 'Users\UsersAccountController@getItemList');  //获取用户的服务数据
+Route::post('/emp/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
+Route::post('/emp/getUseOrderList', 'Users\UsersAccountController@getUseOrderList');  //获取用户购买记录
+
+Route::post('/emp/getUserItemList', 'Users\UsersAccountController@getItemList');  //获取用户的服务数据
+Route::post('/emp/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
+Route::post('/emp/getUseOrderList', 'Users\UsersAccountController@getUseOrderList');  //耗卡记录
 
 
 

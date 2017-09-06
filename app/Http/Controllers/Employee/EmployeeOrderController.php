@@ -53,7 +53,6 @@ class EmployeeOrderController extends Controller
     }
 
     public function serverLog() {
-
         $param = [
             "order_id"    => Request::input('order_id'),
             'from_type'   => Request::input('from_type'),
@@ -73,5 +72,38 @@ class EmployeeOrderController extends Controller
 
         $data = $this->employeeOrderService->updateOrderRemark($param);
         return $data;
+    }
+
+    public function orderTime()
+    {
+        $param = [
+            "uid"         => Request::input('uid'),
+            'remark'      => Request::input('remark',""),
+            'order_time'  => Request::input('order_time')
+        ];
+        $rule = [
+            "uid"       => "required",
+            'order_time'=> "required"
+        ];
+        $this->validation($param, $rule);
+
+        $emp_data = Request::session()->get('emp');
+        $param['emp_id']   = $emp_data['emp_id'];
+        $param['emp_name'] = $emp_data['emp_name'];
+
+        $data = $this->employeeOrderService->orderTime($param);
+        return $data;
+    }
+
+    public function getOrderTime()
+    {
+        $param = [
+            "uid"        => Request::input('uid'),
+            'emp_id'     => Request::input('emp_id'),
+            'start_time' => Request::input('start_time'),
+            'end_time'   => Request::input('end_time')
+        ];
+
+        return $this->employeeOrderService->getOrderTime($param);
     }
 }
