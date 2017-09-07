@@ -76,6 +76,9 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/employee/getEmpOrderList', 'Employee\EmployeeOrderController@getEmpOrderList');  //获取用户数据接口
 
 
+    Route::post('/storeData/getShopsDataView', 'DataViews\ShopDataController@getShopsDataView');  //获取门店总数据
+
+
 
 
 

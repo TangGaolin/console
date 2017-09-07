@@ -39,8 +39,25 @@ class ShopDataController extends Controller
         $this->validation($param, $rule);
 
         return $this->dataViewsService->getShopDataView($param);
+    }
 
+    public function getShopsDataView()
+    {
+        $param = [
+            "shop_ids"=> Request::input('shop_ids'),
+            "year"    => Request::input('year'),
+            "mouth"   => Request::input('mouth'),
+        ];
 
+        $rule = [
+            'shop_ids' => "required|Array",
+            'year'     => "nullable|integer",
+            'mouth'    => "nullable|integer",
+        ];
+
+        $this->validation($param, $rule);
+
+        return $this->dataViewsService->getShopsDataView($param);
     }
 
 

@@ -20,23 +20,26 @@ Class DataViewsService
 
     public function getShopDataView($param)
     {
+
         $param['year']  = $param['year'] ? $param['year'] : date('Y');
         $param['mouth'] = $param['mouth'] ? $param['mouth'] : date('m');
-        $param['day']   =  date('d');
 
         $shopDatas = [];
         for($day = 1; $day <= date('t'); $day++){
-            if($day <= $param['day']){
-                $data['day'] = $day;
-                $data['yeji'] = $this->getYejiData($param['year'], $param['mouth'], $day, $param['shop_id']);
-                $data['xiaohao'] = $this->getXiaohaoData($param['year'], $param['mouth'], $day, $param['shop_id']);
+            //初始化
+            $data['day'] = $day;
+            $data['yeji'] = 0;
+            $data['xiaohao'] = 0;
+            //判断当前天
+            $currentDay = strtotime($param['year'] . "-" . $param['mouth'] . "-" . $day);
+            if(strtotime($currentDay) > time()){
                 $shopDatas[] = $data;
-            }else{
-                $data['day'] = $day;
-                $data['yeji'] = 0;
-                $data['xiaohao'] = 0;
-                $shopDatas[] = $data;
+                continue;
             }
+            $data['yeji'] = $this->getYejiData($param['year'], $param['mouth'], $day, $param['shop_id']);
+            $data['xiaohao'] = $this->getXiaohaoData($param['year'], $param['mouth'], $day, $param['shop_id']);
+            $shopDatas[] = $data;
+
         }
 
         return [
@@ -47,8 +50,31 @@ Class DataViewsService
         ];
     }
 
+    public function getShopsDataView($param)
+    {
+
+        $shopsData = [];
+        $whereParam['year'] = $param['year'];
+        $whereParam['mouth'] = $param['mouth'];
+        foreach ($param['shop_ids'] as $v){
+            $whereParam['shop_id'] = $v;
+            $res = $this->getShopDataView($whereParam);
+            $shopsData[$v] = $res['data'];
+        }
+
+        return [
+            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
+            'msg'        => config('response_code.MSG_OK'),
+            'success'    => true,
+            'data'       => $shopsData
+        ];
+    }
+
     protected function getYejiData($year, $mouth, $day, $shop_id)
     {
+
+        $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+
         $redis = PRedis::connection();
         $redis_key = "shop_yeji:"  . $year . ':' . $mouth . ':' . $shop_id;
         $data  = $redis->hget($redis_key, $day);
@@ -61,6 +87,8 @@ Class DataViewsService
 
     protected function getXiaohaoData($year, $mouth, $day, $shop_id)
     {
+        $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+
         $redis = PRedis::connection();
         $redis_key = "shop_xiaohao:"  . $year . ':' . $mouth . ':' . $shop_id;
         $data  = $redis->hget($redis_key, $day);
