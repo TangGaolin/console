@@ -78,13 +78,16 @@ class EmployeeOrderController extends Controller
     {
         $param = [
             "uid"         => Request::input('uid'),
+            "shop_id"     => Request::input('shop_id'),
             'remark'      => Request::input('remark',""),
             'order_time'  => Request::input('order_time')
         ];
         $rule = [
             "uid"       => "required",
+            "shop_id"   => "required",
             'order_time'=> "required"
         ];
+
         $this->validation($param, $rule);
 
         $emp_data = Request::session()->get('emp');
