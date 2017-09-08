@@ -51,8 +51,8 @@ class ShopDataController extends Controller
 
         $rule = [
             'shop_ids' => "required|Array",
-            'year'     => "nullable|integer",
-            'mouth'    => "nullable|integer",
+            'year'     => "nullable|Numeric",
+            'mouth'    => "nullable|Numeric",
         ];
 
         $this->validation($param, $rule);

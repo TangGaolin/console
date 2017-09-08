@@ -73,11 +73,16 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     public function getOrderList($whereParam)
     {
         $select = $this->orderModel;
-        $this->checkValue($whereParam,'uid') && $select = $select->where("uid", "=", $whereParam["uid"]);
-        $this->checkValue($whereParam,'start_time') &&$select = $select->where("add_time", ">=", $whereParam["start_time"]);
-        $this->checkValue($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
-        $this->checkValue($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
-        $this->checkValue($whereParam,'status') && $whereParam['status'] && $select = $select->where("status", "=", $whereParam["status"]);  //获取不同状态的订单
+
+        if($this->checkValue($whereParam,'order_id')) {
+            $select = $select->where("order_id", "=", $whereParam["order_id"]);
+        }else{
+            $this->checkValue($whereParam,'uid') && $select = $select->where("uid", "=", $whereParam["uid"]);
+            $this->checkValue($whereParam,'start_time') &&$select = $select->where("add_time", ">=", $whereParam["start_time"]);
+            $this->checkValue($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
+            $this->checkValue($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
+            $this->checkValue($whereParam,'status') && $whereParam['status'] && $select = $select->where("status", "=", $whereParam["status"]);  //获取不同状态的订单
+        }
 
         $countSelect = $select;
         $count       = $countSelect->count();
@@ -205,11 +210,15 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     public function getUseOrderList($whereParam)
     {
         $select = $this->useOrderModel;
-        !empty($whereParam['uid']) && $select = $select->where("uid", "=", $whereParam["uid"]);
 
-        checkParam($whereParam,'start_time') && $select = $select->where("add_time", ">=", $whereParam["start_time"]);
-        checkParam($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
-        checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
+        if($this->checkValue($whereParam,'order_id')) {
+            $select = $select->where("use_order_id", "=", $whereParam["order_id"]);
+        }else{
+            checkParam($whereParam, 'uid') && $select = $select->where("uid", "=", $whereParam["uid"]);
+            checkParam($whereParam,'start_time') && $select = $select->where("add_time", ">=", $whereParam["start_time"]);
+            checkParam($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
+            checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
+        }
 
         $countSelect = $select;
         $count       = $countSelect->count();
