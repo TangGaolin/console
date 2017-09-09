@@ -44,6 +44,28 @@ class EmployeeController extends Controller
         return $this->success($data);
     }
 
+    //获取到门店服务员工和跨店服务员工
+    public function getServerEmpList()
+    {
+        $param = [
+            "shop_id"   => Request::input('shop_id'),
+            "is_server" => Request::input('is_server'),
+            'cur_page'  => Request::input('cur_page', 1),
+            'limit'     => Request::input('limit', 15)
+        ];
+        $rule = [
+            "shop_id"    => "nullable|integer",
+            "is_server"  => "nullable|integer",
+            "cur_page"   => "integer",
+            "limit"      => "integer"
+        ];
+        $this->validation($param, $rule);
+
+        $data = $this->employeeService->getServerEmpList($param);
+        return $this->success($data);
+    }
+
+
     //添加员工
     public function addEmployee()
     {

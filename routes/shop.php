@@ -29,6 +29,7 @@ Route::group(['middleware' => ['loginState']], function () {
     Route::post('/shop/recharge', 'Users\UsersAccountController@recharge');  //充值
     Route::post('/shop/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
     Route::post('/shop/getEmployeeList', 'Employee\EmployeeController@getEmployeeList'); // 获取员工信息数据
+    Route::post('/shop/getServerEmpList', 'Employee\EmployeeController@getServerEmpList'); // 获取员工信息数据
 
     Route::post('/shop/getItemList', 'Item\ItemController@getItemList');  //获取当前服务项目
     Route::post('/shop/getUserItemList', 'Users\UsersAccountController@getItemList');  //获取用户的服务数据

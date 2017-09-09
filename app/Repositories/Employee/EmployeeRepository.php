@@ -26,6 +26,8 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         $select = $this->employeeModel->select('emp_id','emp_name','phone_no', 'is_server_all','shop_id','job', "remark");
         $select = $select->where("status","=",1);
 
+        checkParam($whereParam,'is_server_all') && $select = $select->where("is_server_all", "=", $whereParam["is_server_all"]);
+
         checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
         checkParam($whereParam,'is_server') && $select = $select->where("is_server", "=", $whereParam["is_server"]);
         checkParam($whereParam,'is_cashier') && $select = $select->where("is_cashier", "=", $whereParam["is_cashier"]);

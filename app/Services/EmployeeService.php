@@ -43,6 +43,27 @@ Class EmployeeService
         return $data;
     }
 
+    public function getServerEmpList($param)
+    {
+        $storeRepository = app(ShopRepositoryInterface::class);
+        $storeList = $storeRepository->getStoreList();
+        $newStoreData = [];
+        foreach ($storeList as $v) {
+            $newStoreData[$v['shop_id']] = $v['shop_name'];
+        }
+        //先获取所有跨店员工
+        $server_all_emps = $this->employeeRepository->getEmployeeList(['is_server_all'=> 1]);
+
+        //再获取不跨店的门店员工
+        $param['is_server_all'] = 0;
+        $emps = $this->employeeRepository->getEmployeeList($param);
+        $data = array_merge($server_all_emps, $emps);
+//        foreach ($data['data'] as &$v) {
+//            $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "总部";
+//        }
+        return $data;
+    }
+
     public function addEmployee($param)
     {
         $employeeData = $param;
