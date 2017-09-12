@@ -185,7 +185,8 @@ return [
         App\Providers\UsersServiceProvider::class,
         App\Providers\UsersAccountServiceProvider::class,
         App\Providers\EmpOrderServiceProvider::class,
-        App\Providers\UserOrderITimeServiceProvider::class
+        App\Providers\UserOrderITimeServiceProvider::class,
+        App\Providers\RbacRepositoryProvider::class
     ],
 
     /*

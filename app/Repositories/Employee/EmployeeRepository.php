@@ -41,8 +41,53 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
         return [
             'totalSize' => $count,
-            'data'      => $res,
+            'data'      => $res ?$res->toArray() : []
         ];
+    }
+
+    public function getAccountLimit($whereParam)
+    {
+        $select = $this->employeeModel
+            ->leftJoin('rbac_role_user', 'employee.emp_id', '=', 'rbac_role_user.aid')
+            ->leftJoin('rbac_role', 'rbac_role.role_id', '=', 'rbac_role_user.role_id')
+            ->where('employee.status', '1')->where('employee.is_admin', 1);
+
+
+        checkParam($whereParam,'phone_no') && $select = $select->where("employee.phone_no", "=", $whereParam["phone_no"]);
+        checkParam($whereParam,'emp_name') && $select = $select->where("employee.emp_name", "like", $whereParam["emp_name"].'%');
+
+
+        $count = $select->count();
+
+        $accountData = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])
+            ->get(['employee.emp_name', 'employee.phone_no', 'rbac_role.role_name', 'employee.emp_id', 'employee.is_super_admin', 'employee.status']);
+
+        foreach ($accountData as $k => &$v) {
+            if ($v['is_super_admin']) {
+                $v['role_name'] = '超级管理员';
+                $v['role_status'] = 1;
+            }
+        }
+        return [
+            'totalSize' => $count,
+            'data'      => $accountData
+        ];
+    }
+
+    public function getAdminById($emp_id)
+    {
+        $empInfo = $this->employeeModel
+            ->leftJoin('rbac_role_user', 'employee.emp_id', '=', 'rbac_role_user.aid')
+            ->leftJoin('rbac_role', 'rbac_role.role_id', '=', 'rbac_role_user.role_id')
+            ->where('employee.emp_id', $emp_id)
+            ->first(['employee.emp_name', 'employee.phone_no', 'rbac_role.role_name', 'employee.emp_id', 'employee.is_super_admin', 'employee.status']);
+        if($empInfo) {
+            $empInfo = $empInfo->toArray();
+        }
+        if ($empInfo['is_super_admin']) {
+            $empInfo['role_name'] = '超级管理员';
+        }
+        return $empInfo;
     }
 
     public function getEmpDataByIds($emp_ids)
@@ -54,11 +99,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function addEmployee($employeeData)
     {
-        $res = $this->getEmployeeInfo(['phone_no' => $employeeData['phone_no']]);
-        if($res) {
-            return $res;
-        }
-        return $this->employeeModel->insert($employeeData);
+        return $this->employeeModel->insertGetId($employeeData);
     }
 
     public function updateEmployee($emp_id, $employeeData)

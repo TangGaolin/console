@@ -18,11 +18,12 @@ Route::any('/', function () {
 });
 
 Route::any('/getConfig', 'ConfigController@getConfig');
-Route::post('/admin/login', 'Auth\LoginController@login');
+Route::post('/admin/login', 'Auth\AdminAuthController@login');
 
 Route::group(['middleware' => ['AdminloginState']], function () {
 
-    Route::post('/admin/logout', 'Auth\LoginController@logout');  //管理员登录
+    Route::post('/admin/logout', 'Auth\AdminAuthController@logout');  //管理员登录
+
     Route::post('/store/getStoreList', 'Store\StoreController@getStoreList');  //获取门店列表
     Route::post('/store/updateStoreInfo', 'Store\StoreController@updateStoreInfo'); //更新门店信息
     Route::post('/store/addStore', 'Store\StoreController@addStore');  //增加门店
@@ -32,20 +33,21 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/employee/updateEmployee', 'Employee\EmployeeController@updateEmployee'); //更新员工信息
     Route::post('/employee/importEmployee', 'Employee\EmployeeController@importEmployee');  //导入员工信息
     Route::post('/employee/removeEmployee', 'Employee\EmployeeController@removeEmployee');  //删除员工
+    Route::post('/employee/getEmployeeInfo', 'Employee\EmployeeController@getEmployeeInfo');  //获取员工信息
 
     Route::post('/employee/addCashier', 'Employee\CashierController@addCashier');  // 增加收银账号
     Route::post('/employee/updateCashier', 'Employee\CashierController@updateCashier');  //更新收银员信息
     Route::post('/employee/removeCashier', 'Employee\CashierController@removeCashier');  //删除收银员
 
-    Route::post('/employee/getEmployeeInfo', 'Employee\EmployeeController@getEmployeeInfo');  //获取员工信息
+
 
     Route::post('/item/addItemType', 'Item\ItemController@addItemType');  //增加疗程类别
     Route::post('/item/getItemType', 'Item\ItemController@getItemType');  //获取疗程项目类别
     Route::post('/item/modifyItemType', 'Item\ItemController@modifyItemType'); //修改项目类别
-
     Route::post('/item/addItem', 'Item\ItemController@addItem');  //增加项目
     Route::post('/item/getItemList', 'Item\ItemController@getItemList'); //增加项目列表
     Route::post('/item/modifyItem', 'Item\ItemController@modifyItem'); //修改项目
+
 
     Route::post('/goods/addGoodBrand', 'Goods\GoodBrandController@addGoodBrand'); //增加商品品牌
     Route::post('/goods/getBrandList', 'Goods\GoodBrandController@getBrandList'); //获取品牌列表
@@ -77,6 +79,17 @@ Route::group(['middleware' => ['AdminloginState']], function () {
 
 
     Route::post('/storeData/getShopsDataView', 'DataViews\ShopDataController@getShopsDataView');  //获取门店总数据
+
+    Route::post('/admin/addRole', 'Auth\AdminAuthController@addRole');  //添加角色
+    Route::post('/admin/getRoleList', 'Auth\AdminAuthController@getRoleList');  //获取角色列表
+    Route::post('/admin/getNode', 'Auth\AdminAuthController@getNode');  //获取权限节点
+    Route::post('/admin/roleAccess', 'Auth\AdminAuthController@roleAccess');  //获取权限节点
+    Route::post('/admin/modifyRoleAccess', 'Auth\AdminAuthController@modifyRoleAccess');  //修改权限
+    Route::post('/admin/disableRole', 'Auth\AdminAuthController@disableRole');  //删除角色
+    Route::post('/admin/openAccount', 'Auth\AdminAuthController@openAccount');  //创建管理员账号
+    Route::post('/admin/getAccountList', 'Auth\AdminAuthController@getAccountList');  //创建管理员账号
+    Route::post('/admin/disableAccount', 'Auth\AdminAuthController@disableAccount');  //删除账号
+
 
 
 

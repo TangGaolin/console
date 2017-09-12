@@ -27,7 +27,7 @@ Class AuthService {
             'phone_no' => $param['user'],
             'password' => $param['password'],
             'is_admin' => 1,
-            'status'    => 1,
+            'status'   => 1,
         ]);
 
         //不存在，用户名和密码错误
@@ -38,13 +38,13 @@ Class AuthService {
                 'success' => false
             ];
         }
-
-        unset($res['password']);
+        //获取角色信息
+        $accountInfo = $employee->getAdminById($res['emp_id']);
         return [
             'statusCode' => $this->responseCode['STATUSCODE_SUCCESS'],
             'msg'  => $this->responseCode['MSG_OK'],
             'success' => true,
-            'data' => $res
+            'data' => $accountInfo
         ];
     }
 
