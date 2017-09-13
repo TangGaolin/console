@@ -27,8 +27,7 @@ class ItemController extends Controller
         ];
         $this->validation($param, $rule);
 
-        $this->itemService->addItemType($param);
-        return $this->success();
+        return $this->itemService->addItemType($param);
     }
 
     /*
@@ -37,7 +36,7 @@ class ItemController extends Controller
     public function getItemType()
     {
         $data = $this->itemService->getItemType();
-        return $this->success($data);
+        return $data;
     }
 
     /*
@@ -64,6 +63,7 @@ class ItemController extends Controller
     {
         $param = [
             "item_name" => Request::input('item_name'),
+            "pinyin"    => Request::input('pinyin'),
             "item_type" => Request::input('item_type'),
             "price"     => Request::input('price'),
             "times"     => Request::input('times'),
@@ -71,6 +71,7 @@ class ItemController extends Controller
         ];
         $rule = [
             "item_name" => "required|string",
+            "pinyin" => "nullable|string",
             "item_type" => "required|integer",
             "price"     => "required|numeric",
             "times"     => "required|integer",
@@ -100,7 +101,8 @@ class ItemController extends Controller
         ];
         $this->validation($param, $rule);
         $data = $this->itemService->getItemList($param);
-        return $this->success($data);
+
+        return $data;
     }
 
     /*
@@ -111,6 +113,7 @@ class ItemController extends Controller
         $param = [
             "item_id"   => Request::input('item_id'),
             "item_name" => Request::input('item_name'),
+            "pinyin" => Request::input('pinyin'),
             "item_type" => Request::input('item_type'),
             "price"     => Request::input('price'),
             "times"     => Request::input('times'),
@@ -119,14 +122,15 @@ class ItemController extends Controller
         $rule = [
             "item_id"   => "required|integer",
             "item_name" => "required|string",
+            "pinyin"    => "nullable|string",
             "item_type" => "required|integer",
             "price"     => "required|numeric",
             "times"     => "required|integer",
             "emp_fee"   => "required|numeric",
         ];
         $this->validation($param, $rule);
-        return $this->itemService->modifyItem($param);
 
+        return $this->itemService->modifyItem($param);
     }
 
 

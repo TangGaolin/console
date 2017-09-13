@@ -29,10 +29,11 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function getItemList($whereParam)
     {
-        $select =  $this->item->select('item_id','item_name','item_type','price','times','emp_fee','status');
+        $select =  $this->item->select('item_id','item_name', 'pinyin','item_type','price','times','emp_fee','status');
 
-        !empty($whereParam['item_type']) && $select = $select->where("item_type", "=", $whereParam["item_type"]);
-        !empty($whereParam['item_name']) && $select = $select->where("item_name", "like", '%'.$whereParam["item_name"].'%');
+        checkParam($whereParam, 'item_type') && $select = $select->where("item_type", "=", $whereParam["item_type"]);
+        checkParam($whereParam, 'item_name') && $select = $select->where("item_name", "like", '%'.$whereParam["item_name"].'%');
+        checkParam($whereParam, 'pinyin') && $select = $select->where("pinyin", "like", '%'.$whereParam["pinyin"].'%');
 
         $countSelect = $select;
         $count       = $countSelect->count();

@@ -24,12 +24,14 @@ Class ItemService
     public function addItemType($param)
     {
         $itemTypeData = $param;
-        return $this->itemRepository->addItemType($itemTypeData);
+        $this->itemRepository->addItemType($itemTypeData);
+        return success();
     }
 
     public function getItemType()
     {
-        return $this->itemRepository->getItemTypeList();
+        $data = $this->itemRepository->getItemTypeList();
+        return success($data);
     }
 
     public function modifyItemType($param)
@@ -37,13 +39,9 @@ Class ItemService
         $itemTypeData = $param;
         $res = $this->itemRepository->modifyItemType($itemTypeData);
         if(!$res){
-            return [
-                'statusCode' => config('response_code.STATUSCODE_ITEMERROR'),
-                'msg'        => "项目类别名称已经存在",
-                'success'    => false
-            ];
+            return fail(601, "项目类别名称已经存在");
         }
-        return $this->success();
+        return success();
     }
 
     public function addItem($param)
@@ -51,13 +49,9 @@ Class ItemService
         $itemData = $param;
         $res = $this->itemRepository->addItem($itemData);
         if(!$res){
-            return [
-                'statusCode' => config('response_code.STATUSCODE_ITEMERROR'),
-                'msg'        => "项目名称已经存在",
-                'success'    => false
-            ];
+            return fail(601, "项目名称已经存在");
         }
-        return $this->success();
+        return success();
     }
 
     public function getItemList($param)
@@ -65,7 +59,14 @@ Class ItemService
         if(0 == $param['item_type']){
             unset($param['item_type']);
         }
-        return $this->itemRepository->getItemList($param);
+        if(checkParam($param,'item_name')) {
+            if (!preg_match("/[\x7f-\xff]/", $param['item_name'])) {  //判断字符串中是否有中文
+                $param['pinyin'] = $param['item_name'];
+                unset($param['item_name']);
+            }
+        }
+        $data = $this->itemRepository->getItemList($param);
+        return success($data);
     }
 
     public function modifyItem($param)
@@ -73,21 +74,9 @@ Class ItemService
         $itemData = $param;
         $res =  $this->itemRepository->updateItem($itemData);
         if(!$res){
-            return [
-                'statusCode' => config('response_code.STATUSCODE_ITEMERROR'),
-                'msg'        => "项目名称已经存在",
-                'success'    => false
-            ];
+            return fail(601, "项目名称已经存在");
         }
-        return $this->success();
+        return success();
     }
 
-    public function success()
-    {
-        return [
-            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
-            'msg'        => config('response_code.MSG_OK'),
-            'success'    => true
-        ];
-    }
 }
