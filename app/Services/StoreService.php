@@ -23,7 +23,7 @@ Class StoreService {
     public function getStoreList()
     {
         $storeList = $this->shopRepository->getStoreList();
-        return $storeList;
+        return success($storeList);
     }
 
     public function updateStoreInfo($param)
@@ -34,7 +34,7 @@ Class StoreService {
         }
 
         $res = $this->shopRepository->updateStoreInfo($param);
-        return $res;
+        return success();
     }
 
     public function addStore($param)
@@ -44,7 +44,7 @@ Class StoreService {
             $param['city'] = json_encode($param['city'],JSON_UNESCAPED_UNICODE);
         }
         $res = $this->shopRepository->addStore($param);
-        return $res;
+        return success();
     }
 
 

@@ -21,10 +21,8 @@ class StoreController extends Controller
     }
 
     public function getStoreList(){
-
         $result =  $this->storeService->getStoreList();
-
-        return $this->success($result);
+        return $result;
     }
 
     public function updateStoreInfo()
@@ -40,7 +38,7 @@ class StoreController extends Controller
 
         $this->validation($param, $rule);
         $result =  $this->storeService->updateStoreInfo($param);
-        return $this->success();
+        return $result;
     }
 
     public function addStore()
@@ -55,7 +53,7 @@ class StoreController extends Controller
 
         $this->validation($param, $rule);
         $result =  $this->storeService->addStore($param);
-        return $this->success();
+        return $result;
     }
 
 
