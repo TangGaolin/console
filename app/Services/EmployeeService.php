@@ -140,17 +140,20 @@ Class EmployeeService
             return $reader;
         });
         $employeeData = $data->getSheet(0)->toArray();
+        //删除无用数据
         unset($employeeData[0]);
+        unset($employeeData[1]);
+        unset($employeeData[2]);
 
         foreach ($employeeData as $v) {
-            if(!isset($converShopData[$v[0]])){
+            $tmpEmployeeData['shop_id']  = $param['shop_id'];
+            $tmpEmployeeData['emp_name'] =  trim($v[0]);
+            $tmpEmployeeData['job']      =  trim($v[1]);
+            $tmpEmployeeData['phone_no'] =  trim($v[2]);
+            //检查数据，过滤无效数据
+            if(!$tmpEmployeeData['emp_name'] || !$tmpEmployeeData['job']  || !$tmpEmployeeData['phone_no'] ) {
                 continue;
             }
-            $tmpEmployeeData['shop_id']  = $param['id'];
-            $tmpEmployeeData['emp_name'] =  $v[1];
-            $tmpEmployeeData['job']      =  $v[2];
-            $tmpEmployeeData['phone_no'] =  $v[3];
-
             $res = $this->employeeRepository->addEmployee($tmpEmployeeData);
             if($res){
                 $this->employeeRepository->updateEmployee($res['emp_id'], $tmpEmployeeData);
