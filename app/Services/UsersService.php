@@ -83,6 +83,8 @@ Class UsersService
         });
         $userData = $data->getSheet(0)->toArray();
         unset($userData[0]);
+        unset($userData[1]);
+        unset($userData[2]);
         $saveUserData = [];
         $error_flag = false;
         $insertData = [];
@@ -102,7 +104,6 @@ Class UsersService
             return fail(601,'表格数据错误:' . $insertData['user_name'] . ':' . $insertData['phone_no']);
         }
 
-        dd($saveUserData);
         $this->usersRepository->addUser($saveUserData);
         return success();
     }
