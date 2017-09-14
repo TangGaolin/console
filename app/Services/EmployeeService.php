@@ -55,14 +55,14 @@ Class EmployeeService
         $server_all_emps = $this->employeeRepository->getEmployeeList(['is_server_all'=> 1,'limit' => 100]);
         //再获取不跨店的门店员工
         $param['is_server_all'] = 0;
-
         $data = $this->employeeRepository->getEmployeeList($param);
+
         $tmpServerAll = [];
         foreach ($server_all_emps['data'] as $v){
             if($v['shop_id'] == $param['shop_id']) {
                 $data['data'][] = $v;
             }else{
-                $v['emp_name'] = $v['emp_name'] . "(跨店)";
+                $v['emp_name'] = $v['emp_name'] . " (跨店)";
                 $tmpServerAll[] = $v;
             }
         }

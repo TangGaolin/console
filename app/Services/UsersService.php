@@ -9,6 +9,7 @@ namespace App\Services;
 
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Shop\ShopRepositoryInterface;
+use App\Repositories\UserOrderTime\UserOrderTimeRepositoryInterface;
 use App\Repositories\Users\UsersAccountRepositoryInterface;
 use App\Repositories\Users\UsersRepositoryInterface;
 use Excel;
@@ -152,29 +153,56 @@ Class UsersService
     {
         // 获取预约顾客
         $data['res_user'] = [];
+        $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
+        $resUser = $orderTimeRepository->getOrderTime([
+            'shop_id' => $param['shop_id'],
+            'start_time' => date('Y-m-d H:i:s', time() - 12 * 60 * 60),
+            'end_time' => date('Y-m-d H:i:s', time() + 36 * 60 * 60)
+        ]);
+
 
         // 获取生日提醒
         $data['birth_user'] = [];
 
         // 获取今日顾客
+        $data['today_user'] = [];
         $usersAccountRepository = app(UsersAccountRepositoryInterface::class);
         $whereParam['shop_id'] = $param['shop_id'];
         $whereParam['start_time'] = date('Y-m-d');
         $whereParam['end_time']   = $whereParam['start_time']  . " 23:59:59";
         $whereParam['limit']   = 1000;
+        //今日消耗顾客
         $useOrderData = $usersAccountRepository->getUseOrderList($whereParam);
+        //今日消耗顾客
         $orderData = $usersAccountRepository->getOrderList($whereParam);
-        $u_ids1 = array_column($useOrderData['data'],'uid');
-        $u_ids2 = array_column($orderData['data'],'uid');
-        $u_ids = array_merge($u_ids1, $u_ids2);
+
+        $use_ids   = array_column($useOrderData['data'],'uid');
+        $order_ids = array_column($orderData['data'],'uid');
+        $res_ids   = array_column($resUser,'uid');
+        $u_ids     = array_merge($use_ids, $order_ids, $res_ids);
+        $u_ids = array_unique($u_ids);
         $useRepository = app(UsersRepositoryInterface::class);
         $users = $useRepository->getUserInfoByIds($u_ids);
-        $data['today_user'] = [];
-        foreach ($users as $user){
-            $convert_users['uid']      = $user['uid'];
-            $convert_users['user_name']= $user['user_name'];
-            $convert_users['phone_no'] = $user['phone_no'];
-            $data['today_user'][]      = $convert_users;
+        $convert_users = [];
+        foreach ($users as $v){
+            $convert_users[$v['uid']] = $v;
+        }
+        foreach ($resUser as $user){
+            $tmpUser['user_name'] = $convert_users[$user['uid']]['user_name'];
+            $tmpUser['phone_no'] = $convert_users[$user['uid']]['phone_no'];
+            $tmpUser['uid'] = $user['uid'];
+            $tmpUser['emp_id'] = $user['emp_id'];
+            $tmpUser['emp_name'] = $user['emp_name'];
+            $tmpUser['order_time'] = $user['order_time'];
+            $tmpUser['remark'] = $user['remark'];
+            $data['res_user'][] = $tmpUser;
+        }
+
+        foreach (array_unique(array_merge($use_ids, $order_ids)) as $uid){
+            $tmpUser2['uid'] = $uid;
+            $tmpUser2['phone_no'] = $convert_users[$uid]['phone_no'];
+            $tmpUser2['user_name'] = $convert_users[$uid]['user_name'];
+            $data['today_user'][] = $tmpUser2;
         }
 
         return [

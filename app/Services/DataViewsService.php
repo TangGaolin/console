@@ -31,8 +31,9 @@ Class DataViewsService
             $data['yeji'] = 0;
             $data['xiaohao'] = 0;
             //判断当前天
-            $currentDay = strtotime($param['year'] . "-" . $param['mouth'] . "-" . $day);
-            if(strtotime($currentDay) > time()){
+            $currentTime = strtotime($param['year'] . "-" . $param['mouth'] . "-" . $day);
+
+            if($currentTime > time()){
                 $shopDatas[] = $data;
                 continue;
             }
