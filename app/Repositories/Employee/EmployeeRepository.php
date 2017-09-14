@@ -37,11 +37,21 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
         $countSelect = $select;
         $count       = $countSelect->count();
+
+        if(!isset($whereParam['cur_page'])) {
+            $whereParam['cur_page'] = 1;
+        }
+
+        if(!isset($whereParam['limit'])) {
+            $whereParam['limit'] = 10;
+        }
+
         $res         = $select->skip(($whereParam['cur_page']-1) * $whereParam['limit'])->take($whereParam['limit'])->get();
+
 
         return [
             'totalSize' => $count,
-            'data'      => $res ?$res->toArray() : []
+            'data'      => $res ? $res->toArray() : []
         ];
     }
 
@@ -52,10 +62,8 @@ class EmployeeRepository implements EmployeeRepositoryInterface
             ->leftJoin('rbac_role', 'rbac_role.role_id', '=', 'rbac_role_user.role_id')
             ->where('employee.status', '1')->where('employee.is_admin', 1);
 
-
         checkParam($whereParam,'phone_no') && $select = $select->where("employee.phone_no", "=", $whereParam["phone_no"]);
         checkParam($whereParam,'emp_name') && $select = $select->where("employee.emp_name", "like", $whereParam["emp_name"].'%');
-
 
         $count = $select->count();
 

@@ -52,16 +52,22 @@ Class EmployeeService
             $newStoreData[$v['shop_id']] = $v['shop_name'];
         }
         //先获取所有跨店员工
-        $server_all_emps = $this->employeeRepository->getEmployeeList(['is_server_all'=> 1]);
-
+        $server_all_emps = $this->employeeRepository->getEmployeeList(['is_server_all'=> 1,'limit' => 100]);
         //再获取不跨店的门店员工
         $param['is_server_all'] = 0;
-        $emps = $this->employeeRepository->getEmployeeList($param);
-        $data = array_merge($server_all_emps, $emps);
-//        foreach ($data['data'] as &$v) {
-//            $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "总部";
-//        }
-        return $data;
+
+        $data = $this->employeeRepository->getEmployeeList($param);
+        $tmpServerAll = [];
+        foreach ($server_all_emps['data'] as $v){
+            if($v['shop_id'] == $param['shop_id']) {
+                $data['data'][] = $v;
+            }else{
+                $v['emp_name'] = $v['emp_name'] . "(跨店)";
+                $tmpServerAll[] = $v;
+            }
+        }
+        $data['data'] = array_merge($data['data'], $tmpServerAll);
+        return success($data);
     }
 
     public function addEmployee($param)

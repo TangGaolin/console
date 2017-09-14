@@ -62,7 +62,7 @@ class EmployeeController extends Controller
         $this->validation($param, $rule);
 
         $data = $this->employeeService->getServerEmpList($param);
-        return $this->success($data);
+        return $data;
     }
 
 
