@@ -78,7 +78,7 @@ Class DataViewsService
         $redis = PRedis::connection();
         $redis_key = "shop_yeji:"  . $year . ':' . $mouth . ':' . $shop_id;
         $data  = $redis->hget($redis_key, $day);
-        if(!$data){
+        if(is_null($data)){
             $data = $this->countYejiData($year, $mouth, $day, $shop_id);
             $redis->hset($redis_key, $day, $data);
         }
@@ -92,7 +92,7 @@ Class DataViewsService
         $redis = PRedis::connection();
         $redis_key = "shop_xiaohao:"  . $year . ':' . $mouth . ':' . $shop_id;
         $data  = $redis->hget($redis_key, $day);
-        if(!$data){
+        if(is_null($data)){
             $data = $this->countXiaohaoData($year, $mouth, $day, $shop_id);
             $redis->hset($redis_key, $day, $data);
         }
