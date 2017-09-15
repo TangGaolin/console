@@ -41,7 +41,10 @@ Route::group(['middleware' => ['loginState']], function () {
 
     Route::post('/shop/repay', 'Users\UsersAccountController@repay');  //用户还款
 
-    Route::post('/shop/getShopSideUsers', 'Users\UsersController@getShopSideUsers');  //用户还款
+    Route::post('/shop/getOrderUser', 'Users\UsersController@getOrderUser');  //获取预约数据接口
+
+    Route::post('/shop/getTodayUsers', 'Users\UsersController@getTodayUsers');  //获取侧边栏用户
+
     Route::post('/shop/chargeGoods', 'Users\UsersAccountController@chargeGoods');  //产品卡充值
 
     Route::post('/shop/getGoodsList', 'Goods\GoodsController@getGoodsList');  //获取产品列表
@@ -50,6 +53,8 @@ Route::group(['middleware' => ['loginState']], function () {
     Route::post('/shop/changeItems', 'Users\UsersAccountController@changeItems');  //退换操作接口
 
     Route::post('/shop/resetPassword', 'Auth\ResetPasswordController@resetCashierPassword');  //修改密码接口
+
+    Route::post('/shop/checkUserOrderTime', 'Users\UsersController@checkUserOrderTime');  //确认客人到店
 
 
 

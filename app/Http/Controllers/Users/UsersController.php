@@ -132,7 +132,7 @@ class UsersController extends Controller
     }
 
     //shop side  user
-    public function getShopSideUsers()
+    public function getTodayUsers()
     {
         $param = [
             'shop_id' => Request::input('shop_id'),
@@ -143,7 +143,35 @@ class UsersController extends Controller
         ];
 
         $this->validation($param, $rule);
-        return $this->usersService->getShopSideUsers($param);
+        return $this->usersService->getTodayUsers($param);
     }
+    //确认顾客到店
+    public function checkUserOrderTime() {
+
+        $param = [
+            'order_time_id' => Request::input('order_time_id'),
+        ];
+        $rule = [
+            'order_time_id' => 'required|integer'
+        ];
+
+        $this->validation($param, $rule);
+        return $this->usersService->checkUserOrderTime($param);
+    }
+
+    public function getOrderUser()
+    {
+        $param = [
+            'shop_id' => Request::input('shop_id'),
+        ];
+
+        $rule = [
+            'shop_id' => 'nullable|integer'
+        ];
+
+        $this->validation($param, $rule);
+        return $this->usersService->getOrderUser($param);
+    }
+
 
 }
