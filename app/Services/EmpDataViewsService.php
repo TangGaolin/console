@@ -19,7 +19,6 @@ Class EmpDataViewsService
     {
         $param['year']  = $param['year'] ? $param['year'] : date('Y');
         $param['mouth'] = $param['mouth'] ? $param['mouth'] : date('m');
-        $param['day']   =  date('d');
 
         $empDatas = [];
         $empDatas['yeji_sum'] = 0;
@@ -28,28 +27,55 @@ Class EmpDataViewsService
         $empDatas['yeji_today'] = 0;
         $empDatas['xiaohao_today'] = 0;
         $empDatas['fee_today'] = 0;
-        for($day = 1; $day <= date('t'); $day++){
-            if($day <= $param['day']){
+        $empDatas['list'] = [];
+        //如果是当前月
+        if($param['year'] == date('Y') && $param['mouth'] == date('m')) {
+            // date('t') => 当前月有多少天
+            for($day = 1, $currentDay = date('d'), $daysOfMouth = date('t'); $day <= $daysOfMouth; $day++) {
                 $data['day'] = $day;
-                $empData = $this->getEmpData($param['year'], $param['mouth'], $day, $param['emp_id']);
-                $data['yeji'] = $empData['yeji'];
-                $data['xiaohao'] = $empData['xiaohao'];
-                $data['fee'] = $empData['fee'];
+                //是不是未来
+                if($day > $currentDay){
+                    $data['yeji']    = 0;
+                    $data['xiaohao'] = 0;
+                    $data['fee']     = 0;
+                    $empDatas['list'][] = $data;
+                    continue;
+                }else{
+                    $empData = $this->getEmpData($param['year'], $param['mouth'], $day, $param['emp_id']);
+                    $data['yeji'] = $empData['yeji'];
+                    $data['xiaohao'] = $empData['xiaohao'];
+                    $data['fee'] = $empData['fee'];
+                }
                 $empDatas['yeji_sum'] += $data['yeji'];
                 $empDatas['xiaohao_sum'] += $data['xiaohao'];
                 $empDatas['fee_sum'] += $data['fee'];
-                if($day == $param['day']){
+                if($day == $currentDay){
                     $empDatas['yeji_today'] = $data['yeji'];
                     $empDatas['xiaohao_today'] = $data['xiaohao'];
                     $empDatas['fee_today'] = $data['fee'];
                 }
                 $empDatas['list'][] = $data;
-            }else{
+            }
+        }else {
+            $currentTime = strtotime($param['year'] . "-" . $param['mouth']);
+            for($day = 1, $daysOfMouth = date('t', $currentTime); $day <= $daysOfMouth; $day++) {
                 $data['day'] = $day;
-                $data['yeji'] = 0;
-                $data['xiaohao'] = 0;
-                $data['fee'] = 0;
-                $empDatas['list'][] = $data;
+
+                if($currentTime > time()) {
+                    $data['yeji']    = 0;
+                    $data['xiaohao'] = 0;
+                    $data['fee']     = 0;
+                    $empDatas['list'][]      = $data;
+                    continue;
+                }
+                $empData = $this->getEmpData($param['year'], $param['mouth'], $day, $param['emp_id']);
+                $data['yeji']    = $empData['yeji'];
+                $data['xiaohao'] = $empData['xiaohao'];
+                $data['fee']     = $empData['fee'];
+                $empDatas['yeji_sum']    += $data['yeji'];
+                $empDatas['xiaohao_sum'] += $data['xiaohao'];
+                $empDatas['fee_sum']     += $data['fee'];
+                $empDatas['list'][]      = $data;
             }
         }
         return [

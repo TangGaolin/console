@@ -25,22 +25,37 @@ Class DataViewsService
         $param['mouth'] = $param['mouth'] ? $param['mouth'] : date('m');
 
         $shopDatas = [];
-        for($day = 1; $day <= date('t'); $day++){
-            //初始化
-            $data['day'] = $day;
-            $data['yeji'] = 0;
-            $data['xiaohao'] = 0;
-            //判断当前天
-            $currentTime = strtotime($param['year'] . "-" . $param['mouth'] . "-" . $day);
-
-            if($currentTime > time()){
+        //如果是当前月
+        if($param['year'] == date('Y') && $param['mouth'] == date('m')) {
+            // date('t') => 当前月有多少天
+            for($day = 1, $currentDay = date('d'), $daysOfMouth = date('t'); $day <= $daysOfMouth; $day++) {
+                //初始化
+                $data['day'] = $day;
+                //是不是未来
+                if($day > $currentDay){
+                    $data['yeji'] = 0;
+                    $data['xiaohao'] = 0;
+                    $shopDatas[] = $data;
+                    continue;
+                }
+                $data['yeji'] = $this->getYejiData($param['year'], $param['mouth'], $day, $param['shop_id']);
+                $data['xiaohao'] = $this->getXiaohaoData($param['year'], $param['mouth'], $day, $param['shop_id']);
                 $shopDatas[] = $data;
-                continue;
             }
-            $data['yeji'] = $this->getYejiData($param['year'], $param['mouth'], $day, $param['shop_id']);
-            $data['xiaohao'] = $this->getXiaohaoData($param['year'], $param['mouth'], $day, $param['shop_id']);
-            $shopDatas[] = $data;
-
+        }else {
+            $currentTime = strtotime($param['year'] . "-" . $param['mouth']);
+            for($day = 1, $daysOfMouth = date('t', $currentTime); $day <= $daysOfMouth; $day++) {
+                $data['day'] = $day;
+                if($currentTime > time()) {
+                    $data['yeji'] = 0;
+                    $data['xiaohao'] = 0;
+                    $shopDatas[] = $data;
+                    continue;
+                }
+                $data['yeji'] = $this->getYejiData($param['year'], $param['mouth'], $day, $param['shop_id']);
+                $data['xiaohao'] = $this->getXiaohaoData($param['year'], $param['mouth'], $day, $param['shop_id']);
+                $shopDatas[] = $data;
+            }
         }
 
         return [
