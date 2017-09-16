@@ -136,11 +136,24 @@ Class DataViewsService
     }
 
 
+    // 重新载入门店业绩数据缓存
+    public function reloadShopYejiCache($year, $mouth, $day, $shop_id)
+    {
+        $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+        $redis = PRedis::connection();
+        $redis_key = "shop_yeji:"  . $year . ':' . $mouth . ':' . $shop_id;
+        $data = $this->countYejiData($year, $mouth, $day, $shop_id);
+        $redis->hset($redis_key, $day, $data);
+    }
 
-
-
-
-
-
+    //重新载入门店消耗缓存
+    public function reloadShopXiaohaoCache($year, $mouth, $day, $shop_id)
+    {
+        $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+        $redis = PRedis::connection();
+        $redis_key = "shop_xiaohao:"  . $year . ':' . $mouth . ':' . $shop_id;
+        $data = $this->countXiaohaoData($year, $mouth, $day, $shop_id);
+        $redis->hset($redis_key, $day, $data);
+    }
 
 }

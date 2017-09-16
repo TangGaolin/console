@@ -7,12 +7,17 @@
  */
 namespace App\Services;
 
+use App\Jobs\ReloadEmpDataCache;
+use App\Jobs\ReloadShopXiaoDataCache;
+use App\Jobs\ReloadShopYejiDataCache;
 use App\Repositories\Users\UsersAccountRepositoryInterface;
 use App\Repositories\Users\UsersRepositoryInterface;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 
 Class ShopActionService
 {
+    use DispatchesJobs;
 
     protected $usersRepository;
     protected $usersAccountRepository;
@@ -65,6 +70,20 @@ Class ShopActionService
             'emp_order_data' => $empOrderData,
         ]);
 
+        //重新载入缓存数据
+        $this->dispatch(new ReloadShopYejiDataCache([
+               'add_time' => $param['add_time'],
+               'shop_id' => $param['shop_id']
+        ]));
+
+        foreach ($empOrderData as $emp){
+            $this->dispatch(new ReloadEmpDataCache([
+                'add_time' => $param['add_time'],
+                'emp_id' => $emp['emp_id']
+            ]));
+        }
+
+
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg'        => config('response_code.MSG_OK'),
@@ -112,6 +131,19 @@ Class ShopActionService
             'order_data' => $orderData,
             'emp_order_data' => $empOrderData,
         ]);
+
+        //重新载入缓存数据
+        $this->dispatch(new ReloadShopYejiDataCache([
+            'add_time' => $param['add_time'],
+            'shop_id' => $param['shop_id']
+        ]));
+
+        foreach ($empOrderData as $emp){
+            $this->dispatch(new ReloadEmpDataCache([
+                'add_time' => $param['add_time'],
+                'emp_id' => $emp['emp_id']
+            ]));
+        }
 
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
@@ -225,6 +257,19 @@ Class ShopActionService
             'user_order_data'=> $useOrderData
         ]);
 
+        //重新载入缓存数据
+        $this->dispatch(new ReloadShopYejiDataCache([
+            'add_time' => $param['add_time'],
+            'shop_id' => $param['shop_id']
+        ]));
+
+        foreach ($empOrderData as $emp){
+            $this->dispatch(new ReloadEmpDataCache([
+                'add_time' => $param['add_time'],
+                'emp_id' => $emp['emp_id']
+            ]));
+        }
+
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg'        => config('response_code.MSG_OK'),
@@ -298,6 +343,20 @@ Class ShopActionService
                 'updateUserItemDatas' => $updateUserItemDatas,
         ]);
 
+
+        //重新载入缓存数据
+        $this->dispatch(new ReloadShopXiaoDataCache([
+            'add_time' => $param['add_time'],
+            'shop_id' => $param['shop_id']
+        ]));
+
+        foreach ($empOrderDatas as $emp){
+            $this->dispatch(new ReloadEmpDataCache([
+                'add_time' => $param['add_time'],
+                'emp_id' => $emp['emp_id']
+            ]));
+        }
+
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg'        => config('response_code.MSG_OK'),
@@ -354,6 +413,19 @@ Class ShopActionService
             'emp_order_data' => $empOrderData,
             'update_data' => $updateData,
         ]);
+
+        //重新载入缓存数据
+        $this->dispatch(new ReloadShopYejiDataCache([
+            'add_time' => $param['add_time'],
+            'shop_id' => $param['shop_id']
+        ]));
+
+        foreach ($empOrderData as $emp){
+            $this->dispatch(new ReloadEmpDataCache([
+                'add_time' => $param['add_time'],
+                'emp_id' => $emp['emp_id']
+            ]));
+        }
 
         //更新数据
         return [
@@ -414,6 +486,19 @@ Class ShopActionService
             'order_data'     => $orderData,
             'emp_order_data' => $empOrderData,
         ]);
+
+        //重新载入缓存数据
+        $this->dispatch(new ReloadShopYejiDataCache([
+            'add_time' => $param['add_time'],
+            'shop_id' => $param['shop_id']
+        ]));
+
+        foreach ($empOrderData as $emp){
+            $this->dispatch(new ReloadEmpDataCache([
+                'add_time' => $param['add_time'],
+                'emp_id' => $emp['emp_id']
+            ]));
+        }
 
         return success();
     }
@@ -515,6 +600,19 @@ Class ShopActionService
             'update_item_data' => $updateUserItemDatas,
             'new_item_data' => $newUserItems,
         ]);
+
+        //重新载入缓存数据
+        $this->dispatch(new ReloadShopYejiDataCache([
+            'add_time' => $param['add_time'],
+            'shop_id' => $param['shop_id']
+        ]));
+
+        foreach ($empOrderData as $emp){
+            $this->dispatch(new ReloadEmpDataCache([
+                'add_time' => $param['add_time'],
+                'emp_id' => $emp['emp_id']
+            ]));
+        }
         return success();
     }
 

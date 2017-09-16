@@ -15,7 +15,6 @@ Class EmpDataViewsService
     {
     }
 
-
     public function getEmpDataView($param)
     {
         $param['year']  = $param['year'] ? $param['year'] : date('Y');
@@ -63,6 +62,7 @@ Class EmpDataViewsService
 
     protected function getEmpData($year, $mouth, $day, $emp_id)
     {
+        $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
         $redis = PRedis::connection();
         $redis_key = "emp:"  . $year . ':' . $mouth . ':' . $emp_id;
         $data  = $redis->hget($redis_key, $day);
@@ -93,5 +93,16 @@ Class EmpDataViewsService
         }
         return json_encode($data, true);
     }
+
+    //重新载入员工数据缓存
+    public function reloadEmpDataCache($year, $mouth, $day, $emp_id)
+    {
+        $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+        $redis = PRedis::connection();
+        $redis_key = "emp:"  . $year . ':' . $mouth . ':' . $emp_id;
+        $data = $this->countEmpData($year, $mouth, $day, $emp_id);
+        $redis->hset($redis_key, $day, $data);
+    }
+
 
 }
