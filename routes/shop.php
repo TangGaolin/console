@@ -46,6 +46,9 @@ Route::group(['middleware' => ['loginState']], function () {
     Route::post('/shop/checkUserOrderTime', 'Users\UsersController@checkUserOrderTime');  //确认客人到店
     Route::post('/shop/getTodayUsers', 'Users\UsersController@getTodayUsers');  //获取今日来访用户
 
+    //获取交易数据
+    Route::post('/shop/getOrderInfo', 'Employee\EmployeeOrderController@getOrderInfo');   //获取单据详情
+
     //查询用户记录
     Route::post('/shop/getItemList', 'Item\ItemController@getItemList');  //获取当前服务项目
     Route::post('/shop/getGoodsList', 'Goods\GoodsController@getGoodsList');  //获取产品列表

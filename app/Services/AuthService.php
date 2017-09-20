@@ -79,6 +79,7 @@ Class AuthService {
         }else{
             $storeInfo = $storeRepository->getShopInfo($res['shop_id']);
             $res['shop_name'] = $storeInfo['shop_name'];
+            $res['shop_tel'] = $storeInfo['shop_tel'];
         }
 
         unset($res['password']);
