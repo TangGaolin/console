@@ -9,9 +9,7 @@ use App\Services\AuthService;
 class LoginController extends Controller
 {
 
-
     protected $authService;
-
 
     public function __construct(AuthService $authService)
     {

@@ -72,6 +72,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
 
 
     Route::post('/storeData/getShopsDataView', 'DataViews\ShopDataController@getShopsDataView');  //获取门店总数据
+    Route::post('/storeData/getOrderTime', 'Employee\EmployeeOrderController@getOrderTime');  //获取预约记录
 
     Route::post('/admin/addRole', 'Auth\AdminAuthController@addRole');  //添加角色
     Route::post('/admin/getRoleList', 'Auth\AdminAuthController@getRoleList');  //获取角色列表

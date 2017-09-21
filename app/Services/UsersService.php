@@ -194,7 +194,7 @@ Class UsersService
         return success();
     }
 
-    //获取订单数据
+    //获取预约顾客
     public function getOrderUser($param)
     {
         $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);

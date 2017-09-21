@@ -211,6 +211,19 @@ return [
                             'resource'  => ['/storeData/getShopsDataView']
                         ]
                     ]
+                ],
+                [
+                    'node_id'   => '33',
+                    'node_name' => 'user-order-time',
+                    'title'     => '预约统计',
+                    'child'     => [
+                        [
+                            'node_id'   => '34',
+                            'node_name' => 'orderTime',
+                            'title'     => '预约统计',
+                            'resource'  => ['/storeData/getOrderTime']
+                        ]
+                    ]
                 ]
             ]
         ],

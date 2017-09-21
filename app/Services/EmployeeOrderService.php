@@ -9,8 +9,10 @@ namespace App\Services;
 
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Employee\EmpOrderRepositoryInterface;
+use App\Repositories\Shop\ShopRepositoryInterface;
 use App\Repositories\UserOrderTime\UserOrderTimeRepositoryInterface;
 use App\Repositories\Users\UsersAccountRepositoryInterface;
+use App\Repositories\Users\UsersRepositoryInterface;
 
 
 Class EmployeeOrderService
@@ -113,8 +115,30 @@ Class EmployeeOrderService
 
     public function getOrderTime($whereParam)
     {
+
+
         $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
         $res = $orderTimeRepository->getOrderTime($whereParam);
+
+        $storeRepository = app(ShopRepositoryInterface::class);
+        $storeList = $storeRepository->getStoreList();
+        $newStoreData = [];
+
+        foreach ($storeList as $v) {
+            $newStoreData[$v['shop_id']] = $v['shop_name'];
+        }
+
+        $res_ids   = array_column($res,'uid');
+        $useRepository = app(UsersRepositoryInterface::class);
+        $users = $useRepository->getUserInfoByIds($res_ids);
+        $convert_users = [];
+        foreach ($users as $v){
+            $convert_users[$v['uid']] = $v['user_name'];
+        }
+        foreach ($res as &$v) {
+            $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "";
+            $v["user_name"] = $convert_users[$v["uid"]] ?? "";
+        }
         return success($res);
     }
 
