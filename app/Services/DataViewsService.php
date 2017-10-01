@@ -90,6 +90,7 @@ Class DataViewsService
     {
 
         $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+        $day = str_pad($day,2,0, STR_PAD_LEFT);
 
         $redis = PRedis::connection();
         $redis_key = "shop_yeji:"  . $year . ':' . $mouth . ':' . $shop_id;
@@ -104,6 +105,7 @@ Class DataViewsService
     protected function getXiaohaoData($year, $mouth, $day, $shop_id)
     {
         $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+        $day = str_pad($day,2,0, STR_PAD_LEFT);
 
         $redis = PRedis::connection();
         $redis_key = "shop_xiaohao:"  . $year . ':' . $mouth . ':' . $shop_id;
@@ -144,6 +146,7 @@ Class DataViewsService
 
         $orders = $usersAccountRepository->getUseOrderList($whereParam);
         $data = 0;
+
         foreach ($orders['data'] as $order) {
             $data += $order['use_money'];
         }
@@ -155,6 +158,8 @@ Class DataViewsService
     public function reloadShopYejiCache($year, $mouth, $day, $shop_id)
     {
         $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+        $day   = str_pad($day,2,0, STR_PAD_LEFT);
+
         $redis = PRedis::connection();
         $redis_key = "shop_yeji:"  . $year . ':' . $mouth . ':' . $shop_id;
         $data = $this->countYejiData($year, $mouth, $day, $shop_id);
@@ -165,10 +170,12 @@ Class DataViewsService
     public function reloadShopXiaohaoCache($year, $mouth, $day, $shop_id)
     {
         $mouth = str_pad($mouth,2,0, STR_PAD_LEFT);
+        $day = str_pad($day,2,0, STR_PAD_LEFT);
+
         $redis = PRedis::connection();
         $redis_key = "shop_xiaohao:"  . $year . ':' . $mouth . ':' . $shop_id;
         $data = $this->countXiaohaoData($year, $mouth, $day, $shop_id);
+
         $redis->hset($redis_key, $day, $data);
     }
-
 }
