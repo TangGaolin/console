@@ -43,5 +43,11 @@ Route::group(['middleware' => ['EmploginState']], function () {
     Route::post('/emp/getUserItemList', 'Users\UsersAccountController@getItemList');  //获取用户的服务数据
     Route::post('/emp/getOrderList', 'Users\UsersAccountController@getOrderList');  //获取用户购买记录
     Route::post('/emp/getUseOrderList', 'Users\UsersAccountController@getUseOrderList');  //耗卡记录
+
+    //获取门店员工列表
+    Route::post('/emp/getEmployeeList', 'Employee\EmployeeController@getEmployeeList'); //获取员工列表
+
+    //更新会员信息
+    Route::post('/emp/updateUser', 'Users\UsersController@updateUser');  //更新会员信息
 });
 
