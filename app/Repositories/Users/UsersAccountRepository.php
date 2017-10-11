@@ -32,8 +32,6 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         $this->useOrderModel   = $useOrder;
     }
 
-
-
     //用户充值事物处理
     public function recharge($param)
     {
@@ -47,7 +45,13 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
                 'balance'     => DB::raw('balance+' . $param['order_data']['worth_money']),
                 'debt' => DB::raw('debt+' . $param['order_data']['debt']),
             ];
-            return $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
+
+            //更新会员最近消费时间
+            $leave_shop_time = [
+                'leave_shop_time' => $param['order_data']['add_time']
+            ];
+
+            return $this->usersModel->where('uid','=',$param['order_data']['uid'])->update(array_merge($updateData, $leave_shop_time));
         };
         return DB::transaction($query);
     }
@@ -65,7 +69,12 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
                 'good_money'     => DB::raw('good_money+' . $param['order_data']['order_info']),
                 'debt' => DB::raw('debt+' . $param['order_data']['debt']),
             ];
-            return $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
+
+            //更新会员最近消费时间
+            $leave_shop_time = [
+                'leave_shop_time' => $param['order_data']['add_time']
+            ];
+            return $this->usersModel->where('uid','=',$param['order_data']['uid'])->update(array_merge($updateData, $leave_shop_time));
         };
         return DB::transaction($query);
     }
@@ -134,6 +143,12 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             if(!empty($updateData)){
                 $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
             }
+            //更新会员最近消费时间
+            $leave_shop_time = [
+                'leave_shop_time' => $param['order_data']['add_time']
+            ];
+            $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($leave_shop_time);
+
             //插入会员项目表
             !empty($param['user_items']) && $this->userItemsModel->insert($param['user_items']);
 
@@ -190,6 +205,12 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         $query = function () use ($param) {
             //插入员工明细表
             $this->empOrderModel->insert($param['empOrderDatas']);
+
+            //更新会员最近消费时间
+            $leave_shop_time = [
+                'leave_shop_time' => $param['useOrderData']['add_time']
+            ];
+            $this->usersModel->where('uid','=',$param['useOrderData']['uid'])->update($leave_shop_time);
 
             //账户卡进行更新
             foreach ($param['updateUserItemDatas'] as $userItemData) {
@@ -262,6 +283,13 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             if(!empty($updateData)){
                 $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
             }
+
+            //更新会员最近消费时间
+            $leave_shop_time = [
+                'leave_shop_time' => $param['order_data']['add_time']
+            ];
+            $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($leave_shop_time);
+
             //插入员工明细表
             return $this->empOrderModel->insert($param['emp_order_data']);
 
@@ -280,7 +308,12 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             $updateAccountData = [
                 'debt' => DB::raw('debt-' . $param['update_data']['debt'])
             ];
-            $this->usersModel->where('uid','=',$param['update_data']['uid'])->update($updateAccountData);
+
+            //更新会员最近消费时间
+            $leave_shop_time = [
+                'leave_shop_time' => $param['order_data']['add_time']
+            ];
+            $this->usersModel->where('uid','=',$param['update_data']['uid'])->update(array_merge($updateAccountData, $leave_shop_time));
 
             $updateOldOrderData = [
                 'debt'   => DB::raw('debt-' . $param['update_data']['debt']),
@@ -307,14 +340,18 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             }
             // 更新会员金额
             if(!empty($updateData)){
-                $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
+                $this->usersModel->where('uid','=',$param['order_daadd_timeta']['uid'])->update($updateData);
             }
+            //更新会员最近消费时间
+            $leave_shop_time = [
+                'leave_shop_time' => $param['order_data']['add_time']
+            ];
+            $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($leave_shop_time);
 
             // 账户卡进行更新
             foreach ($param['update_item_data'] as $userItemData) {
                 $updateData['id'] = $userItemData['id'];
                 $updateData['used_times'] = DB::raw('used_times+' . $userItemData['use_time']); //更新次数
-
                 // 更新金额
                 $updateData['now_money'] = DB::raw('now_money-' . $userItemData['use_money']);
                 $updateData['status'] = $userItemData['status'];
