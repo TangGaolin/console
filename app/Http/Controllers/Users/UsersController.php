@@ -145,14 +145,16 @@ class UsersController extends Controller
         $this->validation($param, $rule);
         return $this->usersService->getTodayUsers($param);
     }
-    //确认顾客到店
+    //确认顾客到店,或者取消
     public function checkUserOrderTime() {
 
         $param = [
             'order_time_id' => Request::input('order_time_id'),
+            'status' => Request::input('status'),
         ];
         $rule = [
-            'order_time_id' => 'required|integer'
+            'order_time_id' => 'required|integer',
+            'status' => 'required|numeric',
         ];
 
         $this->validation($param, $rule);

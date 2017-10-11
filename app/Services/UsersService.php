@@ -190,7 +190,7 @@ Class UsersService
     public function checkUserOrderTime($param)
     {
         $userOrderTime = app(UserOrderTimeRepositoryInterface::class);
-        $res = $userOrderTime->updateOrderTime($param['order_time_id'], ['status' => 1]); //确认顾客到店
+        $res = $userOrderTime->updateOrderTime($param['order_time_id'], ['status' => $param['status']]); //确认顾客到店
         return success();
     }
 
