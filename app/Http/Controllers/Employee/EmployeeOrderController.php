@@ -16,21 +16,16 @@ class EmployeeOrderController extends Controller
     }
 
     /*
-     * 按照条件获取员工列表
+     * 按照条件获取员工服务单据列表
      * */
     public function getEmpOrderList()
     {
         $param = [
             "emp_id"    => Request::input('emp_id'),
+            "shop_id"   => Request::input('shop_id'),
             'cur_page'  => Request::input('cur_page', 1),
             'limit'     => Request::input('limit', 15)
         ];
-        $rule = [
-            "emp_id" => "integer",
-            "cur_page"   => "integer",
-            "limit"      => "integer"
-        ];
-        $this->validation($param, $rule);
 
         $data = $this->employeeOrderService->getEmpOrderList($param);
         return $data;

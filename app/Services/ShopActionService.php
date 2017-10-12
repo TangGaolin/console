@@ -58,6 +58,7 @@ Class ShopActionService
         $order_desc = "充值" . '-' .$user_info['user_name'];
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
+            $item['shop_id']    = $param['shop_id'];
             $item['order_desc'] = $order_desc;
             $item['yeji']       = $v['money'];
             $item['order_id']   = $orderId;
@@ -120,6 +121,7 @@ Class ShopActionService
         $order_desc = "产品卡充值" . '-' .$user_info['user_name'];
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
+            $item['shop_id']    = $param['shop_id'];
             $item['order_desc'] = $order_desc;
             $item['yeji']       = $v['money'];
             $item['order_id']   = $orderId;
@@ -189,6 +191,7 @@ Class ShopActionService
         $order_desc = "购买服务" . '-' . $user_name;
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
+            $item['shop_id']    = $param['shop_id'];
             $item['order_desc'] = $order_desc;
             $item['yeji']       = $v['money'];
             $item['xiaohao']    = 0;
@@ -240,6 +243,7 @@ Class ShopActionService
             $order_desc = "耗卡" . '-' . $user_name;
             foreach ($param['server_emps'] as $v){
                 $item['emp_id']     = $v['emp_id'];
+                $item['shop_id']    = $param['shop_id'];
                 $item['order_desc'] = $order_desc;
                 $item['xiaohao']    = $v["xiaohao"];
                 $item['fee']        = $v["fee"];
@@ -325,6 +329,7 @@ Class ShopActionService
 
             foreach ($select_item['emps'] as $emp) {
                 $empOrderData['emp_id']     = $emp['emp_id'];
+                $empOrderData['shop_id']            = $param['shop_id'];
                 $empOrderData['order_desc'] = $order_desc;
                 $empOrderData['yeji']       = 0;
                 $empOrderData['fee']        = $emp['fee'];
@@ -393,6 +398,7 @@ Class ShopActionService
         $order_desc = "还款" . '-' .$user_info['user_name'];
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
+            $item['shop_id']    = $param['shop_id'];
             $item['order_desc'] = $order_desc;
             $item['yeji']       = $v['money'];
             $item['order_id']   = $orderId;
@@ -475,6 +481,7 @@ Class ShopActionService
         $order_desc = "购买产品" . '-' .$user_name;
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
+            $item['shop_id']    = $param['shop_id'];
             $item['order_desc'] = $order_desc;
             $item['yeji']       = $v['money'];
             $item['order_id']   = $orderId;
@@ -548,6 +555,7 @@ Class ShopActionService
         $order_desc = "退换" . '-' .$user_info['user_name'];
         foreach ($param['pay_emps'] as $v){
             $item['emp_id']     = $v['emp_id'];
+            $item['shop_id']    = $param['shop_id'];
             $item['order_desc'] = $order_desc;
             $item['yeji']       = $v['money'];
             $item['order_id']   = $orderId;

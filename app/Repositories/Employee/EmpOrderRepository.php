@@ -20,6 +20,7 @@ class EmpOrderRepository implements EmpOrderRepositoryInterface
 
         $select = $this->empOrder;
         checkParam($whereParam,'emp_id') && $select = $select->where("emp_id", "=", $whereParam["emp_id"]);
+        checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
         checkParam($whereParam,'start_time') &&$select = $select->where("add_time", ">=", $whereParam["start_time"]);
         checkParam($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
 
