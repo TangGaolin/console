@@ -56,5 +56,8 @@ Route::group(['middleware' => ['loginState']], function () {
     //基础功能
     Route::post('/shop/resetPassword', 'Auth\ResetPasswordController@resetCashierPassword');  //修改密码接口
 
+    //更新会员信息
+    Route::post('/shop/updateUser', 'Users\UsersController@updateUser');  //更新会员信息
+
 });
 

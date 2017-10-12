@@ -141,6 +141,8 @@ Class UsersService
             $userInfo['emp_name'] = $emp_info['emp_name'];
         }
 
+        unset($userInfo['password']);
+
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
             'msg'        => config('response_code.MSG_OK'),

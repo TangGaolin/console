@@ -98,6 +98,7 @@ class UsersController extends Controller
             "emp_id"    => Request::input("emp_id"),
             "birthday"  => Request::input("birthday"),
             "remark"    => Request::input("remark"),
+            "source"    => Request::input("source"),
 
         ];
         $rule = [
@@ -107,7 +108,7 @@ class UsersController extends Controller
             "shop_id"    => "nullable|integer",
             "emp_id"     => "nullable|integer",
             "birthday"   => "nullable|date",
-            "remark"     => "nullable|string",
+            "source"     => "nullable|string",
         ];
         $this->validation($param, $rule);
         return $this->usersService->updateUser($param);
