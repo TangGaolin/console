@@ -49,5 +49,8 @@ Route::group(['middleware' => ['EmploginState']], function () {
 
     //更新会员信息
     Route::post('/emp/updateUser', 'Users\UsersController@updateUser');  //更新会员信息
+
+    //获取门店业绩消耗数据
+    Route::post('/emp/getShopDataView', 'DataViews\ShopDataController@getShopDataView');
 });
 
