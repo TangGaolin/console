@@ -16,6 +16,9 @@ class UsersRepository implements UsersRepositoryInterface
 
     public function addUser($userData)
     {
+        if(isset($userData['birthday']) && "" == $userData['birthday']) {
+            unset($userData['birthday']);
+        }
         return $this->usersModel->insert($userData);
     }
 
