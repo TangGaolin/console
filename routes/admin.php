@@ -19,6 +19,7 @@ Route::any('/', function () {
 
 Route::any('/getConfig', 'ConfigController@getConfig');
 Route::post('/admin/login', 'Auth\AdminAuthController@login');
+Route::get('/admin/captcha', 'Auth\AdminAuthController@captcha');
 
 Route::group(['middleware' => ['AdminloginState']], function () {
 

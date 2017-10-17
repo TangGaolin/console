@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\RbacService;
+use Gregwar\Captcha\CaptchaBuilder;
 use Request;
 
 use App\Services\AuthService;
@@ -25,21 +26,37 @@ class AdminAuthController extends Controller
         $param = [
             'user'     => Request::input('user'),
             'password' => Request::input('password'),
+            'captcha'  => Request::input('captcha'),
             'ip'       => Request::getClientIp()
         ];
 
         $rule = [
             'user'     => "required|string",
             'password' => "required|string",
+            'captcha'  => "required|string",
         ];
         $this->validation($param, $rule);
 
+        //如果验证码不正确
+        if(strtolower(Request::session()->get('phrase')) != strtolower($param['captcha'])) {
+            Request::session()->forget('phrase');
+            Request::session()->save();
+            return fail(403,'验证码不正确');
+        }
         $result =  $this->authService->login($param);
-
         if ($result['statusCode'] == '0') {
             Request::session()->put('admin', $result['data']);
         }
         return $result;
+    }
+
+    //后端管理登录，提供验证码
+    public function captcha()
+    {
+        $builder = new CaptchaBuilder;
+        $builder->build();
+        Request::session()->put('phrase', $builder->getPhrase());
+        return response($builder->output())->header('Content-Type', 'image/jpeg');
     }
 
     public function logout()
