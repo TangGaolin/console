@@ -10,6 +10,7 @@ namespace App\Services;
 use App\Jobs\ReloadEmpDataCache;
 use App\Jobs\ReloadShopXiaoDataCache;
 use App\Jobs\ReloadShopYejiDataCache;
+use App\Repositories\UserOrderTime\UserOrderTimeRepositoryInterface;
 use App\Repositories\Users\UsersAccountRepositoryInterface;
 use App\Repositories\Users\UsersRepositoryInterface;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -624,9 +625,12 @@ Class ShopActionService
         return success();
     }
 
-
-
-
+    public function orderTime($param)
+    {
+        $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
+        $orderTimeRepository->addOrderTime($param);
+        return success();
+    }
 
 
 

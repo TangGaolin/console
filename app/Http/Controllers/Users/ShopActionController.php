@@ -250,4 +250,28 @@ class ShopActionController extends Controller
         return $this->shopActionService->changeItems($param);
     }
 
+    public function orderTime()
+    {
+        $param = [
+            "uid"         => Request::input('uid'),
+            "emp_id"      => Request::input('emp_id'),
+            "emp_name"    => Request::input('emp_name'),
+            "shop_id"     => Request::input('shop_id'),
+            'remark'      => Request::input('remark',""),
+            'order_time'  => Request::input('order_time')
+        ];
+        $rule = [
+            "uid"       => "required",
+            "emp_id"    => "required",
+            "emp_name"  => "required",
+            "shop_id"   => "required",
+            'order_time'=> "required"
+        ];
+
+        $this->validation($param, $rule);
+
+        $data = $this->shopActionService->orderTime($param);
+        return $data;
+    }
+
 }

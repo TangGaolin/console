@@ -12,6 +12,9 @@
 */
 
 
+Route::any('/', function () {
+    return redirect('/index.html', '301');
+});
 
 Route::any('/getConfig', 'ConfigController@getConfig');
 
@@ -58,6 +61,10 @@ Route::group(['middleware' => ['loginState']], function () {
 
     //更新会员信息
     Route::post('/shop/updateUser', 'Users\UsersController@updateUser');  //更新会员信息
+
+    //更新会员信息
+    Route::post('/shop/orderTime', 'Users\ShopActionController@orderTime');  //会员预约功能
+
 
 });
 

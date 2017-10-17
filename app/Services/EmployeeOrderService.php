@@ -115,8 +115,6 @@ Class EmployeeOrderService
 
     public function getOrderTime($whereParam)
     {
-
-
         $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
         $res = $orderTimeRepository->getOrderTime($whereParam);
 
