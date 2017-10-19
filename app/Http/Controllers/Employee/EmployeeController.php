@@ -44,6 +44,33 @@ class EmployeeController extends Controller
         return $this->success($data);
     }
 
+    public function getEmpListWithUserNum()
+    {
+        $param = [
+            "emp_name_phone" => Request::input('emp_name_phone'),
+            "shop_id"   => Request::input('shop_id'),
+            "is_server" => Request::input('is_server'),
+            "is_cashier"=> Request::input('is_cashier'),
+            "is_admin"  => Request::input('is_admin'),
+            'cur_page'  => Request::input('cur_page', 1),
+            'limit'     => Request::input('limit', 15)
+        ];
+        $rule = [
+            "emp_name_phone" => "nullable|string",
+            "shop_id"    => "nullable|integer",
+            "is_server"  => "nullable|integer",
+            "is_cashier" => "nullable|integer",
+            "is_admin"   => "nullable|integer",
+            "cur_page"   => "integer",
+            "limit"      => "integer"
+        ];
+        $this->validation($param, $rule);
+
+        $data = $this->employeeService->getEmpListWithUserNum($param);
+        return $data;
+    }
+
+
     //获取到门店服务员工和跨店服务员工
     public function getServerEmpList()
     {

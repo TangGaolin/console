@@ -45,7 +45,7 @@ Route::group(['middleware' => ['EmploginState']], function () {
     Route::post('/emp/getUseOrderList', 'Users\UsersAccountController@getUseOrderList');  //耗卡记录
 
     //获取门店员工列表
-    Route::post('/emp/getEmployeeList', 'Employee\EmployeeController@getEmployeeList'); //获取员工列表
+    Route::post('/emp/getEmployeeList', 'Employee\EmployeeController@getEmpListWithUserNum'); //获取员工列表
 
     //更新会员信息
     Route::post('/emp/updateUser', 'Users\UsersController@updateUser');  //更新会员信息

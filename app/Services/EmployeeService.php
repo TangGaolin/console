@@ -9,6 +9,7 @@ namespace App\Services;
 
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Shop\ShopRepositoryInterface;
+use App\Repositories\Users\UsersRepositoryInterface;
 use Excel;
 
 
@@ -41,6 +42,16 @@ Class EmployeeService
             $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "总部";
         }
         return $data;
+    }
+
+    public function getEmpListWithUserNum($param)
+    {
+        $data = $this->employeeRepository->getEmployeeList($param);
+        $userRepository = app(UsersRepositoryInterface::class);
+        foreach ($data['data'] as &$v) {
+            $v["user_num"] = $userRepository->getUserNum(['emp_id' => $v['emp_id']]);
+        }
+        return success($data);
     }
 
     public function getServerEmpList($param)

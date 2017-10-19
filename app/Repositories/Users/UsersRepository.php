@@ -41,6 +41,14 @@ class UsersRepository implements UsersRepositoryInterface
         ];
     }
 
+    public function getUserNum($whereParam)
+    {
+        $select = $this->usersModel;
+        checkParam($whereParam,'emp_id') && $select = $select->where("emp_id", "=", $whereParam["emp_id"]);
+        return $select->count();
+    }
+
+
     public function getUserInfo($user)
     {
         $result = $this->usersModel->where($user)->first();
