@@ -162,18 +162,30 @@ class UsersController extends Controller
         return $this->usersService->checkUserOrderTime($param);
     }
 
-    public function getOrderUser()
+    //获取用户预约情况
+    public function getOrderTime()
     {
         $param = [
-            'shop_id' => Request::input('shop_id'),
+            "uid"        => Request::input('uid'),
+            'emp_id'     => Request::input('emp_id'),
+            'shop_id'    => Request::input('shop_id'),
+            'start_time' => Request::input('start_time'),
+            'end_time'   => Request::input('end_time')
         ];
 
-        $rule = [
-            'shop_id' => 'nullable|integer'
+        return $this->usersService->getOrderTime($param);
+    }
+
+    //获取门店预约看板接口
+    public function getOrderTimeView()
+    {
+        $param = [
+            'shop_id'    => Request::input('shop_id'),
+            'start_time' => Request::input('start_time'),
+            'end_time'   => Request::input('end_time')
         ];
 
-        $this->validation($param, $rule);
-        return $this->usersService->getOrderUser($param);
+        return $this->usersService->getOrderTimeView($param);
     }
 
 

@@ -113,34 +113,4 @@ Class EmployeeOrderService
         return success();
     }
 
-    public function getOrderTime($whereParam)
-    {
-        $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
-        $res = $orderTimeRepository->getOrderTime($whereParam);
-
-        $storeRepository = app(ShopRepositoryInterface::class);
-        $storeList = $storeRepository->getStoreList();
-        $newStoreData = [];
-
-        foreach ($storeList as $v) {
-            $newStoreData[$v['shop_id']] = $v['shop_name'];
-        }
-
-        $res_ids   = array_column($res,'uid');
-        $useRepository = app(UsersRepositoryInterface::class);
-        $users = $useRepository->getUserInfoByIds($res_ids);
-        $convert_users = [];
-        foreach ($users as $v){
-            $convert_users[$v['uid']] = $v['user_name'];
-        }
-        foreach ($res as &$v) {
-            $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "";
-            $v["user_name"] = $convert_users[$v["uid"]] ?? "";
-        }
-        return success($res);
-    }
-
-
-
-
 }

@@ -29,6 +29,8 @@ class UserOrderTimeRepository implements UserOrderTimeRepositoryInterface
         checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
         isset($whereParam['status']) && $select = $select->where("status", "=", $whereParam["status"]); //返回 0 也判断
 
+        $select = $select->where("status", "!=", -1);  //取消不显示
+        $select = $select->orderBy('order_time');
         $res = $select->get();
         return $res ? $res->toArray() : [];
     }

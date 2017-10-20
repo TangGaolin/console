@@ -231,6 +231,70 @@ Class UsersService
     }
 
 
+    public function getOrderTime($whereParam)
+    {
+        $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
+        $res = $orderTimeRepository->getOrderTime($whereParam);
+
+        $storeRepository = app(ShopRepositoryInterface::class);
+        $storeList = $storeRepository->getStoreList();
+        $newStoreData = [];
+
+        foreach ($storeList as $v) {
+            $newStoreData[$v['shop_id']] = $v['shop_name'];
+        }
+
+        $res_ids   = array_column($res,'uid');
+        $useRepository = app(UsersRepositoryInterface::class);
+        $users = $useRepository->getUserInfoByIds($res_ids);
+        $convert_users = [];
+        foreach ($users as $v){
+            $convert_users[$v['uid']] = $v['user_name'];
+        }
+        foreach ($res as &$v) {
+            $v["shop_name"] = $newStoreData[$v["shop_id"]] ?? "";
+            $v["user_name"] = $convert_users[$v["uid"]] ?? "";
+        }
+        return success($res);
+    }
+
+    public function getOrderTimeView($param)
+    {
+        $whereParam = $param;
+        $orderTimeRepository = app(UserOrderTimeRepositoryInterface::class);
+        $orderTimeData = $orderTimeRepository->getOrderTime($whereParam);
+
+        $u_ids   = array_column($orderTimeData,'uid');
+        $useRepository = app(UsersRepositoryInterface::class);
+        $users = $useRepository->getUserInfoByIds($u_ids);
+        $convert_users = [];
+        foreach ($users as $v){
+            $convert_users[$v['uid']] = $v['user_name'];
+        }
+        foreach ($orderTimeData as &$v) {
+            $v["user_name"] = $convert_users[$v["uid"]] ?? "";
+        }
+
+        $employeeRepository  = app(EmployeeRepositoryInterface::class);
+        $empData = $employeeRepository->getEmployeeList([
+            'shop_id' => $param['shop_id'],
+            'is_server' => 1,
+        ]);
+
+        foreach ($empData['data'] as &$emp){
+            $emp['order_user'] = [];
+            foreach ($orderTimeData as $order){
+                $index = getTimeIndex($order['order_time']);
+                if($order['emp_id'] == $emp['emp_id']) {
+                    $emp['order_user'][$index][] = $order;
+                    continue;
+                }
+            }
+        }
+        return success($empData['data']);
+    }
+
+
 
 
 }

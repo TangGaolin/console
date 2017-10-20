@@ -32,7 +32,7 @@ Route::group(['middleware' => ['EmploginState']], function () {
     Route::post('/emp/getOrderInfo', 'Employee\EmployeeOrderController@getOrderInfo');   //获取单据详情
 
     Route::post('/emp/orderTime', 'Employee\EmployeeOrderController@orderTime'); //会员预约接口
-    Route::post('/emp/getOrderTime', 'Employee\EmployeeOrderController@getOrderTime'); //获取会员预约数据
+    Route::post('/emp/getOrderTime', 'Users\UsersController@getOrderTime'); //获取会员预约数据
     Route::post('/emp/serverLog', 'Employee\EmployeeOrderController@serverLog'); //服务记录
 
     Route::post('/emp/getUserDetail', 'Users\UsersController@getUserDetail');  //获取用户详情

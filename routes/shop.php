@@ -45,7 +45,7 @@ Route::group(['middleware' => ['loginState']], function () {
 
     //全局数据
     Route::post('/shop/getShopDataView', 'DataViews\ShopDataController@getShopDataView');  //获取门店业绩消耗数据
-    Route::post('/shop/getOrderUser', 'Users\UsersController@getOrderUser');  //获取预约数据接口
+    Route::post('/shop/getOrderUser', 'Users\UsersController@getOrderTime');  //获取预约数据接口
     Route::post('/shop/checkUserOrderTime', 'Users\UsersController@checkUserOrderTime');  //确认客人到店
     Route::post('/shop/getTodayUsers', 'Users\UsersController@getTodayUsers');  //获取今日来访用户
 
@@ -64,6 +64,7 @@ Route::group(['middleware' => ['loginState']], function () {
 
     //更新会员信息
     Route::post('/shop/orderTime', 'Users\ShopActionController@orderTime');  //会员预约功能
+    Route::post('/shop/getOrderTimeView', 'Users\UsersController@getOrderTimeView');  //会员预约看板数据
 
 
 });
