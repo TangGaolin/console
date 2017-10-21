@@ -32,6 +32,7 @@ class UserOrderTimeRepository implements UserOrderTimeRepositoryInterface
         $select = $select->where("status", "!=", -1);  //取消不显示
         $select = $select->orderBy('order_time');
         $res = $select->get();
+
         return $res ? $res->toArray() : [];
     }
 

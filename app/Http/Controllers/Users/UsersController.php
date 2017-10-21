@@ -168,6 +168,7 @@ class UsersController extends Controller
         $param = [
             "uid"        => Request::input('uid'),
             'emp_id'     => Request::input('emp_id'),
+            'status'     => Request::input('status'),
             'shop_id'    => Request::input('shop_id'),
             'start_time' => Request::input('start_time'),
             'end_time'   => Request::input('end_time')
