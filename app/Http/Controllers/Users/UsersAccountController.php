@@ -26,6 +26,7 @@ class UsersAccountController extends Controller
             "shop_id"       => Request::input("shop_id"),
             "order_id"      => Request::input("order_id"),
             "select_date"   => Request::input("select_date"),
+            "date_range"    => Request::input("date_range"),
             "cur_page"      => Request::input("cur_page", 1),
             "limit"         => Request::input("limit", 10),
             "status"        => Request::input("status")
@@ -68,9 +69,10 @@ class UsersAccountController extends Controller
     {
         $param = [
             "uid"           => Request::input("uid"),
-            "order_id"       => Request::input("order_id"),
+            "order_id"      => Request::input("order_id"),
             "shop_id"       => Request::input("shop_id"),
             "select_date"   => Request::input("select_date"),
+            "date_range"    => Request::input("date_range"),
             "cur_page"      => Request::input("cur_page", 1),
             "limit"         => Request::input("limit", 10)
         ];

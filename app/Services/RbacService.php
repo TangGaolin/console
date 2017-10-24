@@ -82,6 +82,7 @@ class RbacService
             $this->adminRepository->updateEmployee($res['emp_id'], $employeeData);
             $admin_id = $res['emp_id'];
         }else{
+            $employeeData['is_server'] = 0; // 默认为非服务人员
             $admin_id = $this->adminRepository->addEmployee($employeeData);
         }
         //关联角色表

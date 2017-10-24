@@ -30,6 +30,11 @@ Class UsersAccountService
             $param['start_time'] = $param['select_date'];
             $param['end_time']   = $param['select_date'] . " 23:59:59";
         }
+        if($param['date_range']) {
+            $param['start_time'] = $param['date_range'][0];
+            $param['end_time']   = $param['date_range'][1];
+        }
+
         $orderList = $this->usersAccountRepository->getOrderList($param);
 
         //获取收银员信息
@@ -89,6 +94,11 @@ Class UsersAccountService
         if($param['select_date']){
             $param['start_time'] = $param['select_date'];
             $param['end_time']   = $param['select_date'] . " 23:59:59";
+        }
+
+        if($param['date_range']) {
+            $param['start_time'] = $param['date_range'][0];
+            $param['end_time']   = $param['date_range'][1];
         }
         $orderList = $this->usersAccountRepository->getUseOrderList($param);
 

@@ -95,6 +95,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
         $countSelect = $select;
         $count       = $countSelect->count();
+        $money_total       = $countSelect->sum('pay_money');
 
         if(!isset($whereParam['cur_page'])) {
             $whereParam['cur_page'] = 1;
@@ -109,6 +110,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
         return [
             'totalSize' => $count,
+            'totalMoney' => $money_total,
             'data'      => $res->toArray(),
         ];
     }
@@ -231,7 +233,6 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     public function getUseOrderList($whereParam)
     {
         $select = $this->useOrderModel;
-
         if($this->checkValue($whereParam,'order_id')) {
             $select = $select->where("use_order_id", "=", $whereParam["order_id"]);
         }else{
@@ -240,9 +241,9 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             checkParam($whereParam,'end_time') && $select = $select->where("add_time", "<", $whereParam["end_time"]);
             checkParam($whereParam,'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
         }
-
         $countSelect = $select;
         $count       = $countSelect->count();
+        $money_total = $countSelect->sum('use_money');
 
         if(!isset($whereParam['cur_page'])) {
             $whereParam['cur_page'] = 1;
@@ -257,6 +258,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
         return [
             'totalSize' => $count,
+            'totalMoney' => $money_total,
             'data'      => $res->toArray(),
         ];
     }
