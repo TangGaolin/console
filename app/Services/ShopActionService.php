@@ -211,6 +211,7 @@ Class ShopActionService
             foreach ($param['selected_items'] as $value) {
                 $u_item['order_id']  = $orderId;
                 $u_item['uid']       = $param['uid'];
+                $u_item['shop_id']   = $param['shop_id'];
                 $u_item['item_id']   = $value['item_id'];
                 $u_item['item_name'] = $value['item_name'];
                 $u_item['price']     = $value['price'];
