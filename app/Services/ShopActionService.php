@@ -81,7 +81,7 @@ Class ShopActionService
         foreach ($empOrderData as $emp){
             $this->dispatch(new ReloadEmpDataCache([
                 'add_time' => $param['add_time'],
-                'emp_id' => $emp['emp_id']
+                'emp_id'   => $emp['emp_id']
             ]));
         }
 
@@ -520,8 +520,8 @@ Class ShopActionService
         $orderType = $param['select_new_items'] ? 6 : 5;
         //业绩数据
         $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
-        //本单价值: -退项目金额 + 新项目金额 + 手续费 - 会员卡卡扣
-        $lastMoney = -$param['item_money'] + $param['new_item_money'] + $param['change_fee'] - $param['use_balance'];
+        //本单价值: -退项目金额 + 新项目金额 + 手续费 - 会员卡卡扣 - 产品卡卡扣
+        $lastMoney = -$param['item_money'] + $param['new_item_money'] + $param['change_fee'] - $param['pay_balance'] - $param['good_money'];
         //计算欠款
         $debt = $lastMoney - $payMoney;
         //构造订单详情
@@ -539,7 +539,8 @@ Class ShopActionService
             "shop_id"   => $param['shop_id'],
             "worth_money" => $lastMoney,
             "order_info"  => json_encode($orderInfo, JSON_UNESCAPED_UNICODE),
-            "pay_balance" => $param['use_balance'],
+            "pay_balance" =>  $param['pay_balance'],
+            "use_good_money" => $param['good_money'],
             "pay_cash"     => $param['pay_cash'],
             "pay_card"     => $param['pay_card'],
             "pay_mobile"   => $param['pay_mobile'],
@@ -592,6 +593,7 @@ Class ShopActionService
         foreach ($param['select_new_items'] as $value) {
             $u_item['order_id']  = $orderId;
             $u_item['uid']       = $param['uid'];
+            $u_item['shop_id']       = $param['shop_id'];
             $u_item['item_id']   = $value['item_id'];
             $u_item['item_name'] = $value['item_name'];
             $u_item['price']     = $value['price'];

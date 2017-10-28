@@ -217,7 +217,8 @@ class ShopActionController extends Controller
             "new_item_money"=> Request::input("newItemMoney", 0), //新项目金额
 
             "change_fee"    => Request::input("change_fee", 0), //本单手续费
-            "use_balance"   => Request::input("use_balance", 0),//使用会员卡金额
+            "pay_balance"   => Request::input("pay_balance", 0),//使用会员卡金额
+            "good_money"    => Request::input("good_money", 0),//使用产品卡扣
             "pay_cash"      => Request::input("pay_cash", 0),   //支付现金
             "pay_card"      => Request::input("pay_card", 0),   //银行卡
             "pay_mobile"    => Request::input("pay_mobile", 0), //移动支付
@@ -236,7 +237,8 @@ class ShopActionController extends Controller
             "new_item_money" => "numeric",
 
             "change_fee"     => "required|numeric",
-            "use_balance"    => "required|numeric",
+            "pay_balance"    => "required|numeric",
+            "good_money"     => "required|numeric",
             "pay_card"       => "required|numeric",
             "pay_cash"       => "required|numeric",
             "pay_mobile"     => "required|numeric",

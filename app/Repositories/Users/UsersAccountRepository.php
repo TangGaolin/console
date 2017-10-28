@@ -336,13 +336,18 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
                 $updateData['balance'] = DB::raw('balance-' . $param['order_data']['pay_balance']);
             }
 
+            // 判断是否使用产品卡
+            if($param['order_data']['use_good_money'] > 0){
+                $updateData['good_money'] = DB::raw('good_money-' . $param['order_data']['use_good_money']);
+            }
+
             // 判断是否有欠款
             if($param['order_data']['debt'] > 0){
                 $updateData['debt'] = DB::raw('debt+' . $param['order_data']['debt']);
             }
             // 更新会员金额
             if(!empty($updateData)){
-                $this->usersModel->where('uid','=',$param['order_daadd_timeta']['uid'])->update($updateData);
+                $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($updateData);
             }
             //更新会员最近消费时间
             $leave_shop_time = [
@@ -350,6 +355,7 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             ];
             $this->usersModel->where('uid','=',$param['order_data']['uid'])->update($leave_shop_time);
 
+            $updateData = [];
             // 账户卡进行更新
             foreach ($param['update_item_data'] as $userItemData) {
                 $updateData['id'] = $userItemData['id'];
