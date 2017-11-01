@@ -40,4 +40,6 @@ return [
         '其他平台',
         '其他'
     ],
+
+    'show_report_button' => env('OPOEN_DINGDING_ROBOT', 0)
 ];

@@ -635,9 +635,24 @@ Class ShopActionService
         return success();
     }
 
-
-
-
-
+    public function reportOrderData($param)
+    {
+        $query_data = [
+            'msgtype' => 'text',
+            'text' => [
+                'content'  => $param['report_msg']
+            ]
+        ];
+        $res = request_by_curl(
+            'https://oapi.dingtalk.com/robot/send?access_token='. config('envsetting.dingding_robot_report'),
+            json_encode($query_data),
+            true
+        );
+        $res = json_decode($res, true);
+        if(0 != $res['errcode']) {
+            return fail($res['errcode'], $res['errmsg']);
+        }
+        return success();
+    }
 
 }

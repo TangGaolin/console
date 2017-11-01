@@ -276,4 +276,19 @@ class ShopActionController extends Controller
         return $data;
     }
 
+    public function reportOrderData()
+    {
+        $param = [
+            "report_msg"  => Request::input('report_msg'),
+        ];
+        $rule = [
+            "report_msg"  => "required",
+        ];
+        $this->validation($param, $rule);
+        $param['cashier_id'] = $this->getCashierId();
+
+        $data = $this->shopActionService->reportOrderData($param);
+        return $data;
+    }
+
 }

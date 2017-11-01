@@ -57,3 +57,48 @@ function getTimeIndex($time) {
         return 7;
     }
 }
+
+function loggerInfo($name, $path, $message, $level)
+{
+    $log = new \Monolog\Logger($name);
+    $log->pushHandler(
+        new \Monolog\Handler\StreamHandler(
+            storage_path('logs/'. $path),
+            $level
+        )
+    );
+    $log->addInfo($message);
+}
+
+function request_by_curl($remote_server, $post_string, $needLog = false) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $remote_server);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array ('Content-Type: application/json;charset=utf-8'));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $data = curl_exec($ch);
+    curl_close($ch);
+    //是否需要记录log
+    if($needLog){
+        $message = [
+            'request_uri'    => $remote_server,
+            'request_body'   => $post_string,
+            'response_body'  => @json_decode($data, true) ?: $data
+        ];
+
+        //记录log
+        loggerInfo(
+            config('app.app_name'),
+            'servicelog.'.date('Y-m-d').'.log',
+            json_encode($message, JSON_UNESCAPED_UNICODE),
+            \Monolog\Logger::INFO
+        );
+    }
+    return $data;
+}
+
+
+
+

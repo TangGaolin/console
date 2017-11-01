@@ -67,5 +67,7 @@ Route::group(['middleware' => ['loginState']], function () {
     Route::post('/shop/getOrderTimeView', 'Users\UsersController@getOrderTimeView');  //会员预约看板数据
 
 
+    Route::post('/shop/reportOrderData', 'Users\ShopActionController@reportOrderData');  //会员预约看板数据
+
 });
 
