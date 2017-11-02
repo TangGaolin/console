@@ -195,6 +195,15 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         ];
     }
 
+    public function getAllItemMoney($whereParam)
+    {
+        $select = $this->userItemsModel;
+        checkParam($whereParam,'uid') && $select = $select->where("uid", "=", $whereParam["uid"]);
+        checkParam($whereParam, 'shop_id') && $select = $select->where("shop_id", "=", $whereParam["shop_id"]);
+        $data['all_sold_money'] = $select->sum('sold_money');
+        $data['all_now_money'] = $select->sum('now_money');
+        return $data;
+    }
 
     public function getUserItemInfo($whereParam)
     {

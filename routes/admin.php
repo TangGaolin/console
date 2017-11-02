@@ -75,6 +75,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/storeData/getShopsDataView', 'DataViews\ShopDataController@getShopsDataView');  //获取门店总数据
     Route::post('/storeData/getOrderTime', 'Users\UsersController@getOrderTime');  //获取预约记录
     Route::post('/storeData/getOrderTimeView', 'Users\UsersController@getOrderTimeView');  //获取预约记录
+    Route::post('/storeData/getStoreAllMoney', 'Store\StoreDataController@getStoreAllMoney');  //获取预约记录
 
     Route::post('/admin/addRole', 'Auth\AdminAuthController@addRole');  //添加角色
     Route::post('/admin/getRoleList', 'Auth\AdminAuthController@getRoleList');  //获取角色列表
@@ -86,6 +87,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/admin/openAccount', 'Auth\AdminAuthController@openAccount');  //创建管理员账号
     Route::post('/admin/getAccountList', 'Auth\AdminAuthController@getAccountList');  //创建管理员账号
     Route::post('/admin/disableAccount', 'Auth\AdminAuthController@disableAccount');  //删除账号
+
 
 
 });

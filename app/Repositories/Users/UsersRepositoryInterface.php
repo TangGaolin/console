@@ -9,4 +9,5 @@ interface UsersRepositoryInterface
     public function getUserInfo($user);
     public function getUserInfoByIds($u_ids);
     public function updateUser($uid, $userData);
+    public function getUserMoney($shop_id);
 }

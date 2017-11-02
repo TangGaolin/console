@@ -66,5 +66,16 @@ class UsersRepository implements UsersRepositoryInterface
         return $this->usersModel->where('uid','=', $uid)->update($userData);
     }
 
+    public function getUserMoney($whereParam)
+    {
+        $select                 = $this->usersModel->where('shop_id', $whereParam['shop_id']);
+        $data['all_balance']    = $select->sum('balance');
+        $data['all_good_money'] = $select->sum('good_money');
+        $data['all_debt']       = $select->sum('debt');
+        return $data;
+    }
+
+
+
 
 }
