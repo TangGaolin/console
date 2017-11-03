@@ -1,10 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: jesse
- * Date: 16/9/7
- * Time: 10:52
- * private_node: usedId:1-
+ * private_node: max node_id:36
  */
 return [
     'private_node' => [
@@ -209,6 +205,19 @@ return [
                             'node_name' => 'getUsers',
                             'title'     => '门店数据',
                             'resource'  => ['/storeData/getShopsDataView']
+                        ]
+                    ]
+                ],
+                [
+                    'node_id'   => '35',
+                    'node_name' => 'shop-all-money',
+                    'title'     => '门店总览',
+                    'child'     => [
+                        [
+                            'node_id'   => '36',
+                            'node_name' => 'shop-all-money',
+                            'title'     => '门店总览',
+                            'resource'  => ['/storeData/getStoreAllMoney']
                         ]
                     ]
                 ],
