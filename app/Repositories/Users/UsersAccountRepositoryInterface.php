@@ -9,6 +9,7 @@ interface UsersAccountRepositoryInterface
     public function chargeGood($param);
     public function buyItems($param);
     public function getItemList($whereParam);
+    public function getItemListByOrderId($order_id);
     public function getUserItemInfo($whereParam);
     public function getAllItemMoney($whereParam);
     public function useItems($param);
@@ -23,7 +24,7 @@ interface UsersAccountRepositoryInterface
     public function updateOrderRemark($whereParam, $updateData);
     public function updateUseOrderRemark($whereParam, $updateData);
 
-
+    public function cancelOrder($param);
 
 
 

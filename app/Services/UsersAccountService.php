@@ -79,15 +79,14 @@ Class UsersAccountService
     public function getItemList($param)
     {
         $orderList = $this->usersAccountRepository->getItemList($param);
-
-        return [
-            'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
-            'msg'        => config('response_code.MSG_OK'),
-            'success'    => true,
-            'data'       => $orderList
-        ];
+        return success($orderList);
     }
 
+    public function getItemListByOrderId($param)
+    {
+        $itemList = $this->usersAccountRepository->getItemListByOrderId($param['order_id']);
+        return success($itemList);
+    }
 
     public function getUseOrderList($param)
     {

@@ -88,6 +88,8 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/admin/getAccountList', 'Auth\AdminAuthController@getAccountList');  //创建管理员账号
     Route::post('/admin/disableAccount', 'Auth\AdminAuthController@disableAccount');  //删除账号
 
+    Route::post('/users/getItemListByOrderId', 'Users\UsersAccountController@getItemListByOrderId');  //根据订单id查询项目信息
+    Route::post('/users/cancelOrderAction', 'Users\AdminActionController@cancelOrderAction');  //撤销单据
 
 
 });

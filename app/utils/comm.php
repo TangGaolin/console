@@ -58,9 +58,9 @@ function getTimeIndex($time) {
     }
 }
 
-function loggerInfo($name, $path, $message, $level)
+function loggerInfo($path, $message, $level)
 {
-    $log = new \Monolog\Logger($name);
+    $log = new \Monolog\Logger(config('app.name'));
     $log->pushHandler(
         new \Monolog\Handler\StreamHandler(
             storage_path('logs/'. $path),
@@ -90,7 +90,6 @@ function request_by_curl($remote_server, $post_string, $needLog = false) {
 
         //记录log
         loggerInfo(
-            config('app.app_name'),
             'servicelog.'.date('Y-m-d').'.log',
             json_encode($message, JSON_UNESCAPED_UNICODE),
             \Monolog\Logger::INFO

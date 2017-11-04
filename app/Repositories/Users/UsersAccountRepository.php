@@ -195,6 +195,12 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
         ];
     }
 
+    public function getItemListByOrderId($order_id)
+    {
+        $res= $this->userItemsModel->where("order_id", "=", $order_id)->get();
+        return $res ? $res->toArray() : [];
+    }
+
     public function getAllItemMoney($whereParam)
     {
         $select = $this->userItemsModel;
@@ -404,6 +410,20 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     public function updateUseOrderRemark($whereParam, $updateData)
     {
         return $this->useOrderModel->where($whereParam)->update($updateData);
+    }
+
+    //取消购买服务订单
+    public function cancelOrder($param)
+    {
+        $query = function () use ($param) {
+            // 删除订单表
+            $this->orderModel->where('order_id', $param['order_id'])->delete();
+            // 删除员工明细表
+            $this->empOrderModel->where('order_id', $param['order_id'])->delete();
+            // 删除项目表
+            return $this->userItemsModel->where('order_id', $param['order_id'])->delete();
+        };
+        return DB::transaction($query);
     }
 
 

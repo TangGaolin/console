@@ -34,7 +34,7 @@ class UsersAccountController extends Controller
         $rule = [
             "uid"           => "nullable|integer",
             "shop_id"       => "nullable|integer",
-            "order_id"      => "nullable|integer",
+            "order_id"      => "nullable|numeric",
             "select_date"   => "nullable|date",
             "cur_page"      => "required|integer",
             "limit"         => "required|integer",
@@ -63,6 +63,20 @@ class UsersAccountController extends Controller
         $this->validation($param, $rule);
 
         return $this->usersAccountService->getItemList($param);
+    }
+
+    public function getItemListByOrderId()
+    {
+        $param = [
+            "order_id" => Request::input("order_id"),
+        ];
+        $rule = [
+            "order_id" => "nullable|numeric"
+        ];
+
+        $this->validation($param, $rule);
+
+        return $this->usersAccountService->getItemListByOrderId($param);
     }
 
     public function getUseOrderList()
