@@ -222,6 +222,19 @@ return [
                     ]
                 ],
                 [
+                    'node_id'   => '37',
+                    'node_name' => 'shop-emp-data',
+                    'title'     => '员工数据',
+                    'child'     => [
+                        [
+                            'node_id'   => '38',
+                            'node_name' => 'emp-data',
+                            'title'     => '员工数据',
+                            'resource'  => ['/storeData/getShopEmpData']
+                        ]
+                    ]
+                ],
+                [
                     'node_id'   => '33',
                     'node_name' => 'user-order-time',
                     'title'     => '预约统计',

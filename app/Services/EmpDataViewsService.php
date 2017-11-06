@@ -6,6 +6,7 @@
  * Time: 下午3:27
  */
 namespace App\Services;
+use App\Repositories\Employee\EmployeeRepository;
 use App\Repositories\Employee\EmpOrderRepositoryInterface;
 use PRedis;
 
@@ -128,6 +129,27 @@ Class EmpDataViewsService
         $redis_key = "emp:"  . $year . ':' . $mouth . ':' . $emp_id;
         $data = $this->countEmpData($year, $mouth, $day, $emp_id);
         $redis->hset($redis_key, $day, $data);
+    }
+
+
+    public function getShopEmpData($param)
+    {
+        //获取门店员工
+        $employeeRepository = app(EmployeeRepository::class);
+        $empRes = $employeeRepository->getEmployeeList([
+            'shop_id' => $param['shop_id']
+        ]);
+        //获取员工数据
+        foreach ($empRes['data'] as &$emp){
+            $dataRes = $this->getEmpDataView([
+                'year'  => $param['year'],
+                'mouth' => $param['mouth'],
+                'emp_id'=>$emp['emp_id'],
+            ]);
+//            $emp['data'] = $dataRes['data'];
+            $emp = array_merge($emp, $dataRes['data']);
+        }
+        return success($empRes['data']);
     }
 
 

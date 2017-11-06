@@ -41,6 +41,24 @@ class EmpDataController extends Controller
         return $this->dataViewsService->getEmpDataView($param);
     }
 
+    public function getShopEmpData()
+    {
+        $param = [
+            "shop_id" => Request::input('shop_id'),
+            "year"    => Request::input('year'),
+            "mouth"   => Request::input('mouth')
+        ];
+
+        $rule = [
+            'shop_id'  => "required|integer",
+            'year'    => "nullable|integer",
+            'mouth'   => "nullable|integer"
+        ];
+        $this->validation($param, $rule);
+
+        return $this->dataViewsService->getShopEmpData($param);
+    }
+
 
 
 

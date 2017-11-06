@@ -91,5 +91,7 @@ Route::group(['middleware' => ['AdminloginState']], function () {
     Route::post('/users/getItemListByOrderId', 'Users\UsersAccountController@getItemListByOrderId');  //根据订单id查询项目信息
     Route::post('/users/cancelOrderAction', 'Users\AdminActionController@cancelOrderAction');  //撤销单据
 
+    Route::post('/storeData/getShopEmpData', 'DataViews\EmpDataController@getShopEmpData');  //获取门店员工数据
+
 
 });

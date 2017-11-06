@@ -8,9 +8,11 @@
 namespace App\Services;
 
 use App\Repositories\Users\UsersAccountRepositoryInterface;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 Class AdminActionService
 {
+    use DispatchesJobs;
 
     protected $usersRepository;
     protected $usersAccountRepository;
@@ -47,6 +49,7 @@ Class AdminActionService
             json_encode($orderInfo, JSON_UNESCAPED_UNICODE),
             \Monolog\Logger::INFO
         );
+
         return success();
     }
 
