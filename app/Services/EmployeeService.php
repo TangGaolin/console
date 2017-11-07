@@ -84,13 +84,22 @@ Class EmployeeService
     public function addEmployee($param)
     {
         $employeeData = $param;
-        $res = $this->employeeRepository->addEmployee($employeeData);
-        if (!$res) {
-            return [
-                'statusCode' => config('response_code.STATUSCODE_USERERROR'),
-                'msg' => "手机号码已经存在",
-                'success' => false
-            ];
+        //判断手机号码是否存已经存在
+        $res = $this->employeeRepository->getEmployeeInfo(['phone_no' => $employeeData['phone_no']]);
+        if ($res) {
+            //判断是否为服务人员
+            if($res['is_server']) {
+                return [
+                    'statusCode' => config('response_code.STATUSCODE_USERERROR'),
+                    'msg' => "员工已经存在！",
+                    'success' => false
+                ];
+            }else{
+                //更新为服务人员
+                $this->employeeRepository->updateEmployee($res['emp_id'], ['is_server' => 1]);
+            }
+        }else{
+            $this->employeeRepository->addEmployee($employeeData);
         }
         return [
             'statusCode' => config('response_code.STATUSCODE_SUCCESS'),
@@ -127,7 +136,7 @@ Class EmployeeService
     {
         $employeeData = $param;
         //设置初始化密码
-        $employeeData['password'] = mt_rand(100000, 999999);
+        $employeeData['password'] = "123456";
         //判断手机号码是否存已经存在
         $res = $this->employeeRepository->getEmployeeInfo(['phone_no' => $employeeData['phone_no']]);
         if ($res) {
@@ -135,8 +144,9 @@ Class EmployeeService
             if($res['password']){
                 unset($employeeData['password']);
             }
-            $this->employeeRepository->updateEmployee($res['emp_id'], $employeeData);
+            $this->employeeRepository->updateEmployee($res['emp_id'], ['is_cashier' => 1]);
         }else{
+            $employeeData['is_server'] = 0;
             $this->employeeRepository->addEmployee($employeeData);
         }
 
