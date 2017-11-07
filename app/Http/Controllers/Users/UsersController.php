@@ -147,11 +147,11 @@ class UsersController extends Controller
         return $this->usersService->getTodayUsers($param);
     }
     //确认顾客到店,或者取消
-    public function checkUserOrderTime() {
-
+    public function checkUserOrderTime()
+    {
         $param = [
             'order_time_id' => Request::input('order_time_id'),
-            'status' => Request::input('status'),
+            'status'        => Request::input('status'),
         ];
         $rule = [
             'order_time_id' => 'required|integer',

@@ -43,6 +43,8 @@ Class ShopActionService
             "uid"          => $param['uid'],
             "shop_id"      => $param['shop_id'],
             "worth_money"  => $param['charge_money'],
+            "give_money"   => $param['give_money'],
+            "order_info"   => json_encode(['give_money' => $param['give_money']], JSON_UNESCAPED_UNICODE),
             "pay_cash"     => $param['pay_cash'],
             "pay_card"     => $param['pay_card'],
             "pay_mobile"   => $param['pay_mobile'],
@@ -157,9 +159,9 @@ Class ShopActionService
 
     public function buyItems($param)
     {
-        $orderId = date('YmdHis', time()) . mt_rand(100,999);
-        $payMoney =  $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
-        $debt = $param['items_money'] - $payMoney - $param['pay_balance'];
+        $orderId  = date('YmdHis', time()) . mt_rand(100,999);
+        $payMoney = $param['pay_cash'] +  $param['pay_card'] + $param['pay_mobile'];
+        $debt     = $param['items_money'] - $payMoney - $param['pay_balance'] - $param['pay_give_balance'];
 
         //1 计算消费表数据
         $orderData = [
@@ -169,6 +171,7 @@ Class ShopActionService
             "shop_id"      => $param['shop_id'],
             "worth_money"  => $param['items_money'],
             "order_info"   => json_encode($param['selected_items'], JSON_UNESCAPED_UNICODE),
+            "pay_give_balance"   => $param['pay_give_balance'],
             "pay_balance"  => $param['pay_balance'],
             "pay_cash"     => $param['pay_cash'],
             "pay_card"     => $param['pay_card'],

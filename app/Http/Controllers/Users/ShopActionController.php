@@ -25,6 +25,7 @@ class ShopActionController extends Controller
             "uid"           => Request::input("uid"),
             "shop_id"       => Request::input("shop_id"),
             "charge_money"  => Request::input("charge_money"),
+            "give_money"    => Request::input("give_money"),
             "pay_cash"      => Request::input("pay_cash", 0),
             "pay_card"      => Request::input("pay_card",0),
             "pay_mobile"    => Request::input("pay_mobile",0),
@@ -35,6 +36,7 @@ class ShopActionController extends Controller
             "uid"            => "required|integer",
             "shop_id"        => "required|integer",
             "charge_money"   => "required|numeric",
+            "give_money"     => "required|numeric",
             "pay_cash"       => "required|numeric",
             "pay_card"       => "required|numeric",
             "pay_mobile"     => "required|numeric",
@@ -87,6 +89,7 @@ class ShopActionController extends Controller
             "selected_items"=> Request::input("selectedItems"), //购买项目明细
             "items_money"   => Request::input("itemsMoney"), //项目总金额
             "pay_balance"   => Request::input("pay_balance", 0), //卡扣余额
+            "pay_give_balance"   => Request::input("pay_give_balance", 0), //卡扣产品余额
             "pay_cash"      => Request::input("pay_cash", 0), //支付现金
             "pay_card"      => Request::input("pay_card", 0), //银行卡
             "pay_mobile"    => Request::input("pay_mobile", 0), //移动支付
@@ -94,8 +97,6 @@ class ShopActionController extends Controller
             "add_time"      => Request::input("add_time"), //添加时间
             "server_emps"   => Request::input("server_emps"), //散客传该参数
         ];
-
-
         $rule = [
             "uid"            => "required|integer",
             "shop_id"        => "required|integer",

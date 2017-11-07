@@ -36,22 +36,22 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
     public function recharge($param)
     {
         $query = function () use ($param) {
-            //插入订单表
-            $this->orderModel->insert($param['order_data']);
-            //插入员工明细表
-            $this->empOrderModel->insert($param['emp_order_data']);
             //更新会员金额
             $updateData = [
                 'balance'     => DB::raw('balance+' . $param['order_data']['worth_money']),
-                'debt' => DB::raw('debt+' . $param['order_data']['debt']),
+                'give_balance'=> DB::raw('give_balance+' . $param['order_data']['give_money']),
+                'debt'        => DB::raw('debt+' . $param['order_data']['debt']),
             ];
-
             //更新会员最近消费时间
             $leave_shop_time = [
                 'leave_shop_time' => $param['order_data']['add_time']
             ];
-
-            return $this->usersModel->where('uid','=',$param['order_data']['uid'])->update(array_merge($updateData, $leave_shop_time));
+            $this->usersModel->where('uid','=',$param['order_data']['uid'])->update(array_merge($updateData, $leave_shop_time));
+            unset($param['order_data']['give_money']);
+            //插入订单表
+            $this->orderModel->insert($param['order_data']);
+            //插入员工明细表
+            return $this->empOrderModel->insert($param['emp_order_data']);
         };
         return DB::transaction($query);
     }
@@ -66,10 +66,9 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             $this->empOrderModel->insert($param['emp_order_data']);
             //更新会员金额
             $updateData = [
-                'good_money'     => DB::raw('good_money+' . $param['order_data']['order_info']),
-                'debt' => DB::raw('debt+' . $param['order_data']['debt']),
+                'good_money'=> DB::raw('good_money+' . $param['order_data']['order_info']),
+                'debt'      => DB::raw('debt+' . $param['order_data']['debt']),
             ];
-
             //更新会员最近消费时间
             $leave_shop_time = [
                 'leave_shop_time' => $param['order_data']['add_time']
@@ -137,6 +136,9 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
             if($param['order_data']['pay_balance'] > 0){
                 $updateData['balance'] = DB::raw('balance-' . $param['order_data']['pay_balance']);
             }
+            if($param['order_data']['pay_give_balance'] > 0){
+                $updateData['give_balance'] = DB::raw('give_balance-' . $param['order_data']['pay_give_balance']);
+            }
             //判断是否有欠款
             if($param['order_data']['debt'] > 0){
                 $updateData['debt'] = DB::raw('debt+' . $param['order_data']['debt']);
@@ -156,7 +158,6 @@ class UsersAccountRepository implements UsersAccountRepositoryInterface
 
             //散客 插入消耗表
             !empty($param['user_order_data']) && $this->useOrderModel->insert($param['user_order_data']);
-
 
             //插入员工明细表
             $this->empOrderModel->insert($param['emp_order_data']);
